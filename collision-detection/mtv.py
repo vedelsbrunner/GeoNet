@@ -2,6 +2,7 @@ import numpy as np
 from shapely import unary_union
 from shapely.affinity import translate
 
+# Minimum Translation Vector (MTV) algorithm for collision detection
 
 def calculate_centroid(hulls):
     # Combine all hulls into a single geometry to find the centroid
@@ -38,7 +39,6 @@ def hulls_overlap(hull1, hull2):
 
 
 def translate_polygon(polygon, vector):
-    # Translates the polygon by the given vector and returns a new polygon
     return translate(polygon, xoff=vector[0], yoff=vector[1])
 
 
