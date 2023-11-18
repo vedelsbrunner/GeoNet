@@ -17,9 +17,21 @@ class DbscanClustering(ClusteringStrategy):
         self.n_jobs = n_jobs
 
     def cluster(self, network: GeoNetwork):
-        coordinates = np.array([[point.x, point.y] for point in network.__gdf_points.geometry])
+        coordinates = np.array([[point.x, point.y] for point in network.get_points().geometry])
         db = DBSCAN(eps=self.eps, min_samples=self.min_samples, metric=self.metric,
                     metric_params=self.metric_params, algorithm=self.algorithm,
                     leaf_size=self.leaf_size, p=self.p, n_jobs=self.n_jobs)
         labels = db.fit_predict(coordinates)
-        network.__gdf_points['cluster'] = labels
+        network.set_clusters(labels)
+
+        self.update_centroids(network, labels)
+
+    def update_centroids(self, network, labels):
+        points = network.get_points()
+        points['cluster'] = labels
+        for cluster_label in np.unique(labels):
+            if cluster_label != -1:
+                cluster_points = points[points['cluster'] == cluster_label]
+                centroid = cluster_points.geometry.unary_union.centroid
+                for point_id in cluster_points['id']:
+                    network.update_point(point_id, centroid.x, centroid.y)

@@ -1,11 +1,6 @@
-import logging
-
-import pandas as pd
-from shapely import MultiPolygon, Point
-
+from LoggerConfig import logger
 from graph.GeoNetwork import GeoNetwork
 from layouts.Layout import Layout, LayoutConfig
-from LoggerConfig import logger
 
 
 class StackedLayoutConfig(LayoutConfig):

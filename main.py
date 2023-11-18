@@ -1,6 +1,7 @@
 import pandas as pd
 import copy
 
+from cluster.DbscanClustering import DbscanClustering
 from cluster.SamePositionClustering import SamePositionClustering
 from graph.GeoNetwork import GeoNetwork
 from Geocooder import geocode_places
@@ -21,9 +22,20 @@ def process_marieboucher_data():
 
 def main():
     # process_marieboucher_data()
+    marie_boucher_network = create_marie_boucher_geo_network()
+
+    clustering_strategy = DbscanClustering(eps=0.1, min_samples=2)
+    layout_factory = LayoutFactory(clustering_strategy)
+    stack_layout_config = StackedLayoutConfig(stack_points_offset=0.008, hull_buffer=0.01)
+    stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
+    stacked_layout.create_layout(marie_boucher_network, stack_layout_config)
+
+    marie_boucher_network.write_to_disk('../thesis-demo/datas/marieboucher_points.geojson', '../thesis-demo/datas/marieboucher_lines.geojson')
+
+
+def create_marie_boucher_geo_network():
     network = GeoNetwork()
     df = pd.read_csv("./datasets/marieboucher_geocoded.csv")
-
     for index, row in df.iterrows():
         target_location = wkt.loads(row['target_location'])
         source_location = wkt.loads(row['source_location'])
@@ -39,16 +51,9 @@ def main():
         network.add_point(source_node_id, source_location.x, source_location.y)
         network.add_point(target_node_id, target_location.x, target_location.y)
         network.add_line(line_id, source_node_id, target_node_id)
-
     network.finalize()
+    return network
 
-    clustering_strategy = SamePositionClustering()
-    layout_factory = LayoutFactory(clustering_strategy)
-    stack_layout_config = StackedLayoutConfig(stack_points_offset=0.008, hull_buffer=0.01)
-    stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
-    stacked_layout.create_layout(network, stack_layout_config)
-
-    network.write_to_disk('../thesis-demo/datas/marieboucher_points.geojson', '../thesis-demo/datas/marieboucher_lines.geojson')
 
 if __name__ == '__main__':
     main()
