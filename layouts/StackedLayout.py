@@ -1,5 +1,6 @@
 import logging
 
+import pandas as pd
 from shapely import MultiPolygon, Point
 
 from graph.GeoNetwork import GeoNetwork
@@ -24,13 +25,15 @@ class StackedLayout(Layout):
     def do_layout(self, network: GeoNetwork, config: StackedLayoutConfig):
         logger.debug(f"Creating stacked layout with point offset {config.stack_points_offset} and hull buffer {config.hull_buffer}")
 
+        # Assume 'network.get_points()' returns a DataFrame with 'degree' and 'cluster' columns #TODO: Imrpove implicit assumption
         clusters = network.get_points().groupby('cluster')
         logger.debug(f"Found {len(clusters)} clusters for stacked layout")
 
         for _, points in clusters:
-            create_stack(network, points, config.stack_points_offset)
+            sorted_points = self.sort_points_by_degree(network, points)
+            create_stack(network, sorted_points, config.stack_points_offset)
         logger.debug(f"Repositioned points in clusters")
 
-
-
-        logger.debug(f"Created stacked layout with point offset {config.stack_points_offset} and hull buffer {config.hull_buffer}")
+    def sort_points_by_degree(self, network: GeoNetwork, points):
+        sorted_points = points.sort_values(by='degree', ascending=False)
+        return sorted_points
