@@ -17,44 +17,30 @@ class GeoNetwork:
         self.gdf_points = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.gdf_edges = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.graph = nx.Graph()
-        self.points_data = []
-        self.lines_data = []
+        self.__points_data = []
+        self.__lines_data = []
 
     def add_point(self, point_id, x, y, **properties):
         point = Point(x, y)
-        self.points_data.append({'id': point_id, 'geometry': point, **properties})
+        self.__points_data.append({'id': point_id, 'geometry': point, **properties})
         self.graph.add_node(point_id, pos=(x, y), **properties)
 
     def add_line(self, line_id, point_id_start, point_id_end, **properties):
         point_start = self.graph.nodes[point_id_start]['pos']
         point_end = self.graph.nodes[point_id_end]['pos']
         line = LineString([point_start, point_end])
-        self.lines_data.append({'id': line_id, 'geometry': line, **properties})
+        self.__lines_data.append({'id': line_id, 'geometry': line, **properties})
         self.graph.add_edge(point_id_start, point_id_end, **properties)
 
     def finalize(self):
-        points_df = pd.DataFrame(self.points_data)
-        lines_df = pd.DataFrame(self.lines_data)
+        points_df = pd.DataFrame(self.__points_data)
+        lines_df = pd.DataFrame(self.__lines_data)
 
         points_df = points_df.drop_duplicates(subset='id')
         lines_df = lines_df.drop_duplicates(subset='id')
 
         self.gdf_points = gpd.GeoDataFrame(points_df, geometry='geometry')
         self.gdf_edges = gpd.GeoDataFrame(lines_df, geometry='geometry')
-
-    def group_by_same_position(self):
-        # Group by the exact same position
-        self.gdf_points['cluster'] = self.gdf_points.groupby('geometry').ngroup()
-
-    def apply_clustering(self, eps=0.5, min_samples=5, algorithm='auto'):
-        self.finalize()
-        # Apply DBSCAN clustering algorithm
-        coordinates = np.array([[point.x, point.y] for point in self.gdf_points.geometry])
-        db = DBSCAN(eps=eps, min_samples=min_samples, algorithm=algorithm).fit(coordinates)
-        self.gdf_points['cluster'] = db.labels_
-        # Group by cluster label
-        grouped = self.gdf_points.groupby('cluster')
-        return grouped
 
     # TODO: Verify that this works (!)
     def count_edge_crossings(self):

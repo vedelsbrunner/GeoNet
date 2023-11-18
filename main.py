@@ -1,5 +1,7 @@
 import pandas as pd
+import copy
 
+from cluster.DbscanClustering import DbscanClustering
 from cluster.SamePositionClustering import SamePositionClustering
 from graph.GeoNetwork import GeoNetwork
 from Geocooder import geocode_places
@@ -39,16 +41,20 @@ def main():
         network.add_line(line_id, source_node_id, target_node_id)
 
     network.finalize()
+    dbscan_net = copy.deepcopy(network)
 
     clustering_strategy = SamePositionClustering()
     layout_factory = LayoutFactory(clustering_strategy)
     stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
     stacked_layout.create_layout(network)
 
-    # crossings = network.count_edge_crossings()
-    # print(crossings)
-
+    clustering_strategy = DbscanClustering(eps=10, min_samples=5, algorithm='auto')
+    layout_factory = LayoutFactory(clustering_strategy)
+    stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
+    stacked_layout.create_layout(dbscan_net)
+    cluster = dbscan_net.gdf_points.groupby('cluster')
     pass
+
 
 if __name__ == '__main__':
     main()

@@ -5,5 +5,5 @@ from graph.GeoNetwork import GeoNetwork
 
 class ClusteringStrategy(ABC):
     @abstractmethod
-    def cluster(self, network: GeoNetwork, **kwargs):
+    def cluster(self, network: GeoNetwork):
         pass
