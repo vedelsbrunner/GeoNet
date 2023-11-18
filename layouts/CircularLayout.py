@@ -3,5 +3,5 @@ from layouts.Layout import Layout
 
 
 class CircularLayout(Layout):
-    def create_layout(self, network: GeoNetwork):
+    def do_layout(self, network: GeoNetwork, **kwargs):
         print("Creating circular layout")

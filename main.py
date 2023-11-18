@@ -1,7 +1,6 @@
 import pandas as pd
 import copy
 
-from cluster.DbscanClustering import DbscanClustering
 from cluster.SamePositionClustering import SamePositionClustering
 from graph.GeoNetwork import GeoNetwork
 from Geocooder import geocode_places
@@ -9,7 +8,8 @@ import shapely.wkt as wkt
 from input.ColumnNormalizer import marieboucher_mapping, normalize_column_names
 from layouts.LayoutFactory import LayoutFactory
 from layouts.LayoutType import LayoutType
-
+from layouts.StackedLayout import StackedLayoutConfig
+from LoggerConfig import logger
 
 def process_marieboucher_data():
     mariebouche = "./datasets/marieboucher.csv"
@@ -29,7 +29,7 @@ def main():
         source_location = wkt.loads(row['source_location'])
 
         if source_location.is_empty or target_location.is_empty:
-            print('Skipping empty location')
+            logger.info('Skipping empty location')
             continue
 
         source_node_id = f"src_{row['source']}"
@@ -41,20 +41,14 @@ def main():
         network.add_line(line_id, source_node_id, target_node_id)
 
     network.finalize()
-    dbscan_net = copy.deepcopy(network)
 
     clustering_strategy = SamePositionClustering()
     layout_factory = LayoutFactory(clustering_strategy)
+    stack_layout_config = StackedLayoutConfig(stack_points_offset=0.008, hull_buffer=0.01)
     stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
-    stacked_layout.create_layout(network)
+    stacked_layout.create_layout(network, stack_layout_config)
 
-    clustering_strategy = DbscanClustering(eps=10, min_samples=5, algorithm='auto')
-    layout_factory = LayoutFactory(clustering_strategy)
-    stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
-    stacked_layout.create_layout(dbscan_net)
-    cluster = dbscan_net.gdf_points.groupby('cluster')
-    pass
-
+    network.write_to_disk('../thesis-demo/datas/marieboucher_points.geojson', '../thesis-demo/datas/marieboucher_lines.geojson')
 
 if __name__ == '__main__':
     main()

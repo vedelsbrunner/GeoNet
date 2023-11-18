@@ -4,4 +4,5 @@ from graph.GeoNetwork import GeoNetwork
 
 class SamePositionClustering(ClusteringStrategy):
     def cluster(self, network: GeoNetwork):
-        network.gdf_points['cluster'] = network.gdf_points.groupby('geometry').ngroup()
+        clusters = network.get_points().groupby('geometry').ngroup()
+        network.set_clusters(clusters)
