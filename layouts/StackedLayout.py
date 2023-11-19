@@ -1,4 +1,4 @@
-from LoggerConfig import logger
+from utils.LoggerConfig import logger
 from graph.GeoNetwork import GeoNetwork
 from layouts.Layout import Layout, LayoutConfig
 
