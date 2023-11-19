@@ -5,11 +5,13 @@ import geopandas as gpd
 import networkx as nx
 import numpy as np
 import pandas as pd
+from pyproj import CRS
 from shapely.geometry import Point, LineString
 from sklearn.cluster import DBSCAN
 
-logging.basicConfig(level=logging.INFO)
+from utils.LoggerConfig import logger
 
+logging.basicConfig(level=logging.INFO)
 
 class GeoNetwork:
     def __init__(self):
@@ -24,28 +26,44 @@ class GeoNetwork:
 
     def add_point(self, point_id, x, y, **properties):
         point = Point(x, y)
-        self.__points_data.append({'id': point_id, 'geometry': point, **properties})
-        self.graph.add_node(point_id, pos=(x, y), **properties)
-        self.__point_to_edges[point_id] = []
+        if point_id in self.graph:
+            self.graph.nodes[point_id].update({'pos': (x, y), **properties})
+            for point_data in self.__points_data:
+                if point_data['id'] == point_id:
+                    point_data.update({'geometry': point, **properties})
+                    break
+        else:
+            self.__points_data.append({'id': point_id, 'geometry': point, **properties})
+            self.graph.add_node(point_id, pos=(x, y), **properties)
+            self.__point_to_edges[point_id] = []
 
     def add_line(self, line_id, point_id_start, point_id_end, **properties):
-        point_start = self.graph.nodes[point_id_start]['pos']
-        point_end = self.graph.nodes[point_id_end]['pos']
-        line = LineString([point_start, point_end])
-        self.__lines_data.append({'id': line_id, 'geometry': line, **properties})
-        self.graph.add_edge(point_id_start, point_id_end, **properties)
-        # Update the point_to_edges lookup
-        self.__point_to_edges[point_id_start].append((line_id, point_id_end))
-        self.__point_to_edges[point_id_end].append((line_id, point_id_start))
+        if point_id_start not in self.graph or point_id_end not in self.graph:
+            logger.warning(f"One or both points for the line {line_id} do not exist: {point_id_start}, {point_id_end}")
+            return
 
-    def finalize(self):
-        # Convert the lists to DataFrames
+        if self.graph.has_edge(point_id_start, point_id_end):
+            self.graph[point_id_start][point_id_end].update(properties)
+            for line_data in self.__lines_data:
+                if line_data['id'] == line_id:
+                    line_data.update(properties)
+                    break
+        else:
+            point_start = self.graph.nodes[point_id_start]['pos']
+            point_end = self.graph.nodes[point_id_end]['pos']
+            line = LineString([point_start, point_end])
+            self.__lines_data.append({'id': line_id, 'geometry': line, **properties})
+            self.graph.add_edge(point_id_start, point_id_end, **properties)
+            self.__point_to_edges[point_id_start].append((line_id, point_id_end))
+            self.__point_to_edges[point_id_end].append((line_id, point_id_start))
+
+    def finalize(self, crs="EPSG:32633"): #TODO: Ugly work around
         points_df = pd.DataFrame(self.__points_data)
         lines_df = pd.DataFrame(self.__lines_data)
 
-        # Remove duplicates if any
-        points_df = points_df.drop_duplicates(subset='id')
-        lines_df = lines_df.drop_duplicates(subset='id')
+        # Assert that the number of nodes and edges matches
+        assert points_df['id'].nunique() == self.graph.number_of_nodes(), "Mismatch in number of points"
+        assert lines_df['id'].nunique() == self.graph.number_of_edges(), "Mismatch in number of lines"
 
         # Compute the degree for each node (point) in the NetworkX graph
         degrees = dict(self.graph.degree())
@@ -60,9 +78,10 @@ class GeoNetwork:
         points_df['betweenness_centrality'] = points_df['id'].apply(lambda x: betweenness.get(x, 0))
 
 
-        # Create GeoDataFrames
-        self.__gdf_points = gpd.GeoDataFrame(points_df, geometry='geometry')
-        self.__gdf_edges = gpd.GeoDataFrame(lines_df, geometry='geometry')
+        # Create the GeoNetwork as dataframes using the same crs
+        crs_object = CRS(crs)
+        self.__gdf_points = gpd.GeoDataFrame(points_df, geometry='geometry', crs=crs_object)
+        self.__gdf_edges = gpd.GeoDataFrame(lines_df, geometry='geometry', crs=crs_object)
 
     def update_point(self, point_id, new_x, new_y):
         self.graph.nodes[point_id]['pos'] = (new_x, new_y)
@@ -76,11 +95,9 @@ class GeoNetwork:
         self.__gdf_edges.to_file(lines_path, driver='GeoJSON')
 
     def get_points(self):
-        # Provide a copy of the points GeoDataFrame to avoid direct manipulation.
         return self.__gdf_points.copy()
 
     def set_clusters(self, clusters):
-        # Update the GeoDataFrame with the cluster information.
         self.__gdf_points['cluster'] = clusters
 
     def __update_line_geometry(self, line_id, point_id_start, point_id_end):
@@ -88,6 +105,7 @@ class GeoNetwork:
         point_end_pos = self.graph.nodes[point_id_end]['pos']
         new_line_geom = LineString([point_start_pos, point_end_pos])
         self.__gdf_edges.loc[self.__gdf_edges['id'] == line_id, 'geometry'] = new_line_geom
+
 
     def update_point_properties(self, point_id, **properties):
         # Check if the point exists in the graph
