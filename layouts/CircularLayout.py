@@ -1,32 +1,38 @@
-import math
+from math import cos, sin, pi, sqrt
+
+from geopy.distance import geodesic
+from pyproj import Geod
+from shapely import Point
+import geopandas as gpd
 from graph.GeoNetwork import GeoNetwork
-from layouts.Layout import Layout, LayoutConfig
-from LoggerConfig import logger
+from layouts.Layout import LayoutConfig, Layout
+from utils.LoggerConfig import logger
+
 
 class CircularLayoutConfig(LayoutConfig):
-    def __init__(self, center: tuple, radius: float):
-        self.center = center
-        self.radius = radius
+    def __init__(self, radius_scale: float):
+        self.radius_scale = radius_scale
 
 
 class CircularLayout(Layout):
     def do_layout(self, network: GeoNetwork, config: CircularLayoutConfig):
-        logger.debug("Creating circular layout")
+        # The base radius value can be set or calculated from the config
+        base_radius = config.base_radius if hasattr(config, 'base_radius') else 1
 
-        # Group points by 'cluster' and apply layout to each cluster
-        for cluster, points in network.get_points().groupby('cluster'):
-            num_points = len(points)
-            center_x, center_y = config.center  # Center of the circle
-            radius = config.radius  # Radius of the circle
+        points_gdf = network.get_points()
+        clusters = points_gdf['cluster'].unique()
 
-            # Calculate the angle between each point
-            angle_step = 2 * math.pi / num_points
+        for cluster in clusters:
+            cluster_points = points_gdf[points_gdf['cluster'] == cluster]
+            num_points = len(cluster_points)
+            if num_points > 1:
+                radius = base_radius * config.radius_scale * num_points
 
-            # Place each point around the circle within its cluster
-            for i, (index, point) in enumerate(points.iterrows()):
-                angle = angle_step * i
-                new_x = center_x + radius * math.cos(angle)
-                new_y = center_y + radius * math.sin(angle)
-                network.update_point(point['id'], new_x, new_y)
+                circle_center = cluster_points.geometry.unary_union.centroid
 
-        logger.debug("Circular layout for clusters completed")
+                for i, point in enumerate(cluster_points.itertuples()):
+                    bearing = 360 / num_points * i
+                    new_point = geodesic(kilometers=radius).destination((circle_center.y, circle_center.x), bearing)
+                    network.update_point(point.id, new_point.longitude, new_point.latitude)
+            else:
+                logger.debug(f"Skipping cluster {cluster} because it has only one point")
