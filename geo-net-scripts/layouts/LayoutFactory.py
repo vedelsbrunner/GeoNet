@@ -1,8 +1,7 @@
-from cluster.ClusteringStrategy import ClusteringStrategy
-from layouts.CircularLayout import CircularLayout
-from layouts.GridLayout import GridLayout
-from layouts.LayoutType import LayoutType
-from layouts.StackedLayout import StackedLayout
+from scripts.layouts.CircularLayout import CircularLayout
+from scripts.layouts.GridLayout import GridLayout
+from scripts.layouts.LayoutType import LayoutType
+from scripts.layouts.StackedLayout import StackedLayout
 
 
 class LayoutFactory:

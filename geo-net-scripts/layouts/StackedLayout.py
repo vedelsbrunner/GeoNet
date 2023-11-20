@@ -1,6 +1,6 @@
-from utils.LoggerConfig import logger
-from graph.GeoNetwork import GeoNetwork
-from layouts.Layout import Layout, LayoutConfig
+from scripts.utils.LoggerConfig import logger
+from scripts.graph.GeoNetwork import GeoNetwork
+from scripts.layouts.Layout import Layout, LayoutConfig
 
 
 class StackedLayoutConfig(LayoutConfig):

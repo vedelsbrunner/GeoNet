@@ -1,8 +1,8 @@
 import numpy as np
 from sklearn.cluster import DBSCAN
 
-from cluster.ClusteringStrategy import ClusteringStrategy
-from graph.GeoNetwork import GeoNetwork
+from scripts.cluster.ClusteringStrategy import ClusteringStrategy
+from scripts.graph.GeoNetwork import GeoNetwork
 
 
 class DbscanClustering(ClusteringStrategy):

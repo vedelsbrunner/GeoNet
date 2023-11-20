@@ -1,4 +1,4 @@
-from layouts.Layout import LayoutConfig
+from scripts.layouts.Layout import LayoutConfig
 
 
 class CircularLayoutConfig(LayoutConfig):

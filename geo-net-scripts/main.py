@@ -1,16 +1,14 @@
 import pandas as pd
 
-from cluster.DbscanClustering import DbscanClustering
-from cluster.SamePositionClustering import SamePositionClustering
-from graph.GeoNetwork import GeoNetwork
-from layouts.CircularLayoutConfig import CircularLayoutConfig
-from utils.Geocooder import geocode_places
+from scripts.cluster.DbscanClustering import DbscanClustering
+from scripts.graph.GeoNetwork import GeoNetwork
+from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig
+from scripts.utils.Geocooder import geocode_places
 import shapely.wkt as wkt
-from input.ColumnNormalizer import marieboucher_mapping, normalize_column_names
-from layouts.LayoutFactory import LayoutFactory
-from layouts.LayoutType import LayoutType
-from layouts.StackedLayout import StackedLayoutConfig
-from utils.LoggerConfig import logger
+from scripts.input.ColumnNormalizer import marieboucher_mapping, normalize_column_names
+from scripts.layouts.LayoutFactory import LayoutFactory
+from scripts.layouts.LayoutType import LayoutType
+from scripts.utils.LoggerConfig import logger
 
 
 def process_marieboucher_data():
@@ -27,7 +25,7 @@ def process_marieboucher_data():
 
 def create_marie_boucher_geo_network():
     network = GeoNetwork()
-    df = pd.read_csv("./datasets/marieboucher_geocoded.csv")
+    df = pd.read_csv("../datasets/marieboucher_geocoded.csv")
 
     for index, row in df.iterrows():
         target_location = wkt.loads(row['target_coordinates'])
@@ -49,7 +47,7 @@ def create_marie_boucher_geo_network():
 
 
 def main():
-    process_marieboucher_data()
+    # process_marieboucher_data()
     network = create_marie_boucher_geo_network()
     clustering_strategy = DbscanClustering(eps=0.5) #TODO: Cluster -1 ?
     # network = GeoNetwork()
@@ -60,7 +58,7 @@ def main():
     circular_layout_config = CircularLayoutConfig(radius_scale=5)
     circular_layout = layout_factory.get_layout(LayoutType.CIRCULAR)
     circular_layout.create_layout(network, circular_layout_config)
-    circular_layout.optimize_layout(network, max_iterations_per_cluster=100, improvement_threshold=1)
+    # circular_layout.optimize_layout(network, max_iterations_per_cluster=100, improvement_threshold=1)
     # for i in range(1, 1000):
     #     logger.info(f"Total edge crossings: {crossings}")
     #     crossings = network.calculate_total_edge_crossings()
@@ -78,7 +76,7 @@ def main():
     # stacked_layout.create_layout(marie_boucher_network, stack_layout_config)
 
 
-    network.write_to_disk('../thesis-demo/datas/marieboucher_points_bary.geojson', '../thesis-demo/datas/marieboucher_lines_bary.geojson')
+    network.write_to_disk('../../thesis-demo/datas/mb-circular.geojson')
     # network.write_to_disk('../thesis-demo/datas/points_bary.geojson', '../thesis-demo/datas/lines_bary.geojson')
 
 if __name__ == '__main__':

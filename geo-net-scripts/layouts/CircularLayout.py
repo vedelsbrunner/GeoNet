@@ -1,11 +1,10 @@
 from math import sqrt
 from geopy.distance import geodesic
 import random
-import logging
 
-from layouts.CircularLayoutConfig import CircularLayoutConfig
-from layouts.Layout import Layout
-from utils.LoggerConfig import logger
+from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig
+from scripts.layouts.Layout import Layout
+from scripts.utils.LoggerConfig import logger
 
 
 def place_nodes_on_circle(network, nodes, center, radius):

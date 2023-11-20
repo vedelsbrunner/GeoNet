@@ -9,7 +9,7 @@ import pandas as pd
 from pyproj import CRS
 from shapely.geometry import Point, LineString
 
-from utils.LoggerConfig import logger
+from scripts.utils.LoggerConfig import logger
 
 logging.basicConfig(level=logging.INFO)
 
@@ -90,9 +90,9 @@ class GeoNetwork:
         for line_id, connected_point_id in self.__point_to_edges[point_id]:
             self.__update_line_geometry(line_id, point_id, connected_point_id)
 
-    def write_to_disk(self, points_path, lines_path):
-        self.__gdf_points.to_file(points_path, drive='GeoJSON')
-        self.__gdf_edges.to_file(lines_path, driver='GeoJSON')
+    def write_to_disk(self, output_path):
+        combined_gdf = gpd.GeoDataFrame(pd.concat([self.__gdf_points, self.__gdf_edges], ignore_index=True))
+        combined_gdf.to_file(output_path, driver='GeoJSON')
 
     def get_points(self):
         return self.__gdf_points.copy()

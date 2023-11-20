@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from graph.GeoNetwork import GeoNetwork
+from scripts.graph.GeoNetwork import GeoNetwork
 
 
 class ClusteringStrategy(ABC):

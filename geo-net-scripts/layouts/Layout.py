@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
-from graph.GeoNetwork import GeoNetwork
-from utils.LoggerConfig import logger
+from scripts.graph.GeoNetwork import GeoNetwork
+from scripts.utils.LoggerConfig import logger
 
 
 class LayoutConfig(ABC):

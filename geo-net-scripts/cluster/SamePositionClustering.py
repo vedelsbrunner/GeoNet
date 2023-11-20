@@ -1,5 +1,5 @@
-from cluster.ClusteringStrategy import ClusteringStrategy
-from graph.GeoNetwork import GeoNetwork
+from scripts.cluster.ClusteringStrategy import ClusteringStrategy
+from scripts.graph.GeoNetwork import GeoNetwork
 
 
 class SamePositionClustering(ClusteringStrategy):

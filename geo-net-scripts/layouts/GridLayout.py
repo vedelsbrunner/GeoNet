@@ -1,5 +1,5 @@
-from graph.GeoNetwork import GeoNetwork
-from layouts.Layout import Layout
+from scripts.graph.GeoNetwork import GeoNetwork
+from scripts.layouts.Layout import Layout
 
 
 class GridLayout(Layout):
