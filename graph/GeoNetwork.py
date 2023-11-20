@@ -132,7 +132,6 @@ class GeoNetwork:
             logging.warning(f"Point with ID {point_id} not found in GeoDataFrame.")
 
     def calculate_total_edge_crossings(self):
-        logger.debug("Calculating total edge crossings...")
         edges = list(self.graph.edges())
         lines = [(self.graph.nodes[edge[0]]['pos'], self.graph.nodes[edge[1]]['pos']) for edge in edges]
         pairs = list(combinations(lines, 2))
@@ -141,6 +140,7 @@ class GeoNetwork:
             results = pool.map(check_crossings, pairs)
 
         total_crossings = sum(results)
+        logger.debug(f"Total edge crossings: {total_crossings}")
         return total_crossings
 
 
