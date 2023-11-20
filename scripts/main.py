@@ -76,7 +76,7 @@ def main():
     # stacked_layout.create_layout(marie_boucher_network, stack_layout_config)
 
 
-    network.write_to_disk('../../thesis-demo/datas/mb-circular.geojson')
+    network.write_to_disk('../geo-net-app/data/mb-circular.geojson')
     # network.write_to_disk('../thesis-demo/datas/points_bary.geojson', '../thesis-demo/datas/lines_bary.geojson')
 
 if __name__ == '__main__':
