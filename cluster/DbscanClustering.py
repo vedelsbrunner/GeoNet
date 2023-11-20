@@ -6,7 +6,7 @@ from graph.GeoNetwork import GeoNetwork
 
 
 class DbscanClustering(ClusteringStrategy):
-    def __init__(self, eps=0.5, min_samples=5, metric='euclidean', metric_params=None, algorithm='auto', leaf_size=30, p=None, n_jobs=None):
+    def __init__(self, eps=0.5, min_samples=1, metric='euclidean', metric_params=None, algorithm='auto', leaf_size=30, p=None, n_jobs=None):
         self.eps = eps
         self.min_samples = min_samples
         self.metric = metric
