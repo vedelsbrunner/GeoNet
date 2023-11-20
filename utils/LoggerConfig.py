@@ -19,7 +19,7 @@ formatter = CustomColoredFormatter(
     log_colors={
         '[DEBUG]': 'cyan',
         '[INFO]': 'yellow',
-        '[WARNING]': 'orange',
+        '[WARNING]': 'blue',
         '[ERROR]': 'red',
         '[CRITICAL]': 'red,bg_white',
     }
