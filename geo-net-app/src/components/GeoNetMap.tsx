@@ -3,6 +3,14 @@ import DeckGL from 'deck.gl';
 import {MapContext, NavigationControl, StaticMap} from 'react-map-gl';
 import {GeoJsonLayer} from '@deck.gl/layers';
 import MapControls from './MapControls.tsx';
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Box
+} from '@chakra-ui/react';
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';
 const NAV_CONTROL_STYLE = {
@@ -69,7 +77,21 @@ function GeoNetMap({initialViewState, data}) {
                 <StaticMap mapStyle={MAP_STYLE}/>
                 <NavigationControl style={NAV_CONTROL_STYLE}></NavigationControl>
             </DeckGL>
-            <MapControls settings={settings} onChange={handleSettingsChange}></MapControls>
+            <Box position="absolute" top={1} right={1}>
+                <Accordion allowToggle>
+                    <AccordionItem>
+                        <AccordionButton>
+                            <Box flex="1" textAlign="left">
+                                Map Controls
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                        <AccordionPanel>
+                            <MapControls settings={settings} onChange={handleSettingsChange} />
+                        </AccordionPanel>
+                    </AccordionItem>
+                </Accordion>
+            </Box>
         </>
     );
 }
