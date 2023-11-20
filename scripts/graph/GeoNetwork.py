@@ -1,28 +1,28 @@
 import logging
-import random
 from itertools import combinations
 from multiprocessing import Pool
+
+import numpy as np
+from shapely.affinity import translate
 
 import geopandas as gpd
 import networkx as nx
 import pandas as pd
 from pyproj import CRS
 from shapely.geometry import Point, LineString
+from shapely.ops import unary_union
 
+from scripts.mtv.mtv_helpers import check_crossings, hulls_overlap, calculate_mtv
 from scripts.utils.LoggerConfig import logger
 
 logging.basicConfig(level=logging.INFO)
-
-
-def check_crossings(pair):
-    line1, line2 = pair
-    return LineString(line1).crosses(LineString(line2))
 
 
 class GeoNetwork:
     def __init__(self):
         self.__gdf_points = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__gdf_edges = gpd.GeoDataFrame(columns=['id', 'geometry'])
+        self.__gdf_hulls = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__points_data = []  # Only use for optimization purposes
         self.__lines_data = []  # Only use for optimization purposes
         self.__point_to_edges = {}
@@ -61,6 +61,24 @@ class GeoNetwork:
             self.graph.add_edge(point_id_start, point_id_end, **properties)
             self.__point_to_edges[point_id_start].append((line_id, point_id_end))
             self.__point_to_edges[point_id_end].append((line_id, point_id_start))
+
+    def create_convex_hulls(self, buffer_distance=0.03): #TODO: Improve
+        logger.debug("Creating convex hulls for clusters")
+        hulls_data = []
+
+        for cluster_id, points in self.__gdf_points.groupby('cluster'):
+            if cluster_id == -1:
+                logger.warning(f"Skipping cluster with ID {cluster_id} (noise)")
+                continue
+
+            if not points.empty:
+                # Create a buffer around each point and then compute the convex hull
+                buffered_points = points.buffer(buffer_distance)
+                hull = unary_union(buffered_points).convex_hull
+                hulls_data.append({'cluster_id': cluster_id, 'geometry': hull})
+
+        # Create a GeoDataFrame from the list of hulls data
+        self.__gdf_hulls = gpd.GeoDataFrame(hulls_data, crs=self.__gdf_points.crs)
 
     # TODO: Ugly post-processing, refactor(!)
     def finalize(self, crs="EPSG:32633"):
@@ -143,7 +161,6 @@ class GeoNetwork:
         logger.debug(f"Total edge crossings: {total_crossings}")
         return total_crossings
 
-
     # Used for the CircularLayout TODO: Move to CircularLayout
     def are_connections_internal(self, point_id):
         point_cluster = self.__gdf_points.loc[self.__gdf_points['id'] == point_id, 'cluster'].values[0]
@@ -154,29 +171,6 @@ class GeoNetwork:
             if connected_point_cluster != point_cluster:
                 return False
         return True
-
-    # TODO: Remove - only used for testing
-    def create_fixed_clusters(self, seed=42):
-        random.seed(seed)
-
-        cluster_positions = {
-            'cluster_20': (2.3522, 48.8566),  # Coords for Paris, for example
-            'cluster_10': (3.8767, 43.6112),  # Coords for Montpellier
-            'cluster_5': (-1.6793, 48.1173),  # Coords for Rennes
-        }
-
-        cluster_sizes = {'cluster_20': 20, 'cluster_10': 10, 'cluster_5': 5}
-        for cluster_name, (lon, lat) in cluster_positions.items():
-            for i in range(cluster_sizes[cluster_name]):
-                point_id = f'{cluster_name}_point_{i}'
-                self.add_point(point_id, lon, lat)
-
-        all_points = list(self.graph.nodes)
-        num_lines = 50
-        for i in range(num_lines):
-            point_id_start, point_id_end = random.sample(all_points, 2)
-            line_id = f'line_{i}'
-            self.add_line(line_id, point_id_start, point_id_end)
 
     def swap_nodes(self, node1_id, node2_id):
         if node1_id not in self.graph or node2_id not in self.graph:
@@ -196,3 +190,47 @@ class GeoNetwork:
             self.__update_line_geometry(line_id, node2_id, connected_point_id)
 
         return True
+
+    def resolve_overlaps(self):
+        logger.info("Resolving hull overlaps")
+        iteration = 0
+        max_iterations = 20
+        overlapping = True
+
+        while overlapping and iteration < max_iterations:
+            overlapping = False
+            hull_pairs_to_check = list(combinations(range(len(self.__gdf_hulls)), 2))
+
+            for idx1, idx2 in hull_pairs_to_check:
+                hull1 = self.__gdf_hulls.iloc[idx1]['geometry']
+                hull2 = self.__gdf_hulls.iloc[idx2]['geometry']
+                if hulls_overlap(hull1, hull2):
+                    overlapping = True
+                    mtv = calculate_mtv(hull1, hull2)
+                    if mtv is not None:
+                        translation_vector_1 = (-mtv / 2) - np.array([0.01, 0.01])
+                        translation_vector_2 = (mtv / 2) + np.array([0.01, 0.01])
+
+                        cluster_id_1 = self.__gdf_hulls.iloc[idx1]['cluster_id']
+                        cluster_id_2 = self.__gdf_hulls.iloc[idx2]['cluster_id']
+                        self.apply_translation_to_cluster(cluster_id_1, translation_vector_1)
+                        self.apply_translation_to_cluster(cluster_id_2, translation_vector_2)
+
+            iteration += 1
+            logger.debug(f"Completed iteration {iteration}")
+
+        if iteration == max_iterations:
+            logger.warning("Max iterations reached, there might still be overlaps.")
+
+    def apply_translation_to_cluster(self, cluster_id, translation_vector):
+        points_in_cluster = self.__gdf_points[self.__gdf_points['cluster'] == cluster_id]
+        for point_id in points_in_cluster['id']:
+            point = self.__gdf_points.loc[self.__gdf_points['id'] == point_id, 'geometry'].iloc[0]
+            translated_point = translate(point, xoff=translation_vector[0], yoff=translation_vector[1])
+            self.update_point(point_id, translated_point.x, translated_point.y)
+
+        # Apply the same translation to the hull
+        hull_index = self.__gdf_hulls[self.__gdf_hulls['cluster_id'] == cluster_id].index[0]
+        hull = self.__gdf_hulls.loc[hull_index, 'geometry']
+        translated_hull = translate(hull, xoff=translation_vector[0], yoff=translation_vector[1])
+        self.__gdf_hulls.at[hull_index, 'geometry'] = translated_hull

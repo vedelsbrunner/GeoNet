@@ -2,6 +2,7 @@ import numpy as np
 from shapely import unary_union
 from shapely.affinity import translate
 
+
 # Minimum Translation Vector (MTV) algorithm for collision detection
 
 def calculate_centroid(hulls):
@@ -9,29 +10,6 @@ def calculate_centroid(hulls):
     all_hulls_geometry = [hull['geometry'] for hull in hulls]
     all_hulls_unified = unary_union(all_hulls_geometry)
     return all_hulls_unified.centroid
-
-
-def calculate_and_apply_mtv(hulls_with_id, new_gdf):
-    for idx1, hull1 in enumerate(hulls_with_id):
-        for idx2, hull2 in enumerate(hulls_with_id):
-            if idx1 < idx2:  # Avoid checking the same pair twice
-                if hulls_overlap(hull1['geometry'], hull2['geometry']):
-                    mtv = calculate_mtv(hull1['geometry'], hull2['geometry'])
-                    if mtv is None:
-                        print("Warning: No MTV calculated, skipping.")
-                        continue  # Skip to the next pair
-
-                    # Apply half the MTV to each hull in opposite directions with an additional fixed offset
-                    translation_vector_1 = (-mtv / 2) - 0.01  # Offset to prevent hulls from touching
-                    translation_vector_2 = (mtv / 2) + 0.01
-                    hulls_with_id[idx1]['geometry'] = translate(hull1['geometry'], *translation_vector_1)
-                    hulls_with_id[idx2]['geometry'] = translate(hull2['geometry'], *translation_vector_2)
-
-                    # Displace points in the new_gdf corresponding to the hulls
-                    group_id_1 = hull1['group_id']
-                    group_id_2 = hull2['group_id']
-                    new_gdf.loc[new_gdf['group_id'] == group_id_1, 'geometry'] = new_gdf.loc[new_gdf['group_id'] == group_id_1, 'geometry'].apply(lambda x: translate(x, *translation_vector_1))
-                    new_gdf.loc[new_gdf['group_id'] == group_id_2, 'geometry'] = new_gdf.loc[new_gdf['group_id'] == group_id_2, 'geometry'].apply(lambda x: translate(x, *translation_vector_2))
 
 
 def hulls_overlap(hull1, hull2):
