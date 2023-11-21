@@ -108,9 +108,18 @@ class GeoNetwork:
         for line_id, connected_point_id in self.__point_to_edges[point_id]:
             self.__update_line_geometry(line_id, point_id, connected_point_id)
 
-    def write_to_disk(self, output_path):
-        combined_gdf = gpd.GeoDataFrame(pd.concat([self.__gdf_points, self.__gdf_edges], ignore_index=True))
+    def write_to_disk(self, output_path, include_hulls=False):
+        dfs_to_combine = [self.__gdf_points, self.__gdf_edges]
+
+        if include_hulls:
+            if 'cluster_id' in self.__gdf_hulls.columns and 'id' not in self.__gdf_hulls.columns:
+                self.__gdf_hulls.rename(columns={'cluster_id': 'id'}, inplace=True)
+            dfs_to_combine.append(self.__gdf_hulls)
+
+        combined_gdf = gpd.GeoDataFrame(pd.concat(dfs_to_combine, ignore_index=True))
+
         combined_gdf.to_file(output_path, driver='GeoJSON')
+        logger.info(f"GeoNetwork data written to {output_path}{' with hulls' if include_hulls else ''}")
 
     def get_points(self):
         return self.__gdf_points.copy()

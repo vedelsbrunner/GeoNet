@@ -5,7 +5,9 @@ import {ChakraProvider} from '@chakra-ui/react';
 
 function App() {
 
-    const {data, isLoading, error} = usePublicJsonData('mb-circular.geojson');
+    const geoJsonFiles = ['mb-default.geojson', 'mb-circular-clustered.geojson', 'mb-circular.geojson', 'mb-stacked.geojson', 'mb-stacked-clustered.geojson']
+    const {dataSets, isLoading, error} = usePublicJsonData(geoJsonFiles);
+
     const [initialViewState] = useState({
         latitude: 51.47,
         longitude: 0.45,
@@ -24,7 +26,7 @@ function App() {
 
     return (
         <ChakraProvider>
-            <GeoNetMap initialViewState={initialViewState} data={data}/>;
+            <GeoNetMap initialViewState={initialViewState} data={dataSets}/>;
         </ChakraProvider>
     )
 }

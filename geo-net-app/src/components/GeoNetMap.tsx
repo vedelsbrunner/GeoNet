@@ -4,12 +4,12 @@ import {MapContext, NavigationControl, StaticMap} from 'react-map-gl';
 import {GeoJsonLayer} from '@deck.gl/layers';
 import MapControls from './MapControls.tsx';
 import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-  Box
+    Accordion,
+    AccordionItem,
+    AccordionButton,
+    AccordionPanel,
+    AccordionIcon,
+    Box
 } from '@chakra-ui/react';
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';
@@ -20,32 +20,23 @@ const NAV_CONTROL_STYLE = {
 };
 
 function GeoNetMap({initialViewState, data}) {
+    const [selectedLayerIndex, setSelectedLayerIndex] = useState(1);
     const [layers, setLayers] = useState([]);
-    const [filteredData, setFilteredData] = useState(data);
-
     const [settings, setSettings] = useState({
         lineWidthScale: 80,
-        pointRadius: 800,
+        pointRadius: 1200,
         edgeWidth: 1,
-        pointOpacity: 0.1,
-        edgeOpacity: 1,
+        pointOpacity: 1,
+        edgeOpacity: 0.2,
         degreeFilter: 0
 
     });
 
     useEffect(() => {
-        const filteredData = {
-            ...data,
-            features: data.features.filter(feature => {
-                // Apply the filter only if the feature is a point and it has a degree property
-                return feature.geometry.type === 'Point'
-                    ? settings.degreeFilter === 0 || feature.properties.degree === settings.degreeFilter
-                    : true;
-            })
-        };
-        const geoJsonLayer = new GeoJsonLayer({
+
+        const mbDefault = new GeoJsonLayer({
             id: 'geojson-layer',
-            data: filteredData,
+            data: data[0],
             filled: true,
             getPointRadius: settings.pointRadius,
             pickable: true,
@@ -53,19 +44,115 @@ function GeoNetMap({initialViewState, data}) {
             extruded: true,
             lineWidthScale: settings.lineWidthScale,
             lineWidthMinPixels: 1,
-            getFillColor: [0, 0, 0, settings.pointOpacity * 250],
+            getFillColor: (feature) => {
+                if (feature.geometry.type === 'Point') {
+                    return [0, 0, 0, settings.pointOpacity * 255];
+                } else if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                    return [149, 200, 216, 50];
+                }
+                // Default color, if needed
+                return [255, 255, 255, 255];
+            },
             getLineColor: [0, 0, 0, settings.edgeOpacity * 250],
-
         });
-        setLayers([geoJsonLayer]);
-    }, [filteredData, settings]);
 
-    const handleSettingsChange = (newSettings) => {
-        console.log("handleSettingsChange....")
+        const mbCircular = new GeoJsonLayer({
+            id: 'geojson-layer',
+            data: data[2],
+            filled: true,
+            getPointRadius: settings.pointRadius,
+            pickable: true,
+            autoHighlight: true,
+            extruded: true,
+            lineWidthScale: settings.lineWidthScale,
+            lineWidthMinPixels: 1,
+            getFillColor: (feature) => {
+                if (feature.geometry.type === 'Point') {
+                    return [0, 0, 0, settings.pointOpacity * 255];
+                } else if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                    return [149, 200, 216, 50];
+                }
+                // Default color, if needed
+                return [255, 255, 255, 255];
+            },
+            getLineColor: [0, 0, 0, settings.edgeOpacity * 250],
+        });
+
+        const mbCircularClustered = new GeoJsonLayer({
+            id: 'geojson-layer',
+            data: data[1],
+            filled: true,
+            getPointRadius: settings.pointRadius,
+            pickable: true,
+            autoHighlight: true,
+            extruded: true,
+            lineWidthScale: settings.lineWidthScale,
+            lineWidthMinPixels: 1,
+            getFillColor: (feature) => {
+                if (feature.geometry.type === 'Point') {
+                    return [0, 0, 0, settings.pointOpacity * 255];
+                } else if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                    return [149, 200, 216, 50];
+                }
+                // Default color, if needed
+                return [255, 255, 255, 255];
+            },
+            getLineColor: [0, 0, 0, settings.edgeOpacity * 250],
+        });
+
+        const mbStacked = new GeoJsonLayer({
+            id: 'geojson-layer',
+            data: data[3],
+            filled: true,
+            getPointRadius: settings.pointRadius,
+            pickable: true,
+            autoHighlight: true,
+            extruded: true,
+            lineWidthScale: settings.lineWidthScale,
+            lineWidthMinPixels: 1,
+            getFillColor: (feature) => {
+                if (feature.geometry.type === 'Point') {
+                    return [0, 0, 0, settings.pointOpacity * 255];
+                } else if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                    return [149, 200, 216, 50];
+                }
+                // Default color, if needed
+                return [255, 255, 255, 255];
+            },
+            getLineColor: [0, 0, 0, settings.edgeOpacity * 250],
+        });
+
+        const mbStackedClustered = new GeoJsonLayer({
+            id: 'geojson-layer',
+            data: data[4],
+            filled: true,
+            getPointRadius: settings.pointRadius,
+            pickable: true,
+            autoHighlight: true,
+            extruded: true,
+            lineWidthScale: settings.lineWidthScale,
+            lineWidthMinPixels: 1,
+            getFillColor: (feature) => {
+                if (feature.geometry.type === 'Point') {
+                    return [0, 0, 0, settings.pointOpacity * 255];
+                } else if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                    return [149, 200, 216, 50];
+                }
+                // Default color, if needed
+                return [255, 255, 255, 255];
+            },
+            getLineColor: [0, 0, 0, settings.edgeOpacity * 250],
+        });
+
+        setLayers([mbDefault, mbCircular, mbCircularClustered, mbStacked, mbStackedClustered].filter((_, index) => index === selectedLayerIndex));
+    }, [data, settings, selectedLayerIndex]);
+
+    const handleSettingsChange = (newSettings, layerIndex) => {
+        if (layerIndex !== undefined) {
+            setSelectedLayerIndex(layerIndex);
+        }
         setSettings((prevSettings) => ({...prevSettings, ...newSettings}));
-
     };
-
     return (
         <>
             <DeckGL
@@ -84,10 +171,10 @@ function GeoNetMap({initialViewState, data}) {
                             <Box flex="1" textAlign="left">
                                 Map Controls
                             </Box>
-                            <AccordionIcon />
+                            <AccordionIcon/>
                         </AccordionButton>
                         <AccordionPanel>
-                            <MapControls settings={settings} onChange={handleSettingsChange} />
+                            <MapControls settings={settings} onChange={handleSettingsChange}/>
                         </AccordionPanel>
                     </AccordionItem>
                 </Accordion>

@@ -1,4 +1,4 @@
-import {Box, Divider, FormLabel, HStack, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text} from '@chakra-ui/react';
+import {Box, Divider, FormLabel, HStack, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text} from '@chakra-ui/react';
 import React, {useState} from "react";
 
 function MapControls({settings, onChange}) {
@@ -12,6 +12,10 @@ function MapControls({settings, onChange}) {
     const handleLineWidthChange = (value) => {
         setLineWidthScale(value);
         onChange({...settings, lineWidthScale: value});
+    };
+    const handleLayerSelectionChange = (event) => {
+        const layerIndex = parseInt(event.target.value, 10);
+        onChange(settings, layerIndex); // Pass the layerIndex back to the parent component
     };
 
     const handlePointOpacityChange = (value) => {
@@ -96,6 +100,15 @@ function MapControls({settings, onChange}) {
                     <SliderThumb/>
                 </Slider>
             </HStack>
+
+            <Text fontSize={18} mt={4}>Layers</Text>
+            <Select onChange={handleLayerSelectionChange} bg={"gray"} color={"black"}>
+                <option value="0">Default Layer</option>
+                <option value="1">Circular Layer</option>
+                <option value="2">Circular Clustered Layer</option>
+                <option value="3">Stacked Layer</option>
+                <option value="4">Stacked Clustered Layer</option>
+            </Select>
         </Box>
     );
 }
