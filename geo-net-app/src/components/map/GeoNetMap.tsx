@@ -3,7 +3,7 @@ import DeckGL from 'deck.gl';
 import {MapContext, NavigationControl, StaticMap} from 'react-map-gl';
 import MapControls from '../controls/MapControls.tsx';
 import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box} from '@chakra-ui/react';
-import {JsonFilePathsDictionary} from "../controls/hooks/useJsonData.tsx";
+import {JsonFilePathsDictionary} from "../../hooks/useJsonData.tsx";
 import GeoNetLayer from "../layers/GeoNetLayer.ts";
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';

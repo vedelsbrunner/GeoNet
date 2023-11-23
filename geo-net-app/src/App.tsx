@@ -1,5 +1,5 @@
 import React, {useMemo, useState} from 'react';
-import usePublicJsonData, {Layouts, JsonFilePathsDictionary} from './components/controls/hooks/useJsonData.tsx';
+import usePublicJsonData, {Layouts, JsonFilePathsDictionary} from './hooks/useJsonData.tsx';
 import GeoNetMap from "./components/map/GeoNetMap.tsx"
 import {ChakraProvider, useMenu} from "@chakra-ui/react";
 
