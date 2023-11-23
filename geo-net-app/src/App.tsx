@@ -1,20 +1,21 @@
-import React, {useState} from 'react';
-import usePublicJsonData from './hooks/useJsonData.tsx';
-import GeoNetMap from "./components/GeoNetMap.tsx"
-import {ChakraProvider} from '@chakra-ui/react';
+import React, {useMemo, useState} from 'react';
+import usePublicJsonData, {Layouts, JsonFilePathsDictionary} from './components/controls/hooks/useJsonData.tsx';
+import GeoNetMap from "./components/map/GeoNetMap.tsx"
+import {ChakraProvider, useMenu} from "@chakra-ui/react";
 
 function App() {
 
-    const geoJsonFiles = ['mb-default.geojson', 'mb-circular-clustered.geojson', 'mb-circular.geojson', 'mb-stacked.geojson', 'mb-stacked-clustered.geojson']
-    const {dataSets, isLoading, error} = usePublicJsonData(geoJsonFiles);
+    const dataSetsDictionary: JsonFilePathsDictionary = useMemo(() =>({
+        [Layouts.Default]: 'mb-default.geojson',
+        // [Layouts.CircularClustered]: 'mb-circular-clustered.geojson',
+        // [Layouts.Circular]: 'mb-circular.geojson',
+        // [Layouts.Stacked]: 'mb-stacked.geojson',
+        // [Layouts.StackedClustered]: 'mb-stacked-clustered.geojson'
+    }), []);
 
-    const [initialViewState] = useState({
-        latitude: 51.47,
-        longitude: 0.45,
-        zoom: 4,
-        bearing: 1,
-        pitch: 0
-    });
+    const {dataSets, isLoading, error} = usePublicJsonData(dataSetsDictionary);
+
+
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -26,7 +27,7 @@ function App() {
 
     return (
         <ChakraProvider>
-            <GeoNetMap initialViewState={initialViewState} data={dataSets}/>;
+            <GeoNetMap dataSets={dataSets}/>;
         </ChakraProvider>
     )
 }
