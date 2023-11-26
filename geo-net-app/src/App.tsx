@@ -6,10 +6,10 @@ import {ChakraProvider, useMenu} from "@chakra-ui/react";
 function App() {
 
     const dataSetsDictionary: JsonFilePathsDictionary = useMemo(() =>({
-        [Layouts.Default]: 'mb-default.geojson',
+        // [Layouts.Default]: 'mb-default.geojson',
         // [Layouts.CircularClustered]: 'mb-circular-clustered.geojson',
         // [Layouts.Circular]: 'mb-circular.geojson',
-        // [Layouts.Stacked]: 'mb-stacked.geojson',
+        [Layouts.Stacked]: 'mb-stacked.geojson',
         // [Layouts.StackedClustered]: 'mb-stacked-clustered.geojson'
     }), []);
 

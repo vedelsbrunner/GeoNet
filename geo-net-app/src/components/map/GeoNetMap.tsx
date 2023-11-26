@@ -4,29 +4,16 @@ import {MapContext, NavigationControl, StaticMap} from 'react-map-gl';
 import MapControls from '../controls/MapControls.tsx';
 import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box} from '@chakra-ui/react';
 import {JsonFilePathsDictionary} from "../../hooks/useJsonData.tsx";
-import GeoNetLayer from "../layers/GeoNetLayer.ts";
-
-const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';
-const NAV_CONTROL_STYLE = {
-    position: 'absolute',
-    top: 10,
-    left: 10
-};
-const INITIAL_VIEW_STATE = {
-    latitude: 51.47,
-    longitude: 0.45,
-    zoom: 4,
-    bearing: 1,
-    pitch: 0
-};
+import {createGeoNetLayer} from "../layers/GeoNetLayer.ts";
+import {INITIAL_VIEW_STATE, MAP_STYLE, NAV_CONTROL_STYLE} from "./consts.tsx";
 
 interface GeoNetMapProps {
-    initialViewState: any;
     dataSets: JsonFilePathsDictionary;
 }
 
-function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
+function GeoNetMap({dataSets}: GeoNetMapProps) {
     const [layers, setLayers] = useState([]);
+
     const [settings, setSettings] = useState({
         lineWidthScale: 80,
         pointRadius: 1200,
@@ -34,20 +21,16 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
         pointOpacity: 1,
         edgeOpacity: 0.2,
         degreeFilter: 0
-
     });
 
     useEffect(() => {
         const geonetLayers = Object.keys(dataSets).map(key => {
-            const dataSet = dataSets[key];
-            return new GeoNetLayer({
-                id: `geonet-layer-${key}`,
-                data: dataSet,
-                ...settings,
-            });
+            console.log('Creating layer for ' + key)
+            const layer = createGeoNetLayer(key, dataSets[key], settings)
+            return layer;
         });
         setLayers(geonetLayers);
-    }, [dataSets]);
+    }, [dataSets, settings]);
 
     const handleSettingsChange = (newSettings) => {
         console.log(newSettings)
