@@ -27,7 +27,7 @@ def process_marieboucher_data():
 
 def create_marie_boucher_geo_network():
     network = GeoNetwork()
-    df = pd.read_csv("../datasets/marieboucher_geocoded.csv")
+    df = pd.read_csv("../datasets/marieboucher_geocoded-short.csv")
 
     for index, row in df.iterrows():
         target_location = wkt.loads(row['target_coordinates'])

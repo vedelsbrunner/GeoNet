@@ -13,7 +13,7 @@ export class NodesLayer {
             radiusScale: 6,
             radiusMinPixels: 1,
             radiusMaxPixels: 10,
-            getRadius: d => 100,
+            getRadius: d => 400,
             onHover: info => console.log('hovered:', info),
             onClick: info => console.log('clicked:', info),
         });

@@ -36,13 +36,13 @@ class GeoNetwork:
             point_id = row['id']
             neighbor_ids = list(self.graph.neighbors(point_id))
             connecting_edges = []
-            # For each neighbor, find the connecting edge and get its 'id'
             for neighbor_id in neighbor_ids:
-                connection_edges = [tup[0] for tup in self.__point_to_edges[neighbor_id]]
+                connecting_edges.append([tup[0] for tup in self.__point_to_edges[neighbor_id]])
 
             # Update the GeoDataFrame with the lists of neighbors and connecting edges
+            assert len(neighbor_ids) == len(connecting_edges), "Mismatch in number of neighbors and connecting edges"
             self.gdf_points.at[index, 'neighbors'] = neighbor_ids
-            self.gdf_points.at[index, 'connecting_edges'] = connection_edges
+            self.gdf_points.at[index, 'connecting_edges'] = connecting_edges
 
     def add_point(self, point_id, x, y, **properties):
         point = Point(x, y)
@@ -138,13 +138,10 @@ class GeoNetwork:
         if include_hulls:
             if 'cluster_id' in gdf_hulls_copy.columns and 'id' not in gdf_hulls_copy.columns:
                 gdf_hulls_copy.rename(columns={'cluster_id': 'id'}, inplace=True)
-            # Also convert lists to strings if necessary in hulls dataframe
-            # Example: gdf_hulls_copy['some_list_column'] = gdf_hulls_copy['some_list_column'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
             dfs_to_combine.append(gdf_hulls_copy)
 
         combined_gdf = gpd.GeoDataFrame(pd.concat(dfs_to_combine, ignore_index=True))
 
-        # Save to file
         combined_gdf.to_file(output_path, driver='GeoJSON')
         logger.info(f"GeoNetwork data written to {output_path}{' with hulls' if include_hulls else ''}")
 
@@ -162,7 +159,6 @@ class GeoNetwork:
 
     def update_point_properties(self, point_id, **properties):
         if point_id in self.graph:
-            # Update the node properties in the graph
             for key, value in properties.items():
                 self.graph.nodes[point_id][key] = value
 
