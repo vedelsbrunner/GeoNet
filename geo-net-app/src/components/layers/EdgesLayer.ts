@@ -5,10 +5,13 @@ export class EdgesLayer {
         return new LineLayer({
             id: 'lines-layer',
             data: edges,
+            autoHighlight: true,
             getSourcePosition: d => d.geometry.coordinates[0],
             getTargetPosition: d => d.geometry.coordinates[1],
             pickable: true,
-            getWidth: 50,
+            highlightColor: [255, 255, 255, 155],
+
+            getWidth: 1,
         });
     }
 }

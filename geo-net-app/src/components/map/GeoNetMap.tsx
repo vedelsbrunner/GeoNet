@@ -5,6 +5,7 @@ import MapControls from '../controls/MapControls.tsx';
 import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box} from '@chakra-ui/react';
 import {JsonFilePathsDictionary} from "../../hooks/useJsonData.tsx";
 import GeoNetLayer from "../layers/GeoNetLayer.ts";
+import {CreateGeoNetLayer} from "../layers/GeoNetLayerCreator.ts";
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';
 const NAV_CONTROL_STYLE = {
@@ -37,14 +38,27 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
 
     });
 
+    // Reset dataset from all filters
+    const handleMapClick = (info) => {
+        console.log('Map clicked')
+        if (!info.object) {
+            const newLayers = Object.keys(dataSets).map(key => {
+                return CreateGeoNetLayer(key, dataSets[key], settings, updateLayer);
+            });
+            setLayers(newLayers);
+        }
+    };
+
+    function updateLayer(id, newFilteredData) {
+        setLayers(prevLayers => prevLayers.map(layer => {
+            return layer.id === id ? new GeoNetLayer({...layer.props, data: newFilteredData}) : layer;
+        }));
+    }
+
     useEffect(() => {
         const geonetLayers = Object.keys(dataSets).map(key => {
             const dataSet = dataSets[key];
-            return new GeoNetLayer({
-                id: `geonet-layer-${key}`,
-                data: dataSet,
-                ...settings,
-            });
+            return CreateGeoNetLayer(key, dataSet, settings, updateLayer);
         });
         setLayers(geonetLayers);
     }, [dataSets]);
@@ -61,6 +75,8 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
                 controller={true}
                 layers={layers}
                 ContextProvider={MapContext.Provider}
+                onClick={handleMapClick}
+
             >
                 <StaticMap mapStyle={MAP_STYLE}/>
                 <NavigationControl style={NAV_CONTROL_STYLE}/>

@@ -1,15 +1,15 @@
 import pandas as pd
+import shapely.wkt as wkt
 
 from scripts.cluster.DbscanClustering import DbscanClustering
 from scripts.cluster.SamePositionClustering import SamePositionClustering
 from scripts.graph.GeoNetwork import GeoNetwork
-from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig
-from scripts.layouts.StackedLayout import StackedLayoutConfig
-from scripts.utils.Geocooder import geocode_places
-import shapely.wkt as wkt
 from scripts.input.ColumnNormalizer import marieboucher_mapping, normalize_column_names
+from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig
 from scripts.layouts.LayoutFactory import LayoutFactory
 from scripts.layouts.LayoutType import LayoutType
+from scripts.layouts.StackedLayout import StackedLayoutConfig
+from scripts.utils.Geocooder import geocode_places
 from scripts.utils.LoggerConfig import logger
 
 
@@ -51,22 +51,24 @@ def create_marie_boucher_geo_network():
 def main():
     # process_marieboucher_data()
     network = create_marie_boucher_geo_network()
-    # clustering_strategy = DbscanClustering(eps=0.3)  # TODO: Cluster -1 ?
+    clustering_strategy = DbscanClustering(eps=0.3)  # TODO: Cluster -1 ?
     # stack_layout_config = StackedLayoutConfig(stack_points_offset=0.008, hull_buffer=0.01)
-    clustering_strategy = SamePositionClustering()
+    # clustering_strategy = SamePositionClustering()
     layout_factory = LayoutFactory(clustering_strategy)
     # stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
     # stacked_layout.create_layout(network, stack_layout_config)
+
     circular_layout_config = CircularLayoutConfig(radius_scale=2)
     circular_layout = layout_factory.get_layout(LayoutType.CIRCULAR)
     circular_layout.create_layout(network, circular_layout_config)
-
+    #
     network.create_convex_hulls() #Assuming that the network is already clustered #TODO
-    network.resolve_overlaps()
-    circular_layout.optimize_layout(network, max_iterations_per_cluster=150, improvement_threshold=1)
+    # network.resolve_overlaps()
+    # circular_layout.optimize_layout(network, max_iterations_per_cluster=5, improvement_threshold=1)
 
+    network.add_neighbors_and_edges()
 
-    network.write_to_disk('../geo-net-app/public/mb-circular.geojson', include_hulls=True)
+    network.write_to_disk('../geo-net-app/public/mb-stacked.geojson', include_hulls=True)
 
 
 if __name__ == '__main__':
