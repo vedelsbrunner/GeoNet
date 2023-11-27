@@ -20,7 +20,7 @@ logging.basicConfig(level=logging.INFO)
 
 class GeoNetwork:
     def __init__(self):
-        self.__gdf_points = gpd.GeoDataFrame(columns=['id', 'geometry'])
+        self.gdf_points = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__gdf_edges = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__gdf_hulls = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__points_data = []  # Only use for optimization purposes
@@ -28,6 +28,21 @@ class GeoNetwork:
         self.__point_to_edges = {}
         # // TODO: maybe private as well?
         self.graph = nx.Graph()
+
+    def add_neighbors_and_edges(self):
+        self.gdf_points['neighbors'] = None
+        self.gdf_points['connecting_edges'] = None
+        for index, row in self.gdf_points.iterrows():
+            point_id = row['id']
+            neighbor_ids = list(self.graph.neighbors(point_id))
+            connecting_edges = []
+            # For each neighbor, find the connecting edge and get its 'id'
+            for neighbor_id in neighbor_ids:
+                connection_edges = [tup[0] for tup in self.__point_to_edges[neighbor_id]]
+
+            # Update the GeoDataFrame with the lists of neighbors and connecting edges
+            self.gdf_points.at[index, 'neighbors'] = neighbor_ids
+            self.gdf_points.at[index, 'connecting_edges'] = connection_edges
 
     def add_point(self, point_id, x, y, **properties):
         point = Point(x, y)
@@ -62,11 +77,11 @@ class GeoNetwork:
             self.__point_to_edges[point_id_start].append((line_id, point_id_end))
             self.__point_to_edges[point_id_end].append((line_id, point_id_start))
 
-    def create_convex_hulls(self, buffer_distance=0.03): #TODO: Improve
+    def create_convex_hulls(self, buffer_distance=0.03):  # TODO: Improve
         logger.debug("Creating convex hulls for clusters")
         hulls_data = []
 
-        for cluster_id, points in self.__gdf_points.groupby('cluster'):
+        for cluster_id, points in self.gdf_points.groupby('cluster'):
             if cluster_id == -1:
                 logger.warning(f"Skipping cluster with ID {cluster_id} (noise)")
                 continue
@@ -78,7 +93,7 @@ class GeoNetwork:
                 hulls_data.append({'cluster_id': cluster_id, 'geometry': hull})
 
         # Create a GeoDataFrame from the list of hulls data
-        self.__gdf_hulls = gpd.GeoDataFrame(hulls_data, crs=self.__gdf_points.crs)
+        self.__gdf_hulls = gpd.GeoDataFrame(hulls_data, crs=self.gdf_points.crs)
 
     # TODO: Ugly post-processing, refactor(!)
     def finalize(self, crs="EPSG:32633"):
@@ -98,34 +113,46 @@ class GeoNetwork:
         points_df['betweenness_centrality'] = points_df['id'].apply(lambda x: betweenness.get(x, 0)).round(2)
 
         crs_object = CRS(crs)
-        self.__gdf_points = gpd.GeoDataFrame(points_df, geometry='geometry', crs=crs_object)
+        self.gdf_points = gpd.GeoDataFrame(points_df, geometry='geometry', crs=crs_object)
         self.__gdf_edges = gpd.GeoDataFrame(lines_df, geometry='geometry', crs=crs_object)
 
     def update_point(self, point_id, new_x, new_y):
         self.graph.nodes[point_id]['pos'] = (new_x, new_y)
-        self.__gdf_points.loc[self.__gdf_points['id'] == point_id, 'geometry'] = Point(new_x, new_y)
+        self.gdf_points.loc[self.gdf_points['id'] == point_id, 'geometry'] = Point(new_x, new_y)
 
         for line_id, connected_point_id in self.__point_to_edges[point_id]:
             self.__update_line_geometry(line_id, point_id, connected_point_id)
 
     def write_to_disk(self, output_path, include_hulls=False):
-        dfs_to_combine = [self.__gdf_points, self.__gdf_edges]
+        # Make a copy to avoid changing the original dataframes
+        gdf_points_copy = self.gdf_points.copy()
+        gdf_edges_copy = self.__gdf_edges.copy()
+        gdf_hulls_copy = self.__gdf_hulls.copy() if include_hulls else None
+
+        # Convert lists to strings
+        gdf_points_copy['neighbors'] = gdf_points_copy['neighbors'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
+        gdf_points_copy['connecting_edges'] = gdf_points_copy['connecting_edges'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
+
+        dfs_to_combine = [gdf_points_copy, gdf_edges_copy]
 
         if include_hulls:
-            if 'cluster_id' in self.__gdf_hulls.columns and 'id' not in self.__gdf_hulls.columns:
-                self.__gdf_hulls.rename(columns={'cluster_id': 'id'}, inplace=True)
-            dfs_to_combine.append(self.__gdf_hulls)
+            if 'cluster_id' in gdf_hulls_copy.columns and 'id' not in gdf_hulls_copy.columns:
+                gdf_hulls_copy.rename(columns={'cluster_id': 'id'}, inplace=True)
+            # Also convert lists to strings if necessary in hulls dataframe
+            # Example: gdf_hulls_copy['some_list_column'] = gdf_hulls_copy['some_list_column'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
+            dfs_to_combine.append(gdf_hulls_copy)
 
         combined_gdf = gpd.GeoDataFrame(pd.concat(dfs_to_combine, ignore_index=True))
 
+        # Save to file
         combined_gdf.to_file(output_path, driver='GeoJSON')
         logger.info(f"GeoNetwork data written to {output_path}{' with hulls' if include_hulls else ''}")
 
     def get_points(self):
-        return self.__gdf_points.copy()
+        return self.gdf_points.copy()
 
     def set_clusters(self, clusters):
-        self.__gdf_points['cluster'] = clusters
+        self.gdf_points['cluster'] = clusters
 
     def __update_line_geometry(self, line_id, point_id_start, point_id_end):
         point_start_pos = self.graph.nodes[point_id_start]['pos']
@@ -140,7 +167,7 @@ class GeoNetwork:
                 self.graph.nodes[point_id][key] = value
 
             for key, value in properties.items():
-                self.__gdf_points.loc[self.__gdf_points['id'] == point_id, key] = value
+                self.gdf_points.loc[self.gdf_points['id'] == point_id, key] = value
         else:
             logging.warning(f"Point with ID {point_id} not found in the graph.")
 
@@ -152,9 +179,9 @@ class GeoNetwork:
         for key, value in props.items():
             self.graph.nodes[point_id][key] = value
 
-        if self.__gdf_points['id'].isin([point_id]).any():
+        if self.gdf_points['id'].isin([point_id]).any():
             for key, value in props.items():
-                self.__gdf_points.loc[self.__gdf_points['id'] == point_id, key] = value
+                self.gdf_points.loc[self.gdf_points['id'] == point_id, key] = value
         else:
             logging.warning(f"Point with ID {point_id} not found in GeoDataFrame.")
 
@@ -172,11 +199,11 @@ class GeoNetwork:
 
     # Used for the CircularLayout TODO: Move to CircularLayout
     def are_connections_internal(self, point_id):
-        point_cluster = self.__gdf_points.loc[self.__gdf_points['id'] == point_id, 'cluster'].values[0]
+        point_cluster = self.gdf_points.loc[self.gdf_points['id'] == point_id, 'cluster'].values[0]
         connected_points = [edge[1] for edge in self.__point_to_edges[point_id]]
 
         for connected_point_id in connected_points:
-            connected_point_cluster = self.__gdf_points.loc[self.__gdf_points['id'] == connected_point_id, 'cluster'].values[0]
+            connected_point_cluster = self.gdf_points.loc[self.gdf_points['id'] == connected_point_id, 'cluster'].values[0]
             if connected_point_cluster != point_cluster:
                 return False
         return True
@@ -190,8 +217,8 @@ class GeoNetwork:
         node2_pos = self.graph.nodes[node2_id]['pos']
         self.graph.nodes[node1_id]['pos'], self.graph.nodes[node2_id]['pos'] = node2_pos, node1_pos
 
-        self.__gdf_points.loc[self.__gdf_points['id'] == node1_id, 'geometry'] = Point(node2_pos)
-        self.__gdf_points.loc[self.__gdf_points['id'] == node2_id, 'geometry'] = Point(node1_pos)
+        self.gdf_points.loc[self.gdf_points['id'] == node1_id, 'geometry'] = Point(node2_pos)
+        self.gdf_points.loc[self.gdf_points['id'] == node2_id, 'geometry'] = Point(node1_pos)
 
         for line_id, connected_point_id in self.__point_to_edges[node1_id]:
             self.__update_line_geometry(line_id, node1_id, connected_point_id)
@@ -232,9 +259,9 @@ class GeoNetwork:
             logger.warning("Max iterations reached, there might still be overlaps.")
 
     def apply_translation_to_cluster(self, cluster_id, translation_vector):
-        points_in_cluster = self.__gdf_points[self.__gdf_points['cluster'] == cluster_id]
+        points_in_cluster = self.gdf_points[self.gdf_points['cluster'] == cluster_id]
         for point_id in points_in_cluster['id']:
-            point = self.__gdf_points.loc[self.__gdf_points['id'] == point_id, 'geometry'].iloc[0]
+            point = self.gdf_points.loc[self.gdf_points['id'] == point_id, 'geometry'].iloc[0]
             translated_point = translate(point, xoff=translation_vector[0], yoff=translation_vector[1])
             self.update_point(point_id, translated_point.x, translated_point.y)
 
@@ -243,3 +270,5 @@ class GeoNetwork:
         hull = self.__gdf_hulls.loc[hull_index, 'geometry']
         translated_hull = translate(hull, xoff=translation_vector[0], yoff=translation_vector[1])
         self.__gdf_hulls.at[hull_index, 'geometry'] = translated_hull
+
+

@@ -1,56 +1,47 @@
 import {GeoJsonLayer} from '@deck.gl/layers';
-import {DataFilterExtension} from '@deck.gl/extensions';
+import {getFillColor} from "./GetFillColor.ts";
+import {getLineColor} from "./GetLineColor.ts";
+import {getLineWidth} from "./GetLineWidth.ts";
 
-export const createGeoNetLayer = (id, data, settings) => {
+
+export const createGeoNetLayer = (id, data, settings, updateLayer) => {
+    const onClick = (info) => {
+        console.log('clicked')
+        console.log(info)
+        if (info.object) {
+            const neighbors = info.object.properties.neighbors;
+            const connectingEdges = info.object.properties.connecting_edges;
+            const filteredData = data.features.filter(feature =>
+                neighbors.includes(feature.properties.id) ||
+                connectingEdges.includes(feature.properties.id) ||
+                feature.properties.id === info.object.properties.id
+            );
+
+            // Call the updateLayer function passed in props with the new filtered data
+            updateLayer(id, filteredData);
+        }
+    };
+
+
     const layer = new GeoJsonLayer({
-            id: id,
-            data: data,
-            autoHighlight: true,
-            pickable: true,
-            highlightColor: [255, 255, 255, 155],
-            getLineColor: getLineColor,
-            getFillColor: getFillColor,
-            lineWidthScale: 2,
-            lineWidthMinPixels: 2,
-            extruded: true,
-            pointRadiusScale: 10,
-            pointRadiusMinPixels: 1,
-            pointRadiusMaxPixels: 150,
-            getPointRadius: d => 150,
-            getLineWidth: getLineWidth,
-            extensions: [new DataFilterExtension({filterSize: 1})],
-        })
-    ;
+        id: id,
+        data: data,
+        autoHighlight: true,
+        pickable: true,
+        highlightColor: [255, 255, 255, 155],
+        getLineColor: getLineColor,
+        getFillColor: getFillColor,
+        lineWidthScale: 2,
+        pointType: 'circle',
+        lineWidthMinPixels: 2,
+        extruded: true,
+        pointRadiusScale: 10,
+        pointRadiusMinPixels: 1,
+        pointRadiusMaxPixels: 150,
+        getPointRadius: d => 150,
+        getLineWidth: getLineWidth,
+        onClick: onClick
+    });
+
     return layer;
 }
-
-const getLineWidth = feature => {
-    switch (feature.geometry.type) {
-        case 'Point':
-            return 1;
-        case 'LineString':
-            return 1;
-        default:
-            return 1;
-    }
-};
-const getLineColor = feature => {
-    switch (feature.geometry.type) {
-        case 'Point':
-            return [255, 255, 255, 20];
-        case 'LineString':
-            return [0, 120, 0, 255];
-        default:
-            return [0, 0, 0, 255];
-    }
-};
-const getFillColor = feature => {
-    switch (feature.geometry.type) {
-        case 'Point':
-            return [0, 0, 0, 150];
-        case 'LineString':
-            return [0, 120, 0, 20];
-        case 'Polygon':
-            return [0, 0, 255, 255];
-    }
-};

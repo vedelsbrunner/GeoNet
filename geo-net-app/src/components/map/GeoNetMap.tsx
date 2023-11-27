@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import DeckGL from 'deck.gl';
+import {GeoJsonLayer} from '@deck.gl/layers';
 import {MapContext, NavigationControl, StaticMap} from 'react-map-gl';
 import MapControls from '../controls/MapControls.tsx';
 import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box} from '@chakra-ui/react';
@@ -23,11 +24,20 @@ function GeoNetMap({dataSets}: GeoNetMapProps) {
         degreeFilter: 0
     });
 
+    // Reset layers to the full dataset
+    const handleMapClick = (info) => {
+        console.log('Map clicked')
+        if (!info.object) {
+            const newLayers = Object.keys(dataSets).map(key => {
+                return createGeoNetLayer(key, dataSets[key], settings, updateLayer);
+            });
+            setLayers(newLayers);
+        }
+    };
     useEffect(() => {
         const geonetLayers = Object.keys(dataSets).map(key => {
             console.log('Creating layer for ' + key)
-            const layer = createGeoNetLayer(key, dataSets[key], settings)
-            return layer;
+            return createGeoNetLayer(key, dataSets[key], settings, updateLayer);
         });
         setLayers(geonetLayers);
     }, [dataSets, settings]);
@@ -37,12 +47,20 @@ function GeoNetMap({dataSets}: GeoNetMapProps) {
         setSettings(prevSettings => ({...prevSettings, ...newSettings}));
     };
 
+    // Use setLayers to update the state with the new layer data
+    function updateLayer (id, newFilteredData) {
+        setLayers(prevLayers => prevLayers.map(layer => {
+            return layer.id === id ? new GeoJsonLayer({...layer.props, data: newFilteredData}) : layer;
+        }));
+    }
+
     return (
         <>
             <DeckGL
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
                 layers={layers}
+                onClick={handleMapClick}
                 ContextProvider={MapContext.Provider}
             >
                 <StaticMap mapStyle={MAP_STYLE}/>
