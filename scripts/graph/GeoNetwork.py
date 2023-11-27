@@ -1,7 +1,7 @@
 import logging
 from itertools import combinations
 from multiprocessing import Pool
-
+import itertools
 import numpy as np
 from shapely.affinity import translate
 
@@ -36,13 +36,10 @@ class GeoNetwork:
             point_id = row['id']
             neighbor_ids = list(self.graph.neighbors(point_id))
             connecting_edges = []
-            for neighbor_id in neighbor_ids:
-                connecting_edges.append([tup[0] for tup in self.__point_to_edges[neighbor_id]])
-
-            # Update the GeoDataFrame with the lists of neighbors and connecting edges
-            assert len(neighbor_ids) == len(connecting_edges), "Mismatch in number of neighbors and connecting edges"
+            connecting_edges.append([tup[0] for tup in self.__point_to_edges[point_id]])
+            print(connecting_edges)
             self.gdf_points.at[index, 'neighbors'] = neighbor_ids
-            self.gdf_points.at[index, 'connecting_edges'] = connecting_edges
+            self.gdf_points.at[index, 'connecting_edges'] = list(itertools.chain(*connecting_edges))
 
     def add_point(self, point_id, x, y, **properties):
         point = Point(x, y)

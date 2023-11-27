@@ -50,6 +50,7 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
     };
 
     function updateLayer(id, newFilteredData) {
+        // @ts-ignore
         setLayers(prevLayers => prevLayers.map(layer => {
             return layer.id === id ? new GeoNetLayer({...layer.props, data: newFilteredData}) : layer;
         }));
