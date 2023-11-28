@@ -2,7 +2,7 @@ export const ExtractDataLayers = (geoJson) => {
     let nodes = [];
     let edges = [];
     let hulls = {type: 'FeatureCollection', features: []};
-    let labels = [];
+    let location_labels = [];
 
     console.log('Extracting data layers with geoJson:', geoJson);
 
@@ -23,8 +23,9 @@ export const ExtractDataLayers = (geoJson) => {
 
         switch (feature.geometry.type) {
             case 'Point':
-                if (feature.properties && feature.properties.label) {
-                    labels.push(feature);
+                if (feature.properties.id.includes('location_label')) {
+                    location_labels.push(feature);
+
                 } else {
                     nodes.push(feature);
                 }
@@ -33,7 +34,6 @@ export const ExtractDataLayers = (geoJson) => {
                 edges.push(feature);
                 break;
             case 'Polygon':
-            case 'MultiPolygon':
                 hulls.features.push(feature);
                 break;
             default:
@@ -45,6 +45,6 @@ export const ExtractDataLayers = (geoJson) => {
     console.log('Extracted nodes:', nodes);
     console.log('Extracted edges:', edges);
     console.log('Extracted hulls:', hulls);
-    console.log('Extracted labels:', labels);
-    return {nodes, edges, hulls, labels};
+    console.log('Extracted labels:', location_labels);
+    return {nodes, edges, hulls, location_labels};
 }

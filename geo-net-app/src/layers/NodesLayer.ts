@@ -8,7 +8,6 @@ export class NodesLayer {
             pickable: true,
             autoHighlight: true,
             highlightColor: [255, 255, 255, 155],
-
             getPosition: d => d.geometry.coordinates,
             radiusScale: 3,
             radiusMinPixels: 1,

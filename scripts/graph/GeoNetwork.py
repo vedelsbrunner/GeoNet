@@ -21,8 +21,8 @@ logging.basicConfig(level=logging.INFO)
 class GeoNetwork:
     def __init__(self):
         self.gdf_points = gpd.GeoDataFrame(columns=['id', 'geometry'])
-        self.__gdf_edges = gpd.GeoDataFrame(columns=['id', 'geometry'])
-        self.__gdf_hulls = gpd.GeoDataFrame(columns=['id', 'geometry'])
+        self.gdf_edges = gpd.GeoDataFrame(columns=['id', 'geometry'])
+        self.gdf_hulls = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__gdf_labels = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__points_data = []  # Only use for optimization purposes
         self.__lines_data = []  # Only use for optimization purposes
@@ -87,7 +87,7 @@ class GeoNetwork:
                 hull = unary_union(buffered_points).convex_hull
                 hulls_data.append({'cluster_id': cluster_id, 'geometry': hull})
 
-        self.__gdf_hulls = gpd.GeoDataFrame(hulls_data, crs=self.gdf_points.crs)
+        self.gdf_hulls = gpd.GeoDataFrame(hulls_data, crs=self.gdf_points.crs)
 
 
     # TODO: Ugly post-processing, refactor(!)
@@ -109,7 +109,7 @@ class GeoNetwork:
 
         crs_object = CRS(crs)
         self.gdf_points = gpd.GeoDataFrame(points_df, geometry='geometry', crs=crs_object)
-        self.__gdf_edges = gpd.GeoDataFrame(lines_df, geometry='geometry', crs=crs_object)
+        self.gdf_edges = gpd.GeoDataFrame(lines_df, geometry='geometry', crs=crs_object)
 
     def update_point(self, point_id, new_x, new_y):
         self.graph.nodes[point_id]['pos'] = (new_x, new_y)
@@ -120,8 +120,8 @@ class GeoNetwork:
 
     def write_to_disk(self, output_path, include_hulls=False, include_labels=False):
         gdf_points_copy = self.gdf_points.copy()
-        gdf_edges_copy = self.__gdf_edges.copy()
-        gdf_hulls_copy = self.__gdf_hulls.copy() if include_hulls else None
+        gdf_edges_copy = self.gdf_edges.copy()
+        gdf_hulls_copy = self.gdf_hulls.copy() if include_hulls else None
         gdf_labels_copy = self.__gdf_labels.copy() if include_labels else None
 
         gdf_points_copy['neighbors'] = gdf_points_copy['neighbors'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
@@ -154,7 +154,7 @@ class GeoNetwork:
         point_start_pos = self.graph.nodes[point_id_start]['pos']
         point_end_pos = self.graph.nodes[point_id_end]['pos']
         new_line_geom = LineString([point_start_pos, point_end_pos])
-        self.__gdf_edges.loc[self.__gdf_edges['id'] == line_id, 'geometry'] = new_line_geom
+        self.gdf_edges.loc[self.gdf_edges['id'] == line_id, 'geometry'] = new_line_geom
 
     def update_point_properties(self, point_id, **properties):
         if point_id in self.graph:
@@ -230,11 +230,11 @@ class GeoNetwork:
 
         while overlapping and iteration < max_iterations:
             overlapping = False
-            hull_pairs_to_check = list(combinations(range(len(self.__gdf_hulls)), 2))
+            hull_pairs_to_check = list(combinations(range(len(self.gdf_hulls)), 2))
 
             for idx1, idx2 in hull_pairs_to_check:
-                hull1 = self.__gdf_hulls.iloc[idx1]['geometry']
-                hull2 = self.__gdf_hulls.iloc[idx2]['geometry']
+                hull1 = self.gdf_hulls.iloc[idx1]['geometry']
+                hull2 = self.gdf_hulls.iloc[idx2]['geometry']
                 if hulls_overlap(hull1, hull2):
                     overlapping = True
                     mtv = calculate_mtv(hull1, hull2)
@@ -242,8 +242,8 @@ class GeoNetwork:
                         translation_vector_1 = (-mtv / 2) - np.array([0.01, 0.01])
                         translation_vector_2 = (mtv / 2) + np.array([0.01, 0.01])
 
-                        cluster_id_1 = self.__gdf_hulls.iloc[idx1]['cluster_id']
-                        cluster_id_2 = self.__gdf_hulls.iloc[idx2]['cluster_id']
+                        cluster_id_1 = self.gdf_hulls.iloc[idx1]['cluster_id']
+                        cluster_id_2 = self.gdf_hulls.iloc[idx2]['cluster_id']
                         self.apply_translation_to_cluster(cluster_id_1, translation_vector_1)
                         self.apply_translation_to_cluster(cluster_id_2, translation_vector_2)
 
@@ -261,10 +261,10 @@ class GeoNetwork:
             self.update_point(point_id, translated_point.x, translated_point.y)
 
         # Apply the same translation to the hull
-        hull_index = self.__gdf_hulls[self.__gdf_hulls['cluster_id'] == cluster_id].index[0]
-        hull = self.__gdf_hulls.loc[hull_index, 'geometry']
+        hull_index = self.gdf_hulls[self.gdf_hulls['cluster_id'] == cluster_id].index[0]
+        hull = self.gdf_hulls.loc[hull_index, 'geometry']
         translated_hull = translate(hull, xoff=translation_vector[0], yoff=translation_vector[1])
-        self.__gdf_hulls.at[hull_index, 'geometry'] = translated_hull
+        self.gdf_hulls.at[hull_index, 'geometry'] = translated_hull
 
     def create_text_labels(self):
         self.__gdf_labels = gpd.GeoDataFrame(columns=['id', 'geometry', 'text'])
@@ -281,12 +281,23 @@ class GeoNetwork:
             if 'nan' in str(locations):
                 logger.error('TODO: Handle nan cluster / location, why are u here?')
                 continue
-            points_in_cluster = self.gdf_points[self.gdf_points['cluster'] == cluster_id]
-            centroid = points_in_cluster.unary_union.centroid
+
+            # Enable if u want to use the centroid for text positon
+            #points_in_cluster = self.gdf_points[self.gdf_points['cluster'] == cluster_id]
+            # centroid = points_in_cluster.unary_union.centroid
+
+            cluster_hull = self.gdf_hulls.loc[self.gdf_hulls['cluster_id'] == cluster_id, 'geometry'].values[0]
+            southernmost_point = min(cluster_hull.exterior.coords, key=lambda p: p[1])
+            min_x, max_x = cluster_hull.bounds[0], cluster_hull.bounds[2]
+            label_x = (min_x + max_x) / 2
+            label_y = southernmost_point[1]
+            label_geom = Point(label_x, label_y)
+
+            location_string = "\n".join(map(str, locations))
             labels.append({
                 'id': f"location_label'{cluster_id}",
-                'geometry': centroid,
-                'text': "".join(locations)
+                'geometry': label_geom,
+                'text': location_string
             })
 
         self.__gdf_labels = gpd.GeoDataFrame(labels, crs=self.gdf_points.crs)

@@ -9,7 +9,7 @@ export class EdgesLayer {
             getSourcePosition: d => d.geometry.coordinates[0],
             getTargetPosition: d => d.geometry.coordinates[1],
             pickable: true,
-            highlightColor: [255, 255, 255, 155],
+            highlightColor: [255, 255, 255, 40],
 
             getWidth: 1,
         });
