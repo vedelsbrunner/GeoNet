@@ -23,6 +23,7 @@ class GeoNetwork:
         self.gdf_points = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__gdf_edges = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__gdf_hulls = gpd.GeoDataFrame(columns=['id', 'geometry'])
+        self.__gdf_labels = gpd.GeoDataFrame(columns=['id', 'geometry'])
         self.__points_data = []  # Only use for optimization purposes
         self.__lines_data = []  # Only use for optimization purposes
         self.__point_to_edges = {}
@@ -37,7 +38,6 @@ class GeoNetwork:
             neighbor_ids = list(self.graph.neighbors(point_id))
             connecting_edges = []
             connecting_edges.append([tup[0] for tup in self.__point_to_edges[point_id]])
-            print(connecting_edges)
             self.gdf_points.at[index, 'neighbors'] = neighbor_ids
             self.gdf_points.at[index, 'connecting_edges'] = list(itertools.chain(*connecting_edges))
 
@@ -75,22 +75,20 @@ class GeoNetwork:
             self.__point_to_edges[point_id_end].append((line_id, point_id_start))
 
     def create_convex_hulls(self, buffer_distance=0.03):  # TODO: Improve
-        logger.debug("Creating convex hulls for clusters")
         hulls_data = []
 
         for cluster_id, points in self.gdf_points.groupby('cluster'):
             if cluster_id == -1:
-                logger.warning(f"Skipping cluster with ID {cluster_id} (noise)")
+                logger.error(f"Skipping cluster with ID {cluster_id} (noise)")
                 continue
 
             if not points.empty:
-                # Create a buffer around each point and then compute the convex hull
                 buffered_points = points.buffer(buffer_distance)
                 hull = unary_union(buffered_points).convex_hull
                 hulls_data.append({'cluster_id': cluster_id, 'geometry': hull})
 
-        # Create a GeoDataFrame from the list of hulls data
         self.__gdf_hulls = gpd.GeoDataFrame(hulls_data, crs=self.gdf_points.crs)
+
 
     # TODO: Ugly post-processing, refactor(!)
     def finalize(self, crs="EPSG:32633"):
@@ -120,13 +118,12 @@ class GeoNetwork:
         for line_id, connected_point_id in self.__point_to_edges[point_id]:
             self.__update_line_geometry(line_id, point_id, connected_point_id)
 
-    def write_to_disk(self, output_path, include_hulls=False):
-        # Make a copy to avoid changing the original dataframes
+    def write_to_disk(self, output_path, include_hulls=False, include_labels=False):
         gdf_points_copy = self.gdf_points.copy()
         gdf_edges_copy = self.__gdf_edges.copy()
         gdf_hulls_copy = self.__gdf_hulls.copy() if include_hulls else None
+        gdf_labels_copy = self.__gdf_labels.copy() if include_labels else None
 
-        # Convert lists to strings
         gdf_points_copy['neighbors'] = gdf_points_copy['neighbors'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
         gdf_points_copy['connecting_edges'] = gdf_points_copy['connecting_edges'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
 
@@ -137,10 +134,15 @@ class GeoNetwork:
                 gdf_hulls_copy.rename(columns={'cluster_id': 'id'}, inplace=True)
             dfs_to_combine.append(gdf_hulls_copy)
 
-        combined_gdf = gpd.GeoDataFrame(pd.concat(dfs_to_combine, ignore_index=True))
+        if include_labels:
+            if 'text' not in gdf_labels_copy.columns:
+                logger.warning("Text labels are not available to include.")
+            else:
+                dfs_to_combine.append(gdf_labels_copy)
 
+        combined_gdf = gpd.GeoDataFrame(pd.concat(dfs_to_combine, ignore_index=True))
         combined_gdf.to_file(output_path, driver='GeoJSON')
-        logger.info(f"GeoNetwork data written to {output_path}{' with hulls' if include_hulls else ''}")
+        logger.info(f"GeoNetwork data written to {output_path}{' with hulls' if include_hulls else ''}{' and labels' if include_labels else ''}")
 
     def get_points(self):
         return self.gdf_points.copy()
@@ -263,3 +265,29 @@ class GeoNetwork:
         hull = self.__gdf_hulls.loc[hull_index, 'geometry']
         translated_hull = translate(hull, xoff=translation_vector[0], yoff=translation_vector[1])
         self.__gdf_hulls.at[hull_index, 'geometry'] = translated_hull
+
+    def create_text_labels(self):
+        self.__gdf_labels = gpd.GeoDataFrame(columns=['id', 'geometry', 'text'])
+
+        cluster_locations = self.gdf_points.groupby('cluster')['location'].apply(set)
+
+
+        labels = []
+        for cluster_id, locations in cluster_locations.items():
+            if cluster_id == -1:
+                logger.info(f"Skipping cluster with ID {cluster_id} (noise)")
+                continue
+
+            if 'nan' in str(locations):
+                logger.error('TODO: Handle nan cluster / location, why are u here?')
+                continue
+            points_in_cluster = self.gdf_points[self.gdf_points['cluster'] == cluster_id]
+            centroid = points_in_cluster.unary_union.centroid
+            labels.append({
+                'id': f"location_label'{cluster_id}",
+                'geometry': centroid,
+                'text': "".join(locations)
+            })
+
+        self.__gdf_labels = gpd.GeoDataFrame(labels, crs=self.gdf_points.crs)
+
