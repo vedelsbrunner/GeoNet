@@ -10,10 +10,10 @@ export class NodesLayer {
             highlightColor: [255, 255, 255, 155],
 
             getPosition: d => d.geometry.coordinates,
-            radiusScale: 6,
+            radiusScale: 3,
             radiusMinPixels: 1,
-            radiusMaxPixels: 10,
-            getRadius: d => 400,
+            radiusMaxPixels: 20,
+            getRadius: d => 300,
             onHover: info => console.log('hovered:', info),
             onClick: info => console.log('clicked:', info),
         });

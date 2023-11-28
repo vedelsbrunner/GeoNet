@@ -6,7 +6,7 @@ export class HullsLayer {
         return new GeoJsonLayer({
             id: 'hulls-layer',
             data: hulls,
-            extruded: true,
+            extruded: false,
             getFillColor: [160, 160, 180, 50],
             pickable: false,
             autoHighlight: false,

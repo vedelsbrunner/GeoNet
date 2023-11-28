@@ -48,27 +48,38 @@ def create_marie_boucher_geo_network():
     return network
 
 
-def main():
-    # process_marieboucher_data()
-    network = create_marie_boucher_geo_network()
-    clustering_strategy = DbscanClustering(eps=0.3)  # TODO: Cluster -1 ?
-    # stack_layout_config = StackedLayoutConfig(stack_points_offset=0.008, hull_buffer=0.01)
-    # clustering_strategy = SamePositionClustering()
+def create_circular_layout(network, clustering_strategy, config):
     layout_factory = LayoutFactory(clustering_strategy)
-    # stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
-    # stacked_layout.create_layout(network, stack_layout_config)
-
-    circular_layout_config = CircularLayoutConfig(radius_scale=2)
     circular_layout = layout_factory.get_layout(LayoutType.CIRCULAR)
-    circular_layout.create_layout(network, circular_layout_config)
-    #
-    network.create_convex_hulls() #Assuming that the network is already clustered #TODO
-    # network.resolve_overlaps()
-    # circular_layout.optimize_layout(network, max_iterations_per_cluster=5, improvement_threshold=1)
-
+    circular_layout.create_layout(network, config)
+    network.create_convex_hulls()  # Assuming that the network is already clustered #TODO
+    network.resolve_overlaps()
     network.add_neighbors_and_edges()
+    circular_layout.optimize_layout(network, max_iterations_per_cluster=5, improvement_threshold=1)
+    return network
 
+
+def create_stacked_layout(network, clustering_strategy, config):
+    layout_factory = LayoutFactory(clustering_strategy)
+    stacked_layout = layout_factory.get_layout(LayoutType.STACKED)
+    stacked_layout.create_layout(network, config)
+    network.add_neighbors_and_edges()
+    network.create_convex_hulls()  # Assuming that the network is already clustered #TODO
+    network.resolve_overlaps()
     network.write_to_disk('../geo-net-app/public/mb-stacked.geojson', include_hulls=True)
+    return network
+
+
+def main():
+    network = create_marie_boucher_geo_network()
+
+    logger.info("Creating stacked layout")
+    stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.0008, hull_buffer=0.0003)
+    create_stacked_layout(network, SamePositionClustering(), stacked_layout_confing)
+
+    logger.info("Creating circular layout")
+    circular_layout_config = CircularLayoutConfig(radius_scale=2)
+    create_circular_layout(network, DbscanClustering(), circular_layout_config)
 
 
 if __name__ == '__main__':
