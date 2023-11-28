@@ -1,7 +1,7 @@
 import {LineLayer} from 'deck.gl';
 
 export class EdgesLayer {
-    createLayer(edges) {
+    createLayer(edges, settings) {
         return new LineLayer({
             id: 'lines-layer',
             data: edges,
@@ -10,8 +10,8 @@ export class EdgesLayer {
             getTargetPosition: d => d.geometry.coordinates[1],
             pickable: true,
             highlightColor: [255, 255, 255, 40],
-
-            getWidth: 1,
+            getColor: d => [0,0,0, 255 * settings.edgeOpacity],
+            getWidth: d => settings.lineWidthScale / 1000,
         });
     }
 }

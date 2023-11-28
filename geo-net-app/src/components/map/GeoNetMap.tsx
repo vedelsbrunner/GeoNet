@@ -29,13 +29,12 @@ interface GeoNetMapProps {
 function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
     const [layers, setLayers] = useState([]);
     const [settings, setSettings] = useState({
-        lineWidthScale: 80,
-        pointRadius: 1200,
+        lineWidthScale: 1,
+        pointRadius: 250,
         edgeWidth: 1,
         pointOpacity: 1,
         edgeOpacity: 0.2,
         degreeFilter: 0
-
     });
 
     // Reset dataset from all filters
@@ -62,7 +61,7 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
             return CreateGeoNetLayer(key, dataSet, settings, updateLayer);
         });
         setLayers(geonetLayers);
-    }, [dataSets]);
+    }, [dataSets, settings]);
 
     const handleSettingsChange = (newSettings) => {
         console.log(newSettings)

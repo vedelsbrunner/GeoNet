@@ -2,8 +2,6 @@ import GeoNetLayer from "./GeoNetLayer.ts";
 
 export const CreateGeoNetLayer = (id, data, settings, updateLayer) => {
     const onClick = (info) => {
-        console.log('clicked')
-        console.log(info)
         if (info.object) {
             const neighbors = info.object.properties.neighbors;
             const connectingEdges = info.object.properties.connecting_edges;

@@ -1,7 +1,7 @@
 import {ScatterplotLayer} from 'deck.gl';
 
 export class NodesLayer {
-    createLayer(nodes) {
+    createLayer(nodes, settings) {
         return new ScatterplotLayer({
             id: 'nodes-layer',
             data: nodes,
@@ -9,10 +9,11 @@ export class NodesLayer {
             autoHighlight: true,
             highlightColor: [255, 255, 255, 155],
             getPosition: d => d.geometry.coordinates,
-            radiusScale: 3,
+            radiusScale: 2,
             radiusMinPixels: 1,
             radiusMaxPixels: 20,
-            getRadius: d => 300,
+            getFillColor: d => [0,0,0, 255 * settings.pointOpacity],
+            getRadius: d => settings.pointRadius,
             onHover: info => console.log('hovered:', info),
             onClick: info => console.log('clicked:', info),
         });
