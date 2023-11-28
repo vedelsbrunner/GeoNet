@@ -4,8 +4,8 @@ import {MapContext, NavigationControl, StaticMap} from 'react-map-gl';
 import MapControls from '../controls/MapControls.tsx';
 import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box} from '@chakra-ui/react';
 import {JsonFilePathsDictionary} from "../../hooks/useJsonData.tsx";
-import GeoNetLayer from "../layers/GeoNetLayer.ts";
-import {CreateGeoNetLayer} from "../layers/GeoNetLayerCreator.ts";
+import GeoNetLayer from "../../layers/GeoNetLayer.ts";
+import {CreateGeoNetLayer} from "../../layers/GeoNetLayerCreator.ts";
 
 const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';
 const NAV_CONTROL_STYLE = {
