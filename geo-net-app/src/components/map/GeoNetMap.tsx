@@ -28,11 +28,11 @@ interface GeoNetMapProps {
 
 function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
     const [selectedLayer, setSelectedLayer] = useState(Layouts.Default);
-    const [layers, setLayers] = useState([]);
+    const [layers, setLayers] = useState([]); //TODO: Always a single value never a list...!
     const [settings, setSettings] = useState({
         lineWidthScale: 600,
-        pointRadius: 250,
-        pointOpacity: 1,
+        pointRadius: 300,
+        pointOpacity: 0.6,
         edgeOpacity: 0.2,
         degreeFilter: 0
     });
@@ -47,10 +47,10 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
     };
 
     function updateLayer(id, newFilteredData) {
-        // @ts-ignore
-        setLayers(prevLayers => prevLayers.map(layer => {
-            return layer.id === id ? new GeoNetLayer({...layer.props, data: newFilteredData}) : layer;
-        }));
+        console.log(id)
+        console.log(newFilteredData)
+        const filteredLayer = CreateGeoNetLayer(id, newFilteredData, settings, updateLayer);
+        setLayers(filteredLayer);
     }
 
     useEffect(() => {

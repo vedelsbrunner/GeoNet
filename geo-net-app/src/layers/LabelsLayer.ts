@@ -11,7 +11,7 @@ export class LabelsLayer {
             getText: d => d.properties.text,
             getAlignmentBaseline : 'top',
             pickable: false,
-            getSize: 2000,
+            getSize: 1500,
             background: true,
             getBackgroundColor: [255, 255, 255, 80],
             extensions: [new CollisionFilterExtension()]

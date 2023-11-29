@@ -6,10 +6,10 @@ export class EdgesLayer {
             id: 'lines-layer',
             data: edges,
             autoHighlight: true,
+            pickable: true,
             getSourcePosition: d => d.geometry.coordinates[0],
             getTargetPosition: d => d.geometry.coordinates[1],
-            pickable: true,
-            highlightColor: [255, 255, 255, 40],
+            highlightColor: [255, 255, 255, 200],
             getColor: d => [0,0,0, 255 * settings.edgeOpacity],
             getWidth: d => settings.lineWidthScale / 1000,
         });

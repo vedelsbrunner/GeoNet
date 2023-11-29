@@ -14,9 +14,9 @@ export default class GeoNetLayer extends CompositeLayer {
         const layerSettings = {lineWidthScale, pointRadius, edgeWidth, pointOpacity, edgeOpacity, degreeFilter};
         return [
             new LabelsLayer().createLayer(location_labels),
-            new NodesLayer().createLayer(nodes, layerSettings),
+            new HullsLayer().createHullsLayer(hulls),
             new EdgesLayer().createLayer(edges, layerSettings),
-            new HullsLayer().createHullsLayer(hulls)
+            new NodesLayer().createLayer(nodes, layerSettings)
         ];
     }
 }
