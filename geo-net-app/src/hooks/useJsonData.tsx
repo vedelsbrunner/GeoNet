@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react';
 
-// Define an enum with all the possible keys for the file paths.
 export enum Layouts {
     Default = 'default',
     CircularClustered = 'circularClustered',
@@ -9,7 +8,6 @@ export enum Layouts {
     StackedClustered = 'stackedClustered'
 }
 
-// Define the JsonFilePathsDictionary using the enum as keys.
 export interface JsonFilePathsDictionary {
     [Layouts.Default]?: string;
     [Layouts.CircularClustered]?: string;

@@ -4,8 +4,6 @@ export const ExtractDataLayers = (geoJson) => {
     let hulls = {type: 'FeatureCollection', features: []};
     let location_labels = [];
 
-    console.log('Extracting data layers with geoJson:', geoJson);
-
     if (!geoJson) {
         console.error('Invalid or undefined geoJson data:', geoJson);
     }
@@ -42,9 +40,5 @@ export const ExtractDataLayers = (geoJson) => {
         }
     });
 
-    console.log('Extracted nodes:', nodes);
-    console.log('Extracted edges:', edges);
-    console.log('Extracted hulls:', hulls);
-    console.log('Extracted labels:', location_labels);
     return {nodes, edges, hulls, location_labels};
 }

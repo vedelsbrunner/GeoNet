@@ -1,5 +1,6 @@
 import {Box, Divider, FormLabel, HStack, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text} from '@chakra-ui/react';
-import React, {useState} from "react";
+import {useState} from "react";
+import {Layouts} from "../../hooks/useJsonData.tsx";
 
 function MapControls({settings, onChange}) {
     const [lineWidthScale, setLineWidthScale] = useState(settings.lineWidthScale);
@@ -14,13 +15,13 @@ function MapControls({settings, onChange}) {
         onChange({...settings, lineWidthScale: value});
     };
     const handleLayerSelectionChange = (event) => {
-        const layerIndex = parseInt(event.target.value, 10);
-        onChange(settings, layerIndex); // Pass the layerIndex back to the parent component
+        const layerIndex = event.target.value;
+        console.log('layerIndex', layerIndex);
+        onChange(settings, layerIndex);
     };
 
     const handlePointOpacityChange = (value) => {
         setPointOpacity(value);
-        console.log(value)
         onChange({...settings, pointOpacity: value});
     };
 
@@ -32,11 +33,6 @@ function MapControls({settings, onChange}) {
     const handlePointRadiusChange = (value) => {
         setPointRadius(value);
         onChange({...settings, pointRadius: value});
-    };
-
-    const handleEdgeWidthChange = (value) => {
-        setEdgeWidth(value);
-        onChange({...settings, edgeWidth: value});
     };
 
     const handleDegreeFilterChange = (value) => {
@@ -103,11 +99,11 @@ function MapControls({settings, onChange}) {
 
             <Text fontSize={18} mt={4}>Layers</Text>
             <Select onChange={handleLayerSelectionChange} bg={"gray"} color={"black"}>
-                <option value="0">Default Layer</option>
-                <option value="1">Circular Layer</option>
-                <option value="2">Circular Clustered Layer</option>
-                <option value="3">Stacked Layer</option>
-                <option value="4">Stacked Clustered Layer</option>
+                <option value={Layouts.Default}>Default Layer</option>
+                <option value={Layouts.Circular}>Circular Layer</option>
+                <option value={Layouts.CircularClustered}>Circular Clustered Layer</option>
+                <option value={Layouts.Stacked}>Stacked Layer</option>
+                <option value={Layouts.StackedClustered}>Stacked Clustered Layer</option>
             </Select>
         </Box>
     );

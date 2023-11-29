@@ -10,8 +10,6 @@ export const CreateGeoNetLayer = (id, data, settings, updateLayer) => {
                 connectingEdges.includes(feature.properties.id) ||
                 feature.properties.id === info.object.properties.id
             );
-
-            console.log('Newly filtered data:', filteredData)
             updateLayer(id, filteredData);
         }
     };

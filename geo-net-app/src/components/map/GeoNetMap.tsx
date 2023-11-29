@@ -3,7 +3,7 @@ import DeckGL from 'deck.gl';
 import {MapContext, NavigationControl, StaticMap} from 'react-map-gl';
 import MapControls from '../controls/MapControls.tsx';
 import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box} from '@chakra-ui/react';
-import {JsonFilePathsDictionary} from "../../hooks/useJsonData.tsx";
+import {JsonFilePathsDictionary, Layouts} from "../../hooks/useJsonData.tsx";
 import GeoNetLayer from "../../layers/GeoNetLayer.ts";
 import {CreateGeoNetLayer} from "../../layers/GeoNetLayerCreator.ts";
 
@@ -27,11 +27,11 @@ interface GeoNetMapProps {
 }
 
 function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
+    const [selectedLayer, setSelectedLayer] = useState(Layouts.Default);
     const [layers, setLayers] = useState([]);
     const [settings, setSettings] = useState({
-        lineWidthScale: 1,
+        lineWidthScale: 600,
         pointRadius: 250,
-        edgeWidth: 1,
         pointOpacity: 1,
         edgeOpacity: 0.2,
         degreeFilter: 0
@@ -39,11 +39,12 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
 
     // Reset dataset from all filters
     const handleMapClick = (info) => {
-        console.log('Map clicked')
         if (!info.object) {
             const newLayers = Object.keys(dataSets).map(key => {
                 return CreateGeoNetLayer(key, dataSets[key], settings, updateLayer);
             });
+
+
             setLayers(newLayers);
         }
     };
@@ -56,15 +57,16 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
     }
 
     useEffect(() => {
-        const geonetLayers = Object.keys(dataSets).map(key => {
-            const dataSet = dataSets[key];
-            return CreateGeoNetLayer(key, dataSet, settings, updateLayer);
-        });
-        setLayers(geonetLayers);
-    }, [dataSets, settings]);
+        const selectedDataSet = dataSets[selectedLayer];
+        const geonetLayer = CreateGeoNetLayer(selectedLayer, selectedDataSet, settings, updateLayer);
+        setLayers(geonetLayer);
+    }, [dataSets, settings, selectedLayer]);
 
-    const handleSettingsChange = (newSettings) => {
-        console.log(newSettings)
+    const handleSettingsChange = (newSettings, layerIndex) => {
+        console.log('handleSettingsChange', newSettings, layerIndex)
+        if (layerIndex !== undefined) {
+            setSelectedLayer(layerIndex);
+        }
         setSettings(prevSettings => ({...prevSettings, ...newSettings}));
     };
 
