@@ -40,12 +40,9 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
     // Reset dataset from all filters
     const handleMapClick = (info) => {
         if (!info.object) {
-            const newLayers = Object.keys(dataSets).map(key => {
-                return CreateGeoNetLayer(key, dataSets[key], settings, updateLayer);
-            });
-
-
-            setLayers(newLayers);
+            const selectedDataSet = dataSets[selectedLayer];
+            const geonetLayer = CreateGeoNetLayer(selectedLayer, selectedDataSet, settings, updateLayer);
+            setLayers(geonetLayer);
         }
     };
 
