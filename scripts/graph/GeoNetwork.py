@@ -266,6 +266,10 @@ class GeoNetwork:
         translated_hull = translate(hull, xoff=translation_vector[0], yoff=translation_vector[1])
         self.gdf_hulls.at[hull_index, 'geometry'] = translated_hull
 
+    def print_network_summary(self):
+        num_nodes = self.gdf_points.count()[0]
+        num_edges = self.gdf_edges.count()[0]
+        logger.info("This graph as {} nodes and {} edges.".format(num_nodes, num_edges))
     def create_text_labels(self):
         self.__gdf_labels = gpd.GeoDataFrame(columns=['id', 'geometry', 'text'])
 
