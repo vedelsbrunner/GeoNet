@@ -16,7 +16,7 @@ export class NodesLayer {
             getLineColor: d => [255,255,255,50],
             radiusMaxPixels: 20,
             getFillColor: d => [0, 0, 0, 255 * settings.pointOpacity],
-            getRadius: d => settings.pointRadius,
+            getRadius: d => settings.pointRadius * Math.sqrt(d.properties.degree),
             onHover: info => console.log('hovered:', info),
             onClick: info => console.log('clicked:', info),
         });

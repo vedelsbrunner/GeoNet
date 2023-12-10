@@ -21,13 +21,13 @@ interface DataSetsDictionary {
 }
 
 export interface UsePublicJsonDataReturn {
-    dataSets: DataSetsDictionary;
+    layouts: DataSetsDictionary;
     isLoading: boolean;
     error: Error | null;
 }
 
 const usePublicJsonData = (jsonFilePaths: JsonFilePathsDictionary): UsePublicJsonDataReturn => {
-    const [dataSets, setDataSets] = useState<DataSetsDictionary>({});
+    const [layouts, setLayouts] = useState<DataSetsDictionary>({});
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -49,7 +49,7 @@ const usePublicJsonData = (jsonFilePaths: JsonFilePathsDictionary): UsePublicJso
                     return acc;
                 }, {});
 
-                setDataSets(newDataSet);
+                setLayouts(newDataSet);
             } catch (e) {
                 setError(e instanceof Error ? e : new Error(e.toString()));
             } finally {
@@ -60,7 +60,7 @@ const usePublicJsonData = (jsonFilePaths: JsonFilePathsDictionary): UsePublicJso
         fetchData();
     }, [jsonFilePaths]);
 
-    return {dataSets, isLoading, error};
+    return {layouts, isLoading, error};
 };
 
 export default usePublicJsonData;

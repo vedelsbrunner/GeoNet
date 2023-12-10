@@ -1,1 +1,2 @@
 Smith_network.csv: Letter of relationships between interlectuals in the Scottish Enlightenment.
+USDiss: https://www.peers.press/p/TMRTRl7sIUqpr2hQ74hj

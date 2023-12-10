@@ -47,7 +47,7 @@ class CircularLayout(Layout):
 
     def optimize_layout(self, network, max_iterations_per_cluster=100, improvement_threshold=20):
         clusters = self.sort_clusters_by_size(network)
-        for i in range(1, 10):
+        for i in range(1, 50):
             logger.info(f"Starting optimization round {i}.")
             for cluster in clusters:
                 logger.info(f"Starting optimization for cluster {cluster}.")

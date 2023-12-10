@@ -22,11 +22,10 @@ const INITIAL_VIEW_STATE = {
 };
 
 interface GeoNetMapProps {
-    initialViewState: any;
-    dataSets: JsonFilePathsDictionary;
+    layouts: JsonFilePathsDictionary;
 }
 
-function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
+function GeoNetMap({layouts}: GeoNetMapProps) {
     const [selectedLayer, setSelectedLayer] = useState(Layouts.Default);
     const [layers, setLayers] = useState([]); //TODO: Always a single value never a list...!
     const [settings, setSettings] = useState({
@@ -40,7 +39,7 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
     // Reset dataset from all filters
     const handleMapClick = (info) => {
         if (!info.object) {
-            const selectedDataSet = dataSets[selectedLayer];
+            const selectedDataSet = layouts[selectedLayer];
             const geonetLayer = CreateGeoNetLayer(selectedLayer, selectedDataSet, settings, updateLayer);
             setLayers(geonetLayer);
         }
@@ -54,10 +53,10 @@ function GeoNetMap({initialViewState, dataSets}: GeoNetMapProps) {
     }
 
     useEffect(() => {
-        const selectedDataSet = dataSets[selectedLayer];
+        const selectedDataSet = layouts[selectedLayer];
         const geonetLayer = CreateGeoNetLayer(selectedLayer, selectedDataSet, settings, updateLayer);
         setLayers(geonetLayer);
-    }, [dataSets, settings, selectedLayer]);
+    }, [layouts, settings, selectedLayer]);
 
     const handleSettingsChange = (newSettings, layerIndex) => {
         console.log('handleSettingsChange', newSettings, layerIndex)
