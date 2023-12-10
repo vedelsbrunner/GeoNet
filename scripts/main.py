@@ -21,7 +21,7 @@ def create_circular_layout(dataset, network, clustering_strategy, config):
     circular_layout = layout_factory.get_layout(LayoutType.CIRCULAR)
     circular_layout.create_layout(network, config)
     network.create_convex_hulls()  # Assuming that the network is already clustered #TODO
-    network.resolve_overlaps()
+    # network.resolve_overlaps()
     network.add_neighbors_and_edges()
     # circular_layout.optimize_layout(network, max_iterations_per_cluster=1, improvement_threshold=1)
     # network.create_text_labels()
@@ -52,12 +52,12 @@ def main():
     else:
         raise Exception('Invalid dataset')
 
-    logger.info("Creating stacked layout")
-    stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.005, hull_buffer=0.03)
-    create_stacked_layout(current_dataset, network, SamePositionClustering(), stacked_layout_confing)
+   # logger.info("Creating stacked layout")
+   # stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.005, hull_buffer=0.03)
+  #  create_stacked_layout(current_dataset, network, SamePositionClustering(), stacked_layout_confing)
     #
     logger.info("Creating circular layout")
-    circular_layout_config = CircularLayoutConfig(radius_scale=300)
+    circular_layout_config = CircularLayoutConfig(radius_scale=10)
     create_circular_layout(current_dataset, network, DbscanClustering(eps=0.3), circular_layout_config)
 
 
