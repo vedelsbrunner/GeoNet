@@ -2,6 +2,7 @@ from scripts.layouts.CircularLayout import CircularLayout
 from scripts.layouts.GridLayout import GridLayout
 from scripts.layouts.LayoutType import LayoutType
 from scripts.layouts.StackedLayout import StackedLayout
+from scripts.layouts.SunflowerLayout import SunflowerLayout
 
 
 class LayoutFactory:
@@ -15,5 +16,7 @@ class LayoutFactory:
             return GridLayout(self.clustering_strategy)
         elif layout_type == LayoutType.STACKED:
             return StackedLayout(self.clustering_strategy)
+        elif layout_type == LayoutType.SUNFLOWER:
+            return SunflowerLayout(self.clustering_strategy)
         else:
             raise ValueError(f"Unknown layout type: {layout_type}")

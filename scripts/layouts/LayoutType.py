@@ -4,3 +4,4 @@ class LayoutType(Enum):
     CIRCULAR = auto()
     GRID = auto()
     STACKED = auto()
+    SUNFLOWER = auto()
