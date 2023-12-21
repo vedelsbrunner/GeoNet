@@ -100,13 +100,13 @@ function MapControls({settings, onChange}) {
             <Text fontSize={18} mt={4}>Layers</Text>
             <Select onChange={handleLayerSelectionChange} bg={"gray"} color={"black"}>
                 <option value={Layouts.Default}>Default Layout</option>
-                <option value={Layouts.Circular}>Circular Layout</option>
-                <option value={Layouts.CircularClustered}>Circular Clustered Layout</option>
                 <option value={Layouts.Stacked}>Stacked Layout</option>
-                <option value={Layouts.StackedClustered}>Stacked Clustered Layout</option>
+                <option value={Layouts.Circular}>Circular Layout</option>
                 <option value={Layouts.Sunflower}>Sunflower Layout</option>
-                <option value={Layouts.SunflowerClustered}>Sunflower Clustered Layout</option>
                 <option value={Layouts.Grid}>Grid Layout</option>
+                <option value={Layouts.StackedClustered}>Stacked Clustered Layout</option>
+                <option value={Layouts.CircularClustered}>Circular Clustered Layout</option>
+                <option value={Layouts.SunflowerClustered}>Sunflower Clustered Layout</option>
                 <option value={Layouts.GridClustered}>Grid Clustered Layout</option>
             </Select>
         </Box>

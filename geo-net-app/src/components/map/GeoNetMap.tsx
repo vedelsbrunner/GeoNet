@@ -30,9 +30,9 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     const [layers, setLayers] = useState([]); //TODO: Always a single value never a list...!
     const [settings, setSettings] = useState({
         lineWidthScale: 600,
-        pointRadius: 300,
-        pointOpacity: 0.6,
-        edgeOpacity: 0.2,
+        pointRadius: 400,
+        pointOpacity: 1,
+        edgeOpacity: 0.4,
         degreeFilter: 0
     });
 
