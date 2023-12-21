@@ -48,7 +48,10 @@ def create_china_geo_network():
 
 
 def process_china_data():
-    accepted_keywords = topics_keywords["Tang-Song-Ming, Culture and Arts"]
+    accepted_keywords = []
+    for key in topics_keywords:
+        accepted_keywords.extend(topics_keywords[key])
+
     china = "../datasets/china.csv"
     df = pd.read_csv(china, keep_default_na=False)
     ignored_keywords = {"China", "History", ""}  # Add ignored keywords here
