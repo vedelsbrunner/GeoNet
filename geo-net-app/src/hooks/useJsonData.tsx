@@ -21,17 +21,23 @@ interface DataSetsDictionary {
 }
 
 export interface UsePublicJsonDataReturn {
-    layouts: DataSetsDictionary;
     isLoading: boolean;
     error: Error | null;
 }
 
-const usePublicJsonData = (jsonFilePaths: JsonFilePathsDictionary): UsePublicJsonDataReturn => {
-    const [layouts, setLayouts] = useState<DataSetsDictionary>({});
+const usePublicJsonData = (jsonFilePaths: JsonFilePathsDictionary, setExternalLayouts: (layouts: DataSetsDictionary | null) => void): UsePublicJsonDataReturn => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
+        console.log('Fetching Data')
+        setExternalLayouts(null); // Reset layouts to null before fetching new data
+
+        if (!jsonFilePaths || Object.keys(jsonFilePaths).length === 0) {
+            setIsLoading(false);
+            return;
+        }
+
         const fetchData = async () => {
             try {
                 const dataSetsPromises = Object.entries(jsonFilePaths).map(async ([name, path]) => {
@@ -49,7 +55,8 @@ const usePublicJsonData = (jsonFilePaths: JsonFilePathsDictionary): UsePublicJso
                     return acc;
                 }, {});
 
-                setLayouts(newDataSet);
+                setExternalLayouts(newDataSet);
+
             } catch (e) {
                 setError(e instanceof Error ? e : new Error(e.toString()));
             } finally {
@@ -58,9 +65,9 @@ const usePublicJsonData = (jsonFilePaths: JsonFilePathsDictionary): UsePublicJso
         };
 
         fetchData();
-    }, [jsonFilePaths]);
+    }, [jsonFilePaths, setExternalLayouts]);
 
-    return {layouts, isLoading, error};
+    return {isLoading, error};
 };
 
 export default usePublicJsonData;
