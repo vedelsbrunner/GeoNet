@@ -5,6 +5,7 @@ from scripts.cluster.DbscanClustering import DbscanClustering
 from scripts.cluster.SamePositionClustering import SamePositionClustering
 from scripts.dataset_preprocessing.china import create_china_geo_network, process_china_data
 from scripts.dataset_preprocessing.marie_boucher import create_marie_boucher_geo_network
+from scripts.dataset_preprocessing.smith import process_smith_data, create_smith_geo_network
 from scripts.graph.GeoNetwork import GeoNetwork
 from scripts.input.ColumnNormalizer import marieboucher_mapping, normalize_column_names
 from scripts.layouts.GridLayoutConfig import GridLayoutConfig
@@ -50,8 +51,8 @@ def create_sunflower_layout(dataset, network, clustering_strategy, sunflower_lay
     sunflower_layout.create_layout(network, sunflower_layout_config)
     network.add_neighbors_and_edges()
     network.create_convex_hulls()
-    network.write_to_disk(f'../geo-net-app/public/{dataset}/sunflower.geojson', include_hulls=True, include_labels=False)
-    network.write_to_disk(f'../geo-net-app/public/china/sunflower.geojson', include_hulls=True, include_labels=False)
+    network.write_to_disk(f'../geo-net-app/public/{dataset}/default.geojson', include_hulls=True, include_labels=False)
+    network.write_to_disk(f'../geo-net-app/public/china/default.geojson', include_hulls=True, include_labels=False)
     network.write_to_disk(f'../geo-net-app/public/jucs/sunflower.geojson', include_hulls=True, include_labels=False)
     network.write_to_disk(f'../geo-net-app/public/smith/sunflower.geojson', include_hulls=True, include_labels=False)
     return network
@@ -70,12 +71,15 @@ def create_grid_layout(dataset, network, clustering_strategy, grid_layout_config
 
 def main():
     # process_china_data()
-    current_dataset = 'marieboucher'
+    # process_smith_data()
+    current_dataset = 'smith'
 
     if current_dataset == 'china':
         network = create_china_geo_network()
     elif current_dataset == 'marieboucher':
         network = create_marie_boucher_geo_network()
+    elif current_dataset == 'smith':
+        network = create_smith_geo_network()
     else:
         raise Exception('Invalid dataset')
 
@@ -83,15 +87,15 @@ def main():
    # stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.005, hull_buffer=0.03)
   #  create_stacked_layout(current_dataset, network, SamePositionClustering(), stacked_layout_confing)
     #
-    # logger.info("Creating circular layout")
-    # circular_layout_config = CircularLayoutConfig(radius_scale=10)
-    # create_circular_layout(current_dataset, network, DbscanClustering(eps=0.3), circular_layout_config)
+    logger.info("Creating circular layout")
+    circular_layout_config = CircularLayoutConfig(radius_scale=2)
+    create_circular_layout(current_dataset, network, SamePositionClustering(), circular_layout_config)
 
     # sunflower_layout_config = SunflowerLayoutConfig(displacement_radius=0.02)
     # create_sunflower_layout(current_dataset, network, DbscanClustering(eps=0.3), sunflower_layout_config)
 
-    grid_layout_config = GridLayoutConfig(distance_between_points=0.05)
-    create_grid_layout(current_dataset, network, DbscanClustering(eps=0.3), grid_layout_config)
+    # grid_layout_config = GridLayoutConfig(distance_between_points=0.05)
+    # create_grid_layout(current_dataset, network, DbscanClustering(eps=0.3), grid_layout_config)
 
 if __name__ == '__main__':
     main()

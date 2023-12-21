@@ -6,7 +6,7 @@ def geocode_places(df, source_places="source_location", target_places="target_lo
         raise ValueError("Error: source_places or target_places not in df.columns")
 
     print(f"Geocoding {source_places} with {len(df)} places...")
-    source_geocooded = geocode(df[source_places], provider="nominatim", user_agent="GeoNet")
+    source_geocooded = geocode(df[source_places])
     print(f"Geocoded {len(source_geocooded)} places.")
 
     df['source_coordinates'] = source_geocooded['geometry']

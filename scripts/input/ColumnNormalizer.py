@@ -8,3 +8,10 @@ marieboucher_mapping = {
     'Place1': 'source_location',
     'Place2': 'target_location'
 }
+
+smith_mapping = {
+    'Sender': 'source',
+    'Courrier': 'target',
+    'Sender Location': 'source_location',
+    'Courrier Location': 'target_location'
+}
