@@ -30,7 +30,6 @@ const usePublicJsonData = (jsonFilePaths: JsonFilePathsDictionary, setExternalLa
     const [error, setError] = useState<Error | null>(null);
 
     useEffect(() => {
-        console.log('Fetching Data')
         setExternalLayouts(null); // Reset layouts to null before fetching new data
 
         if (!jsonFilePaths || Object.keys(jsonFilePaths).length === 0) {
