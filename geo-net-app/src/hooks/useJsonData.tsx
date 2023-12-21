@@ -5,7 +5,11 @@ export enum Layouts {
     CircularClustered = 'circularClustered',
     Circular = 'circular',
     Stacked = 'stacked',
-    StackedClustered = 'stackedClustered'
+    StackedClustered = 'stackedClustered',
+    Sunflower = 'sunflower',
+    SunflowerClustered = 'sunflowerClustered',
+    Grid = 'grid',
+    GridClustered = 'gridClustered'
 }
 
 export interface JsonFilePathsDictionary {
@@ -14,6 +18,10 @@ export interface JsonFilePathsDictionary {
     [Layouts.Circular]?: string;
     [Layouts.Stacked]?: string;
     [Layouts.StackedClustered]?: string;
+    [Layouts.Sunflower]?: string;
+    [Layouts.SunflowerClustered]?: string;
+    [Layouts.Grid]?: string;
+    [Layouts.GridClustered]?: string;
 }
 
 interface DataSetsDictionary {

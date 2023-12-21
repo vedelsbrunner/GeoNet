@@ -17,7 +17,12 @@ export function DataSetSelectionPage() {
             [Layouts.CircularClustered]: 'circular-clustered.geojson',
             [Layouts.Circular]: 'circular.geojson',
             [Layouts.Stacked]: 'stacked.geojson',
-            [Layouts.StackedClustered]: 'stacked-clustered.geojson'
+            [Layouts.StackedClustered]: 'stacked-clustered.geojson',
+            [Layouts.Sunflower]: 'sunflower.geojson',
+            [Layouts.Grid]: 'grid.geojson',
+            [Layouts.SunflowerClustered]: 'sunflower-clustered.geojson',
+            [Layouts.GridClustered]: 'grid-clustered.geojson'
+
         };
         const datasetLayouts = {};
         dataSetDirectories.forEach(dataset => {
