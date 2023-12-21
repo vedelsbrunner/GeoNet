@@ -5,7 +5,7 @@ from shapely import wkt as wkt
 import pandas as pd
 import ast
 from geopandas.tools import geocode
-from geopy import Point
+from shapely import Point
 
 from scripts.utils.LoggerConfig import logger
 
@@ -65,7 +65,7 @@ def process_jucs_data():
 
         point = wkt.loads(row['coordinates'])
 
-        location = Point(point.y, point.x)
+        location = Point(point.x, point.y)
         location_str = str(location)
 
         # Filter keywords: accept all except ignored

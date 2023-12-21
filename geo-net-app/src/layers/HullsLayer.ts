@@ -6,7 +6,7 @@ export class HullsLayer {
             id: 'hulls-layer',
             data: hulls,
             extruded: false,
-            getFillColor: [160, 160, 180, 150],
+            getFillColor: [240, 128, 128, 100],
             pickable: false,
             autoHighlight: false,
         });

@@ -20,6 +20,31 @@ from scripts.utils.Geocooder import geocode_places
 from scripts.utils.LoggerConfig import logger
 
 
+def create_jucs_geo_network():
+    network = GeoNetwork()
+    df = pd.read_csv("../datasets/jucs_network.csv")
+
+    for index, row in df.iterrows():
+        target_location = wkt.loads(row['target_coordinates'])
+        source_location = wkt.loads(row['source_coordinates'])
+
+        if source_location.is_empty or target_location.is_empty:
+            logger.info('Skipping empty location')
+            continue
+
+        source_node_id = f"src_{row['source']}"
+        target_node_id = f"tgt_{row['target']}"
+        line_id = f"edge_{source_node_id}_{target_node_id}"
+
+        network.add_point(source_node_id, source_location.x, source_location.y)
+        network.add_point(target_node_id, target_location.x, target_location.y)
+        network.add_line(line_id, source_node_id, target_node_id)
+
+    network.finalize()
+    logger.info(network.print_network_summary())
+    # TODO: Add props 2.0
+    return network
+
 
 def create_circular_layout(dataset, network, clustering_strategy, config):
     layout_factory = LayoutFactory(clustering_strategy)
@@ -58,26 +83,28 @@ def create_sunflower_layout(dataset, network, clustering_strategy, sunflower_lay
     network.write_to_disk(f'../geo-net-app/public/smith/sunflower.geojson', include_hulls=True, include_labels=False)
     return network
 
+
 def create_grid_layout(dataset, network, clustering_strategy, grid_layout_config):
     layout_factory = LayoutFactory(clustering_strategy)
     grid_layout = layout_factory.get_layout(LayoutType.GRID)
     grid_layout.create_layout(network, grid_layout_config)
     network.add_neighbors_and_edges()
     network.create_convex_hulls()
-    network.write_to_disk(f'../geo-net-app/public/{dataset}/sunflower.geojson', include_hulls=True, include_labels=False) #TODO: sunflower vs grid
+    network.write_to_disk(f'../geo-net-app/public/{dataset}/sunflower.geojson', include_hulls=True, include_labels=False)  # TODO: sunflower vs grid
     network.write_to_disk(f'../geo-net-app/public/china/sunflower.geojson', include_hulls=True, include_labels=False)
     network.write_to_disk(f'../geo-net-app/public/jucs/sunflower.geojson', include_hulls=True, include_labels=False)
     network.write_to_disk(f'../geo-net-app/public/smith/sunflower.geojson', include_hulls=True, include_labels=False)
     return network
 
+
 def main():
     # prepare_jucs_data()
     # geocode_jucs_data()
 
-    process_jucs_data()
+    # process_jucs_data()
     # process_china_data()
     # process_smith_data()
-    current_dataset = 'smith'
+    current_dataset = 'jucs'
 
     if current_dataset == 'china':
         network = create_china_geo_network()
@@ -85,22 +112,25 @@ def main():
         network = create_marie_boucher_geo_network()
     elif current_dataset == 'smith':
         network = create_smith_geo_network()
+    elif current_dataset == 'jucs':
+        network = create_jucs_geo_network()
     else:
         raise Exception('Invalid dataset')
 
-   # logger.info("Creating stacked layout")
-   # stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.005, hull_buffer=0.03)
-  #  create_stacked_layout(current_dataset, network, SamePositionClustering(), stacked_layout_confing)
+    # logger.info("Creating stacked layout")
+    # stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.005, hull_buffer=0.03)
+    #  create_stacked_layout(current_dataset, network, SamePositionClustering(), stacked_layout_confing)
     #
     logger.info("Creating circular layout")
-    circular_layout_config = CircularLayoutConfig(radius_scale=2)
-    create_circular_layout(current_dataset, network, SamePositionClustering(), circular_layout_config)
+    circular_layout_config = CircularLayoutConfig(radius_scale=12)
+    create_circular_layout(current_dataset, network, DbscanClustering(eps=0.3), circular_layout_config)
 
     # sunflower_layout_config = SunflowerLayoutConfig(displacement_radius=0.02)
     # create_sunflower_layout(current_dataset, network, DbscanClustering(eps=0.3), sunflower_layout_config)
 
     # grid_layout_config = GridLayoutConfig(distance_between_points=0.05)
     # create_grid_layout(current_dataset, network, DbscanClustering(eps=0.3), grid_layout_config)
+
 
 if __name__ == '__main__':
     main()
