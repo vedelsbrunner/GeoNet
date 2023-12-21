@@ -4,6 +4,7 @@ import shapely.wkt as wkt
 from scripts.cluster.DbscanClustering import DbscanClustering
 from scripts.cluster.SamePositionClustering import SamePositionClustering
 from scripts.dataset_preprocessing.china import create_china_geo_network, process_china_data
+from scripts.dataset_preprocessing.jucs import prepare_jucs_data, geocode_jucs_data, process_jucs_data
 from scripts.dataset_preprocessing.marie_boucher import create_marie_boucher_geo_network
 from scripts.dataset_preprocessing.smith import process_smith_data, create_smith_geo_network
 from scripts.graph.GeoNetwork import GeoNetwork
@@ -70,6 +71,10 @@ def create_grid_layout(dataset, network, clustering_strategy, grid_layout_config
     return network
 
 def main():
+    # prepare_jucs_data()
+    # geocode_jucs_data()
+
+    process_jucs_data()
     # process_china_data()
     # process_smith_data()
     current_dataset = 'smith'

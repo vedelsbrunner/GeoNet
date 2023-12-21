@@ -15,3 +15,7 @@ smith_mapping = {
     'Sender Location': 'source_location',
     'Courrier Location': 'target_location'
 }
+
+jucs_mapping = {
+    'Aut'
+}
