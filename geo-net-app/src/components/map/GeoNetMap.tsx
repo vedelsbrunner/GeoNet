@@ -4,7 +4,7 @@ import {MapContext, NavigationControl, StaticMap} from 'react-map-gl';
 import {JsonFilePathsDictionary, Layouts} from "../../hooks/useJsonData.tsx";
 import {CreateGeoNetLayer} from "../../layers/GeoNetLayerCreator.ts";
 import GeoNetControls from "../controls/GeoNetControls.tsx";
-import {INITIAL_VIEW_STATE, MAP_STYLE, NAV_CONTROL_STYLE} from "./MAP_STYLE.tsx";
+import {INITIAL_VIEW_STATE, MAP_STYLE, MAPBOX_ACCESS_TOKEN, NAV_CONTROL_STYLE} from "./MAP_STYLE.tsx";
 
 interface GeoNetMapProps {
     layouts: JsonFilePathsDictionary;
@@ -48,7 +48,9 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
                 layers={currentGeoNetLayer}
                 ContextProvider={MapContext.Provider}
             >
-                <StaticMap mapStyle={MAP_STYLE}/>
+                <StaticMap
+                    mapboxApiAccessToken={MAPBOX_ACCESS_TOKEN}
+                    mapStyle={MAP_STYLE}/>
                 <NavigationControl style={NAV_CONTROL_STYLE}/>
             </DeckGL>
             <GeoNetControls settings={settings} handleSettingsChange={handleSettingsChange}></GeoNetControls>
