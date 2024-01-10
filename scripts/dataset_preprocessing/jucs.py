@@ -7,6 +7,7 @@ import ast
 from geopandas.tools import geocode
 from shapely import Point
 
+from scripts.graph.GeoNetwork import GeoNetwork
 from scripts.utils.LoggerConfig import logger
 
 
@@ -100,3 +101,29 @@ def process_jucs_data():
     network_df = pd.DataFrame(network_data)
     network_df.to_csv("../datasets/jucs_network.csv", index=False)
     return
+
+
+def create_jucs_geo_network():
+    network = GeoNetwork()
+    df = pd.read_csv("../datasets/jucs_network.csv")
+
+    for index, row in df.iterrows():
+        target_location = wkt.loads(row['target_coordinates'])
+        source_location = wkt.loads(row['source_coordinates'])
+
+        if source_location.is_empty or target_location.is_empty:
+            logger.info('Skipping empty location')
+            continue
+
+        source_node_id = f"src_{row['source']}"
+        target_node_id = f"tgt_{row['target']}"
+        line_id = f"edge_{source_node_id}_{target_node_id}"
+
+        network.add_point(source_node_id, source_location.x, source_location.y)
+        network.add_point(target_node_id, target_location.x, target_location.y)
+        network.add_line(line_id, source_node_id, target_node_id)
+
+    network.finalize()
+    logger.info(network.print_network_summary())
+    # TODO: Add props 2.0
+    return network
