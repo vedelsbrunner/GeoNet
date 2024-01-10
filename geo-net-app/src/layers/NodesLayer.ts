@@ -14,7 +14,7 @@ export class NodesLayer {
             radiusMinPixels: 1,
             lineWidthMinPixels: 0.5,
             getLineColor: d => [0,0,0,150],
-            radiusMaxPixels: 20,
+            radiusMaxPixels: 40,
             getFillColor: d => [253,253,150,255 * settings.pointOpacity],
             getRadius: d => settings.pointRadius * Math.sqrt(d.properties.degree),
         });

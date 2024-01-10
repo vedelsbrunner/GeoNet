@@ -23,6 +23,8 @@ class GridLayout(Layout):
                 logger.debug("Skipping cluster with only one point")
                 continue
 
+            cluster_points = cluster_points.sort_values(by='degree', ascending=False)
+
             grid_center = cluster_points.geometry.unary_union.centroid
             grid_size = math.ceil(math.sqrt(num_points))
 
