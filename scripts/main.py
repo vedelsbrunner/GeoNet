@@ -17,9 +17,9 @@ from scripts.layouts.layout_creators.stacked_layout_creator import create_stacke
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
 CREATE_SUNFLOWER_LAYOUT = False
-CREATE_STACKED_LAYOUT = False
+CREATE_STACKED_LAYOUT = True
 CREATE_CIRCULAR_LAYOUT = False
-CREATE_GRID_LAYOUT = True
+CREATE_GRID_LAYOUT = False
 
 
 def main():
@@ -49,8 +49,8 @@ def main():
         create_sunflower_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), sunflower_layout_config, is_aggregated=False)
         create_sunflower_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), sunflower_layout_config, is_aggregated=True)
 
-    if CREATE_SUNFLOWER_LAYOUT:
-        stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.005, hull_buffer=0.03)
+    if CREATE_STACKED_LAYOUT:
+        stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.02, hull_buffer=0.03)
         create_stacked_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), stacked_layout_confing, is_aggregated=False)
         create_stacked_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), stacked_layout_confing, is_aggregated=True)
 
@@ -60,7 +60,7 @@ def main():
         create_circular_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=True)
 
     if CREATE_GRID_LAYOUT:
-        grid_layout_config = GridLayoutConfig(distance_between_points=0.1)
+        grid_layout_config = GridLayoutConfig(distance_between_points=0.2)
         create_grid_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), grid_layout_config, is_aggregated=False)
         create_grid_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=True)
 

@@ -37,6 +37,9 @@ class CircularLayout(Layout):
         for cluster in clusters:
             cluster_points = points_gdf[points_gdf['cluster'] == cluster]
             num_points = len(cluster_points)
+
+            cluster_points = cluster_points.sort_values(by='degree', ascending=False)
+
             if num_points > 1:
                 radius = base_radius * config.radius_scale * sqrt(num_points)
                 circle_center = cluster_points.geometry.unary_union.centroid
