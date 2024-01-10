@@ -10,7 +10,7 @@ def create_grid_layout(dataset, network, clustering_strategy, grid_layout_config
     network.add_neighbors_and_edges()
     network.create_convex_hulls()
     if is_aggregated:
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/grid-clustered.geojson', include_hulls=True, include_labels=False)  # TODO: sunflower vs grid
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/grid-clustered.geojson', include_hulls=True, include_labels=False)
     else:
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/grid.geojson', include_hulls=True, include_labels=False)  # TODO: sunflower vs grid
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/grid.geojson', include_hulls=True, include_labels=False)
     return
