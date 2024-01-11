@@ -2,6 +2,7 @@ import copy
 
 from scripts.cluster.DbscanClustering import DbscanClustering
 from scripts.cluster.SamePositionClustering import SamePositionClustering
+from scripts.dataset_preprocessing.archeology import process_archeology_data, create_archeology_geo_network
 from scripts.dataset_preprocessing.china import create_china_geo_network
 from scripts.dataset_preprocessing.jucs import create_jucs_geo_network
 from scripts.dataset_preprocessing.marie_boucher import create_marie_boucher_geo_network
@@ -16,20 +17,21 @@ from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layo
 from scripts.layouts.layout_creators.stacked_layout_creator import create_stacked_layout
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
-CREATE_SUNFLOWER_LAYOUT = True
+CREATE_SUNFLOWER_LAYOUT = False
 CREATE_STACKED_LAYOUT = False
 CREATE_CIRCULAR_LAYOUT = False
 CREATE_GRID_LAYOUT = False
 
 
 def main():
+    # process_archeology_data()
     # prepare_jucs_data()
     # geocode_jucs_data()
     # process_jucs_data()
     # process_china_data()
     # process_smith_data()
 
-    current_dataset = 'marieboucher'
+    current_dataset = 'china'
 
     if current_dataset == 'china':
         network = create_china_geo_network()
@@ -39,6 +41,8 @@ def main():
         network = create_smith_geo_network()
     elif current_dataset == 'jucs':
         network = create_jucs_geo_network()
+    elif current_dataset == 'archeology':
+        network = create_archeology_geo_network()
     else:
         raise Exception('Invalid dataset')
 
@@ -55,12 +59,12 @@ def main():
         create_stacked_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), stacked_layout_confing, is_aggregated=True)
 
     if CREATE_CIRCULAR_LAYOUT:
-        circular_layout_config = CircularLayoutConfig(radius_scale=10)
+        circular_layout_config = CircularLayoutConfig(radius_scale=25)
         create_circular_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=False)
         create_circular_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=True)
 
     if CREATE_GRID_LAYOUT:
-        grid_layout_config = GridLayoutConfig(distance_between_points=0.2)
+        grid_layout_config = GridLayoutConfig(distance_between_points=0.4)
         create_grid_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), grid_layout_config, is_aggregated=False)
         create_grid_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=True)
 

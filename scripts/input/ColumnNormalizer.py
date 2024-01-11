@@ -19,3 +19,10 @@ smith_mapping = {
 jucs_mapping = {
     'Aut'
 }
+
+archeology_mapping = {
+    'FROM': 'source',
+    'TO': 'target',
+    'SOURCE_LOCATION': 'source_location',
+    'TARGET_LOCATION': 'target_location'
+}

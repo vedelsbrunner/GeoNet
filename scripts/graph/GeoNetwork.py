@@ -74,7 +74,7 @@ class GeoNetwork:
             self.__point_to_edges[point_id_start].append((line_id, point_id_end))
             self.__point_to_edges[point_id_end].append((line_id, point_id_start))
 
-    def create_convex_hulls(self, buffer_distance=0.1):
+    def create_convex_hulls(self, buffer_distance=0.2):
         hulls_data = []
 
         for cluster_id, points in self.gdf_points.groupby('cluster'):

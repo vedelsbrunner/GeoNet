@@ -7,16 +7,20 @@ export class NodesLayer {
             data: nodes,
             pickable: true,
             autoHighlight: true,
-            highlightColor: [255, 255, 255, 155],
+            highlightColor: [255, 255, 255, 255],
             getPosition: d => d.geometry.coordinates,
-            radiusScale: 2,
             stroked: true,
-            radiusMinPixels: 1,
-            lineWidthMinPixels: 0.5,
-            getLineColor: d => [255,255,255,100],
-            radiusMaxPixels: 40,
-            getFillColor: d => [0,0,0,255 * settings.pointOpacity],
-            getRadius: d => settings.pointRadius * Math.sqrt(d.properties.degree),
+            radiusUnits: 'meters',
+            radiusScale: 2,
+            radiusMinPixels: 4,
+
+            lineWidthUnits: 'meters',
+            lineWidthScale: 1000,
+            lineWidthMaxPixels:  10,
+
+            getLineColor: d => [0,0,0,255],
+            getFillColor: d => [255,255,255,255 * settings.pointOpacity],
+            getRadius: d => settings.pointRadius * Math.sqrt(d.properties.degree * 2),
         });
     }
 }

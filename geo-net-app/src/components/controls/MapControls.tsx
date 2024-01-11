@@ -50,7 +50,7 @@ function MapControls({settings, onChange}) {
             </Text>
             <HStack justifyContent="space-between" mt={1}>
                 <FormLabel htmlFor='point-radius'>Radius</FormLabel>
-                <Slider id='point-radius' value={pointRadius} min={0} max={1000} onChange={handlePointRadiusChange}>
+                <Slider id='point-radius' value={pointRadius} min={1000} max={5000} onChange={handlePointRadiusChange}>
                     <SliderTrack>
                         <SliderFilledTrack/>
                     </SliderTrack>
