@@ -12,7 +12,7 @@ export class NodesLayer {
             stroked: true,
             radiusUnits: 'meters',
             radiusScale: 2,
-            radiusMinPixels: 4,
+            radiusMinPixels: 2.5,
 
             lineWidthUnits: 'meters',
             lineWidthScale: 1000,
@@ -20,7 +20,7 @@ export class NodesLayer {
 
             getLineColor: d => [0,0,0,255],
             getFillColor: d => [255,255,255,255 * settings.pointOpacity],
-            getRadius: d => settings.pointRadius * Math.sqrt(d.properties.degree * 2),
+            getRadius: d => settings.pointRadius * Math.sqrt(d.properties.degree * 5),
         });
     }
 }

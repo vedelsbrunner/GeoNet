@@ -9,7 +9,7 @@ def create_sunflower_layout(dataset, network, clustering_strategy, sunflower_lay
     # network.resolve_overlaps()
     network.add_neighbors_and_edges()
     network.create_convex_hulls()
-    if not is_aggregated:
+    if is_aggregated:
         network.write_to_disk(f'../geo-net-app/public/{dataset}/sunflower-clustered.geojson', include_hulls=True, include_labels=False)
     else:
         network.write_to_disk(f'../geo-net-app/public/{dataset}/sunflower.geojson', include_hulls=True, include_labels=False)
