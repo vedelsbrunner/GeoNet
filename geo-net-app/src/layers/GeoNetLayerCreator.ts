@@ -6,7 +6,6 @@ export const CreateGeoNetLayer = (selectedLayer, data, settings, updateLayer, la
             const {neighbors, connecting_edges} = info.object.properties;
             if (!neighbors || !connecting_edges) {
                 console.log("Null or undefined data encountered", {neighbors, connecting_edges});
-
                 return;
             }
             const filteredData = data.features.filter(feature =>
@@ -16,7 +15,6 @@ export const CreateGeoNetLayer = (selectedLayer, data, settings, updateLayer, la
             );
             updateLayer(selectedLayer, filteredData);
         } else {
-            console.log('OnHove ended')
             console.log(selectedLayer, layouts[selectedLayer])
             updateLayer(selectedLayer, layouts[selectedLayer]);
         }
