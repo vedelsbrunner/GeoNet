@@ -127,6 +127,14 @@ class GeoNetwork:
         gdf_points_copy['neighbors'] = gdf_points_copy['neighbors'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
         gdf_points_copy['connecting_edges'] = gdf_points_copy['connecting_edges'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
 
+
+        if 'geometry' in gdf_points_copy.columns:
+            gdf_points_copy['longitude'] = gdf_points_copy.geometry.apply(lambda geom: geom.y) #No suer if geom.y is long or lat..
+
+        # Sort by 'cluster', 'degree', and then 'longitude' --> TODO: Only relevant for the stacked layout..
+        if 'cluster' in gdf_points_copy.columns and 'degree' in gdf_points_copy.columns and 'longitude' in gdf_points_copy.columns:
+            gdf_points_copy.sort_values(by=['cluster', 'degree', 'longitude'], ascending=[True, False, True], inplace=True)
+
         dfs_to_combine = [gdf_points_copy, gdf_edges_copy]
 
         if include_hulls:

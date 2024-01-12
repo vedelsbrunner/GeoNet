@@ -11,9 +11,13 @@ class StackedLayoutConfig(LayoutConfig):
 
 def create_stack(network, group, stack_point_offset):
     for i, (index, row) in enumerate(group.iterrows()):
-        new_y = row.geometry.y + (i * stack_point_offset) # create stack along y-axis
+        new_y = row.geometry.y + (i * stack_point_offset)  # create stack along y-axis
         network.update_point(row.id, row.geometry.x, new_y)
 
+
+def sort_points_by_degree(network: GeoNetwork, points):
+    sorted_points = points.sort_values(by='degree', ascending=False)
+    return sorted_points
 
 
 class StackedLayout(Layout):
@@ -25,10 +29,6 @@ class StackedLayout(Layout):
         logger.debug(f"Found {len(clusters)} clusters for stacked layout")
 
         for _, points in clusters:
-            sorted_points = self.sort_points_by_degree(network, points)
+            sorted_points = sort_points_by_degree(network, points)
             create_stack(network, sorted_points, config.stack_points_offset)
         logger.debug(f"Repositioned points in clusters")
-
-    def sort_points_by_degree(self, network: GeoNetwork, points):
-        sorted_points = points.sort_values(by='degree', ascending=False)
-        return sorted_points

@@ -56,7 +56,7 @@ def main():
         create_sunflower_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), sunflower_layout_config, is_aggregated=False)
 
     if CREATE_STACKED_LAYOUT:
-        stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.02, hull_buffer=0.03)
+        stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.03, hull_buffer=0.03)
         create_stacked_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), stacked_layout_confing, is_aggregated=True)
         create_stacked_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), stacked_layout_confing, is_aggregated=False)
 
