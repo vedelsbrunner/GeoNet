@@ -32,9 +32,9 @@ def main():
     # process_china_data()
     # process_smith_data()
 
-    current_dataset = 'jucs'
+    current_dataset = 'china'
 
-    if current_dataset == 'jucs':
+    if current_dataset == 'china':
         network = create_china_geo_network()
     elif current_dataset == 'marieboucher':
         network = create_marie_boucher_geo_network()

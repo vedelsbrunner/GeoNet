@@ -7,6 +7,8 @@ function MapControls({settings, onChange}) {
     const [pointOpacity, setPointOpacity] = useState(settings.pointOpacity);
     const [edgeOpacity, setEdgeOpacity] = useState(settings.edgeOpacity);
     const [pointRadius, setPointRadius] = useState(settings.pointRadius);
+    const [nodeBorderWidth, setNodeBorderWidth] = useState(settings.nodeBorderWidth);
+    const [nodeBorderOpacity, setNodeBorderOpacity] = useState(settings.nodeBorderOpacity);
     const [edgeWidth, setEdgeWidth] = useState(settings.edgeWidth);
     const [degreeFilter, setDegreeFilter] = useState(settings.degreeFilter);
 
@@ -35,10 +37,15 @@ function MapControls({settings, onChange}) {
         onChange({...settings, pointRadius: value});
     };
 
-    const handleDegreeFilterChange = (value) => {
-        setDegreeFilter(value);
-        onChange({...settings, degreeFilter: value});
-    };
+    const handleNodeBorderWidthChange = (value) => {
+        setNodeBorderWidth(value);
+        onChange({...settings, nodeBorderWidth: value})
+    }
+
+    const handleNodeBorderOpacityChange = (value) => {
+        setNodeBorderOpacity(value);
+        onChange({...settings, nodeBorderOpacity: value})
+    }
 
     return (
         <Box position="absolute" width={250} color="white" bg="gray.700" boxShadow="base" right={10} p={4} fontSize="sm">
@@ -67,6 +74,25 @@ function MapControls({settings, onChange}) {
                     <SliderThumb/>
                 </Slider>
             </HStack>
+            <HStack justifyContent="space-between" mt={1}>
+                <FormLabel htmlFor='node-border-width'>Border width</FormLabel>
+                <Slider id='node-border-width' value={nodeBorderWidth} min={0} max={2000} step={10} onChange={handleNodeBorderWidthChange}>
+                    <SliderTrack>
+                        <SliderFilledTrack/>
+                    </SliderTrack>
+                    <SliderThumb/>
+                </Slider>
+            </HStack>
+            <HStack justifyContent="space-between" mt={1}>
+                <FormLabel htmlFor='node-border-opacity'>Border opacity</FormLabel>
+                <Slider id='node-border-opacity' value={nodeBorderOpacity} min={0} max={1} step={0.1} onChange={handleNodeBorderOpacityChange}>
+                    <SliderTrack>
+                        <SliderFilledTrack/>
+                    </SliderTrack>
+                    <SliderThumb/>
+                </Slider>
+            </HStack>
+
             <Divider
                 mt={2}
                 mb={2}
@@ -79,7 +105,7 @@ function MapControls({settings, onChange}) {
             </Text>
             <HStack justifyContent="space-between" mt={1}>
                 <FormLabel htmlFor='line-width-scale'>Width</FormLabel>
-                <Slider id='line-width-scale' value={lineWidthScale} min={0} max={2500} onChange={handleLineWidthChange}>
+                <Slider id='line-width-scale' value={lineWidthScale} min={0} max={3000} onChange={handleLineWidthChange}>
                     <SliderTrack>
                         <SliderFilledTrack/>
                     </SliderTrack>

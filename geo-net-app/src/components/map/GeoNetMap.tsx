@@ -18,7 +18,8 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         pointRadius: 600,
         pointOpacity: 1,
         edgeOpacity: 0.4,
-        degreeFilter: 0
+        nodeBorderWidth: 800,
+        nodeBorderOpacity: 1
     });
     useEffect(() => {
         const selectedDataSet = layouts[selectedLayer];

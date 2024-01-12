@@ -5,22 +5,25 @@ export class NodesLayer {
         return new ScatterplotLayer({
             id: 'nodes-layer',
             data: nodes,
+            getPosition: d => d.geometry.coordinates,
+
+            // Picking & AutoHighlight
             pickable: true,
             autoHighlight: true,
             highlightColor: [255, 255, 255, 255],
-            getPosition: d => d.geometry.coordinates,
-            stroked: true,
+
+            // Node settings
             radiusUnits: 'meters',
             radiusScale: 2,
             radiusMinPixels: 2.5,
-
-            lineWidthUnits: 'meters',
-            lineWidthScale: 1000,
-            lineWidthMaxPixels:  10,
-
-            getLineColor: d => [0,0,0,255],
             getFillColor: d => [255,255,255,255 * settings.pointOpacity],
             getRadius: d => settings.pointRadius * Math.sqrt(d.properties.degree * 5),
+
+            // Node Border settings
+            stroked: true,
+            lineWidthUnits: 'meters',
+            getLineWidth: d => settings.nodeBorderWidth,
+            getLineColor: d => [0,0,0,255 * settings.nodeBorderOpacity]
         });
     }
 }
