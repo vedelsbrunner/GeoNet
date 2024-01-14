@@ -1,4 +1,4 @@
-import {Box, Divider, FormLabel, HStack, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text} from '@chakra-ui/react';
+import {Box, Divider, FormLabel, HStack, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text, Checkbox} from '@chakra-ui/react';
 import {useState} from "react";
 import {Layouts} from "../../hooks/useJsonData.tsx";
 
@@ -11,6 +11,7 @@ function MapControls({settings, onChange}) {
     const [nodeBorderOpacity, setNodeBorderOpacity] = useState(settings.nodeBorderOpacity);
     const [edgeWidth, setEdgeWidth] = useState(settings.edgeWidth);
     const [degreeFilter, setDegreeFilter] = useState(settings.degreeFilter);
+    const [degreeBasedRadiusScale, setDegreeBasedRadiusScale] = useState(settings.degreeBasedRadiusScale);
 
     const handleLineWidthChange = (value) => {
         setLineWidthScale(value);
@@ -47,6 +48,13 @@ function MapControls({settings, onChange}) {
         onChange({...settings, nodeBorderOpacity: value})
     }
 
+    const handleDegreeBasedRadiusScale = (value) => {
+        const isChecked = value.target.checked;
+        console.log(isChecked)
+        setDegreeBasedRadiusScale(isChecked);
+        onChange({...settings, degreeBasedRadiusScale: isChecked})
+    }
+
     return (
         <Box position="absolute" width={250} color="white" bg="gray.700" boxShadow="base" right={10} p={4} fontSize="sm">
             <Text
@@ -63,6 +71,13 @@ function MapControls({settings, onChange}) {
                     </SliderTrack>
                     <SliderThumb/>
                 </Slider>
+            </HStack>
+            <HStack justifyContent="space-between" mt={1}>
+                <Checkbox
+                    id='enable-degree-based-radius-scale'
+                    onChange={handleDegreeBasedRadiusScale}>
+                    Degree-scaled radius
+                </Checkbox>
             </HStack>
 
             <HStack justifyContent="space-between" mt={1}>

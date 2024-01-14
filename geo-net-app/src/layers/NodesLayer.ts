@@ -17,7 +17,7 @@ export class NodesLayer {
             radiusScale: 2,
             radiusMinPixels: 2.5,
             getFillColor: d => [255,255,255,255 * settings.pointOpacity],
-            getRadius: d => settings.pointRadius * Math.sqrt(d.properties.degree * 5),
+            getRadius: d => settings.degreeBasedRadiusScale ? settings.pointRadius * Math.sqrt(d.properties.degree * 5) : settings.pointRadius,
 
             // Node Border settings
             stroked: true,

@@ -1,8 +1,8 @@
-from math import sqrt
+from math import sqrt, pi, cos, sin
 from geopy.distance import geodesic
 import random
 
-from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig
+from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig, CircularLayoutType
 from scripts.layouts.Layout import Layout
 from scripts.utils.LoggerConfig import logger
 
@@ -26,8 +26,7 @@ def place_nodes(network, cluster_points, circle_center, radius, config):
 class CircularLayout(Layout):
     def __init__(self, clustering_strategy):
         super().__init__(clustering_strategy)
-        self.cluster_radius = {}
-        self.outer_nodes = {}
+        self.cluster_info = {}
 
     def do_layout(self, network, config: CircularLayoutConfig):
         base_radius = getattr(config, 'base_radius', 1)
@@ -37,63 +36,28 @@ class CircularLayout(Layout):
         for cluster in clusters:
             cluster_points = points_gdf[points_gdf['cluster'] == cluster]
             num_points = len(cluster_points)
-
             cluster_points = cluster_points.sort_values(by='degree', ascending=False)
 
             if num_points > 1:
-                radius = base_radius * config.radius_scale * sqrt(num_points)
-                circle_center = cluster_points.geometry.unary_union.centroid
-                self.cluster_radius[cluster] = {'radius': radius, 'center': (circle_center.x, circle_center.y)}
-                outer_nodes = place_nodes(network, cluster_points, circle_center, radius, config)
-                self.outer_nodes[cluster] = outer_nodes
-                logger.info(f"Placed nodes for cluster {cluster} with radius {radius}.")
+                if config.layout_type == CircularLayoutType.SINGLE_CIRCLE:
+                    self.place_nodes_single_circle(network, cluster_points, config)
+                logger.info(f"Placed nodes for cluster {cluster}.")
 
-    def optimize_layout(self, network, max_iterations_per_cluster=100, improvement_threshold=20):
-        clusters = self.sort_clusters_by_size(network)
-        for i in range(1, 50):
-            logger.info(f"Starting optimization round {i}.")
-            for cluster in clusters:
-                logger.info(f"Starting optimization for cluster {cluster}.")
-                self.reduce_edge_crossings(network, cluster, max_iterations_per_cluster, improvement_threshold)
+    def place_nodes_single_circle(self, network, cluster_points, config):
+        num_points = len(cluster_points)
+        circle_center = cluster_points.geometry.unary_union.centroid
 
-    def sort_clusters_by_size(self, network):
-        cluster_sizes = network.get_points().groupby('cluster').size()
-        sorted_clusters = cluster_sizes.sort_values(ascending=False).index.tolist()
-        return sorted_clusters
+        # Calculate the distance between nodes along the circle's circumference
+        circumference = num_points * config.min_distance_between_nodes
+        radius = circumference / (2 * pi)
 
-    def reduce_edge_crossings(self, network, cluster, max_iterations, improvement_threshold):
-        logger.debug(f"Trying to reduce edge crossing: Improvemnet threshold: {improvement_threshold}")
-        if cluster not in self.outer_nodes or len(self.outer_nodes[cluster]) < 2:
-            logger.warn(f"Cluster {cluster} does not have enough nodes for optimization.")
-            return
+        for i, point in enumerate(cluster_points.itertuples()):
+            # Calculate the bearing for each node on the circle
+            bearing = 360 * i / num_points
+            # Use geodesic to find the new point on the circle
+            new_point = geodesic(kilometers=radius).destination((circle_center.y, circle_center.x), bearing)
+            # Update the point in the network with the new coordinates
+            network.update_point(point.id, new_point.longitude, new_point.latitude)
 
-        best_crossings = network.calculate_total_edge_crossings()
-        iterations_since_last_improvement = 0
+        self.cluster_info[cluster_points['cluster'].iloc[0]] = {'radius': radius, 'center': (circle_center.x, circle_center.y)}
 
-        for iteration in range(max_iterations):
-            if iterations_since_last_improvement >= improvement_threshold:
-                logger.info(f"No improvement for {improvement_threshold} iterations, stopping optimization for cluster {cluster}.")
-                break
-
-            node1_id, node2_id = self.select_random_outer_nodes(cluster)
-            if not node1_id or not node2_id:
-                logger.info(f"Not enough outer nodes to perform a swap in cluster {cluster}.")
-                break
-
-            network.swap_nodes(node1_id, node2_id)
-            current_crossings = network.calculate_total_edge_crossings()
-            if current_crossings < best_crossings:
-                best_crossings = current_crossings
-                iterations_since_last_improvement = 0
-                logger.debug(f"Improved layout for cluster {cluster}, reduced crossings to {current_crossings}.")
-            else:
-                network.swap_nodes(node1_id, node2_id)  # Revert the swap
-                iterations_since_last_improvement += 1
-
-    def select_random_outer_nodes(self, cluster):
-        try:
-            node1_id, node2_id = random.sample(self.outer_nodes[cluster], 2)
-            return node1_id, node2_id
-        except ValueError:
-            logger.error(f"Not enough outer nodes in cluster {cluster} to select a random pair.")
-            return None, None

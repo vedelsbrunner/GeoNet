@@ -7,7 +7,7 @@ from scripts.dataset_preprocessing.china import create_china_geo_network
 from scripts.dataset_preprocessing.jucs import create_jucs_geo_network
 from scripts.dataset_preprocessing.marie_boucher import create_marie_boucher_geo_network
 from scripts.dataset_preprocessing.smith import create_smith_geo_network
-from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig
+from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig, CircularLayoutType
 from scripts.layouts.GridLayoutConfig import GridLayoutConfig
 from scripts.layouts.StackedLayout import StackedLayoutConfig
 from scripts.layouts.SunflowerLayoutConfig import SunflowerLayoutConfig
@@ -17,11 +17,11 @@ from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layo
 from scripts.layouts.layout_creators.stacked_layout_creator import create_stacked_layout
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
-CREATE_DEFAULT_LAYOUT = True
-CREATE_SUNFLOWER_LAYOUT = True
-CREATE_STACKED_LAYOUT = True
+CREATE_DEFAULT_LAYOUT = False
+CREATE_SUNFLOWER_LAYOUT = False
+CREATE_STACKED_LAYOUT = False
 CREATE_CIRCULAR_LAYOUT = True
-CREATE_GRID_LAYOUT = True
+CREATE_GRID_LAYOUT = False
 
 
 def main():
@@ -32,7 +32,7 @@ def main():
     # process_china_data()
     # process_smith_data()
 
-    current_dataset = 'china'
+    current_dataset = 'marieboucher'
 
     if current_dataset == 'china':
         network = create_china_geo_network()
@@ -62,7 +62,7 @@ def main():
 
     if CREATE_CIRCULAR_LAYOUT:
         #TODO: Introduce configs based on dataset, e.g MarieBoucher needs scale 10 and China 25
-        circular_layout_config = CircularLayoutConfig(radius_scale=25)
+        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_meters=10)
         create_circular_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True)
         create_circular_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False)
 
