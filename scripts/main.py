@@ -62,7 +62,7 @@ def main():
 
     if CREATE_CIRCULAR_LAYOUT:
         #TODO: Introduce configs based on dataset, e.g MarieBoucher needs scale 10 and China 25
-        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=8)
+        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.CIRCLE_PACKING, min_distance_between_nodes_km=8)
         create_circular_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True)
         create_circular_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False)
 

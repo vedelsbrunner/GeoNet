@@ -1,10 +1,12 @@
-from math import pi
+import math
+from math import pi, radians
 
 from geopy.distance import geodesic
 
 from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig, CircularLayoutType
 from scripts.layouts.Layout import Layout
 from scripts.utils.LoggerConfig import logger
+from math import sqrt, pi, cos, sin
 
 
 def place_nodes_on_circle(network, nodes, center, radius):
@@ -42,6 +44,11 @@ class CircularLayout(Layout):
                     self.place_nodes_single_circle(network, cluster_points, config)
                 elif config.layout_type == CircularLayoutType.DOUBLE_CIRCLE:
                     self.place_nodes_double_circle(network, cluster_points, config)
+                    network.add_point_gdf(f'{cluster}_circle_hull_radius', self.cluster_info[cluster]['center'][0], self.cluster_info[cluster]['center'][1],
+                                          radius=self.cluster_info[cluster]['outer_radius'])
+                elif config.layout_type == CircularLayoutType.CIRCLE_PACKING:
+                    self.place_nodes_in_packed_circular_pattern(network, cluster_points, config)
+
                 logger.info(f"Placed nodes for cluster {cluster}.")
 
     def place_nodes_double_circle(self, network, cluster_points, config):
@@ -70,6 +77,7 @@ class CircularLayout(Layout):
         }
 
     def place_nodes_single_circle(self, network, cluster_points, config):
+
         num_points = len(cluster_points)
         circle_center = cluster_points.geometry.unary_union.centroid
 
@@ -82,3 +90,27 @@ class CircularLayout(Layout):
             network.update_point(point.id, new_point.longitude, new_point.latitude)
 
         self.cluster_info[cluster_points['cluster'].iloc[0]] = {'radius': radius, 'center': (circle_center.x, circle_center.y)}
+
+    def place_nodes_in_spiral_pattern(self, network, cluster_points, config):
+        circle_center = cluster_points.geometry.unary_union.centroid
+        separation = config.min_distance_between_nodes_km  # Minimum separation between points
+
+        # Constants for spiral calculation
+        a = separation  # Spiral tightness
+        b = separation / (2 * math.pi)  # Distance between turns
+
+        for i, point in enumerate(cluster_points.itertuples()):
+            # Calculate the angle and radius for the spiral
+            theta = i * 0.1  # Incremental angle for the spiral
+            r = a + b * theta
+
+            # Convert polar coordinates (r, theta) to Cartesian coordinates (x, y)
+            x = circle_center.x + r * math.cos(theta)
+            y = circle_center.y + r * math.sin(theta)
+
+            # Update the point in the network
+            network.update_point(point.id, x, y)
+
+        # The radius of the outermost point gives an approximate boundary of the cluster
+        max_radius = a + b * len(cluster_points) * 0.1
+        self.cluster_info[cluster_points['cluster'].iloc[0]] = {'max_radius': max_radius, 'center': (circle_center.x, circle_center.y)}

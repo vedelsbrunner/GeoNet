@@ -41,6 +41,23 @@ class GeoNetwork:
             self.gdf_points.at[index, 'neighbors'] = neighbor_ids
             self.gdf_points.at[index, 'connecting_edges'] = list(itertools.chain(*connecting_edges))
 
+    def add_point_gdf(self, point_id, x, y, **properties):
+        point_geom = Point(x, y)
+
+        if self.gdf_points['id'].isin([point_id]).any():
+            logger.warning(f"Point with ID {point_id} already exists in gdf_points.")
+            return
+
+        new_row = {'id': point_id, 'geometry': point_geom, **properties}
+        self.gdf_points = self.gdf_points._append(new_row, ignore_index=True)
+
+        if point_id not in self.graph:
+            self.graph.add_node(point_id, pos=(x, y), **properties)
+            self.__point_to_edges[point_id] = []
+
+        for connected_point_id in self.graph.neighbors(point_id):
+            self.__update_line_geometry(f'{point_id}_{connected_point_id}', point_id, connected_point_id)
+
     def add_point(self, point_id, x, y, **properties):
         point = Point(x, y)
         if point_id in self.graph:

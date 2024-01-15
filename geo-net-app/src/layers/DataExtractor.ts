@@ -3,6 +3,7 @@ export const ExtractDataLayers = (geoJson) => {
     let edges = [];
     let hulls = {type: 'FeatureCollection', features: []};
     let location_labels = [];
+    let circluar_hulls = [];
 
     if (!geoJson) {
         console.error('Invalid or undefined geoJson data:', geoJson);
@@ -23,8 +24,13 @@ export const ExtractDataLayers = (geoJson) => {
             case 'Point':
                 if (feature.properties.id.includes('location_label')) {
                     location_labels.push(feature);
-
-                } else {
+                }
+                else if (feature.properties.id.includes('circle_hull_radius'))
+                {
+                    console.log('Found a circular hull')
+                    circluar_hulls.push(feature)
+                }
+                else {
                     nodes.push(feature);
                 }
                 break;
@@ -40,5 +46,5 @@ export const ExtractDataLayers = (geoJson) => {
         }
     });
 
-    return {nodes, edges, hulls, location_labels};
+    return {nodes, edges, hulls, location_labels, circluar_hulls};
 }
