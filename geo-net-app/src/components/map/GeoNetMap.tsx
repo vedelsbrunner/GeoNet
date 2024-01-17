@@ -51,7 +51,14 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
                 connecting_edges.includes(feature.properties.id) ||
                 feature.properties.id === info.object.properties.id
             );
-            updateLayer(selectedLayer, filteredData);
+
+            if (selectedNodesRef.current.length > 0) {
+                const newSelectedNodes = Array.from(new Set([...selectedNodesRef.current, ...filteredData]));
+                updateLayer(selectedLayer, newSelectedNodes);
+            } else {
+                updateLayer(selectedLayer, filteredData)
+            }
+
         } else if (selectedNodesRef.current.length === 0) {
             updateLayer(selectedLayer, layouts[selectedLayer]);
         }
