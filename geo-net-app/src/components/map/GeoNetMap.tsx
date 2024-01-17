@@ -82,6 +82,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     function resetNodeSelection() {
         console.log('Resetting node selection to whole geoNetwork..')
         updateLayer(selectedLayer, layouts[selectedLayer]);
+        setSelectedNodes([])
     }
 
     function updateLayer(selectedLayer, newFilteredData) {
