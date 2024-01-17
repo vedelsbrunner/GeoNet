@@ -91,7 +91,7 @@ class GeoNetwork:
             self.__point_to_edges[point_id_start].append((line_id, point_id_end))
             self.__point_to_edges[point_id_end].append((line_id, point_id_start))
 
-    def create_convex_hulls(self, buffer_distance=0.2):
+    def create_convex_hulls(self, buffer_distance=0.06):
         hulls_data = []
 
         for cluster_id, points in self.gdf_points.groupby('cluster'):
@@ -290,6 +290,8 @@ class GeoNetwork:
         hull = self.gdf_hulls.loc[hull_index, 'geometry']
         translated_hull = translate(hull, xoff=translation_vector[0], yoff=translation_vector[1])
         self.gdf_hulls.at[hull_index, 'geometry'] = translated_hull
+
+        # Apply the same translation to the
 
     def print_network_summary(self):
         num_nodes = self.gdf_points.count()[0]

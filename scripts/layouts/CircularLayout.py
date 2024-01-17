@@ -44,8 +44,7 @@ class CircularLayout(Layout):
                     self.place_nodes_single_circle(network, cluster_points, config)
                 elif config.layout_type == CircularLayoutType.DOUBLE_CIRCLE:
                     self.place_nodes_double_circle(network, cluster_points, config)
-                    network.add_point_gdf(f'{cluster}_circle_hull_radius', self.cluster_info[cluster]['center'][0], self.cluster_info[cluster]['center'][1],
-                                          radius=self.cluster_info[cluster]['outer_radius'])
+                    network.add_point_gdf(f'{cluster}_circle_hull_radius', self.cluster_info[cluster]['center'][0], self.cluster_info[cluster]['center'][1], radius=self.cluster_info[cluster]['outer_radius'], cluster=cluster)
                 elif config.layout_type == CircularLayoutType.CIRCLE_PACKING:
                     self.place_nodes_in_packed_circular_pattern(network, cluster_points, config)
 
@@ -93,24 +92,18 @@ class CircularLayout(Layout):
 
     def place_nodes_in_spiral_pattern(self, network, cluster_points, config):
         circle_center = cluster_points.geometry.unary_union.centroid
-        separation = config.min_distance_between_nodes_km  # Minimum separation between points
+        separation = config.min_distance_between_nodes_km
 
-        # Constants for spiral calculation
-        a = separation  # Spiral tightness
-        b = separation / (2 * math.pi)  # Distance between turns
+        a = separation
+        b = separation / (2 * math.pi)
 
         for i, point in enumerate(cluster_points.itertuples()):
-            # Calculate the angle and radius for the spiral
-            theta = i * 0.1  # Incremental angle for the spiral
+            theta = i * 0.1
             r = a + b * theta
 
-            # Convert polar coordinates (r, theta) to Cartesian coordinates (x, y)
             x = circle_center.x + r * math.cos(theta)
             y = circle_center.y + r * math.sin(theta)
-
-            # Update the point in the network
             network.update_point(point.id, x, y)
 
-        # The radius of the outermost point gives an approximate boundary of the cluster
         max_radius = a + b * len(cluster_points) * 0.1
         self.cluster_info[cluster_points['cluster'].iloc[0]] = {'max_radius': max_radius, 'center': (circle_center.x, circle_center.y)}

@@ -18,10 +18,13 @@ from scripts.layouts.layout_creators.stacked_layout_creator import create_stacke
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
 CREATE_DEFAULT_LAYOUT = True
-CREATE_SUNFLOWER_LAYOUT = True
-CREATE_STACKED_LAYOUT = True
+CREATE_SUNFLOWER_LAYOUT = False
+CREATE_STACKED_LAYOUT = False
 CREATE_CIRCULAR_LAYOUT = True
-CREATE_GRID_LAYOUT = True
+CREATE_GRID_LAYOUT = False
+
+EXECUTE_ALL = False
+
 
 def create_layouts_for_network(dataset, network):
     if CREATE_DEFAULT_LAYOUT:
@@ -55,25 +58,26 @@ def main():
     # process_china_data()
     # process_smith_data()
 
-    execute_all = True
-    current_dataset = 'china'
+    network_creators = {
+        'china': create_china_geo_network,
+        'marieboucher': create_marie_boucher_geo_network,
+        'smith': create_smith_geo_network,
+        'jucs': create_jucs_geo_network,
+        'archeology': create_archeology_geo_network
+    }
 
-    if execute_all:
-        networks = {
-            'china': create_china_geo_network(),
-            'marieboucher': create_marie_boucher_geo_network(),
-            'smith': create_smith_geo_network(),
-            'jucs': create_jucs_geo_network(),
-            'archeology': create_archeology_geo_network()
-        }
+    current_dataset = 'marieboucher'
 
-        for dataset, network in networks.items():
+    if EXECUTE_ALL:
+        for dataset, creator in network_creators.items():
+            network = creator()
             create_layouts_for_network(dataset, network)
     else:
-        network = globals()[f"create_{current_dataset}_geo_network"]()
-        create_layouts_for_network(current_dataset, network)
-
-
+        if current_dataset in network_creators:
+            network = network_creators[current_dataset]()
+            create_layouts_for_network(current_dataset, network)
+        else:
+            print(f"No network creator function found for dataset: {current_dataset}")
 
 
 if __name__ == '__main__':
