@@ -14,7 +14,7 @@ export class NodesLayer {
 
             // Node settings
             radiusUnits: 'meters',
-            radiusScale: 2,
+            radiusScale: 5,
             radiusMinPixels: 2.5,
             getFillColor: d => [255,255,255,255 * settings.pointOpacity],
             getRadius: d => settings.degreeBasedRadiusScale ? settings.pointRadius * Math.sqrt(d.properties.degree * 5) : settings.pointRadius,

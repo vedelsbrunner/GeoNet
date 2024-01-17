@@ -1,8 +1,8 @@
-import {Box, Divider, FormLabel, HStack, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text, Checkbox} from '@chakra-ui/react';
+import {Box, Divider, FormLabel, HStack, Button, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text, Checkbox} from '@chakra-ui/react';
 import {useState} from "react";
 import {Layouts} from "../../hooks/useJsonData.tsx";
 
-function MapControls({settings, onChange}) {
+function MapControls({settings, onChange, onResetNodeSelection}) {
     const [lineWidthScale, setLineWidthScale] = useState(settings.lineWidthScale);
     const [pointOpacity, setPointOpacity] = useState(settings.pointOpacity);
     const [edgeOpacity, setEdgeOpacity] = useState(settings.edgeOpacity);
@@ -55,8 +55,27 @@ function MapControls({settings, onChange}) {
         onChange({...settings, degreeBasedRadiusScale: isChecked})
     }
 
+    const handleResetNodeSelection = () => {
+        onResetNodeSelection();
+    }
+
     return (
         <Box position="absolute" width={250} color="white" bg="gray.700" boxShadow="base" right={10} p={4} fontSize="sm">
+            <Select onChange={handleLayerSelectionChange} bg={"gray"} color={"black"}>
+                <option value={Layouts.Default}>Default Layout</option>
+                <option value={Layouts.Stacked}>Stacked Layout</option>
+                <option value={Layouts.Circular}>Circular Layout</option>
+                <option value={Layouts.Sunflower}>Sunflower Layout</option>
+                <option value={Layouts.Grid}>Grid Layout</option>
+                <option value={Layouts.StackedClustered}>Stacked Clustered Layout</option>
+                <option value={Layouts.CircularClustered}>Circular Clustered Layout</option>
+                <option value={Layouts.SunflowerClustered}>Sunflower Clustered Layout</option>
+                <option value={Layouts.GridClustered}>Grid Clustered Layout</option>
+            </Select>
+            <Divider
+                mt={4}
+                mb={2}
+            />
             <Text
                 fontWeight={300}
                 fontSize={18}
@@ -111,7 +130,8 @@ function MapControls({settings, onChange}) {
             <Divider
                 mt={2}
                 mb={2}
-            ></Divider>
+            />
+
             <Text
                 fontWeight={300}
                 fontSize={18}
@@ -138,18 +158,22 @@ function MapControls({settings, onChange}) {
                 </Slider>
             </HStack>
 
-            <Text fontSize={18} mt={4}>Layers</Text>
-            <Select onChange={handleLayerSelectionChange} bg={"gray"} color={"black"}>
-                <option value={Layouts.Default}>Default Layout</option>
-                <option value={Layouts.Stacked}>Stacked Layout</option>
-                <option value={Layouts.Circular}>Circular Layout</option>
-                <option value={Layouts.Sunflower}>Sunflower Layout</option>
-                <option value={Layouts.Grid}>Grid Layout</option>
-                <option value={Layouts.StackedClustered}>Stacked Clustered Layout</option>
-                <option value={Layouts.CircularClustered}>Circular Clustered Layout</option>
-                <option value={Layouts.SunflowerClustered}>Sunflower Clustered Layout</option>
-                <option value={Layouts.GridClustered}>Grid Clustered Layout</option>
-            </Select>
+            <Divider
+                mt={2}
+                mb={2}
+            />
+
+
+            <HStack justifyContent="space-between" mt={1}>
+                <Button
+                    id='reset-node-selection'
+                    onClick={handleResetNodeSelection}
+                    size="sm"
+                    colorScheme="blue"
+                >
+                    Reset Node Selection
+                </Button>
+            </HStack>
         </Box>
     );
 }

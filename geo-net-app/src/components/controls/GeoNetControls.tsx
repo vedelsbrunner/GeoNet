@@ -1,7 +1,7 @@
 import {Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box} from "@chakra-ui/react";
 import MapControls from "./MapControls.tsx";
 
-function GeoNetControls({settings, handleSettingsChange}) {
+function GeoNetControls({settings, handleSettingsChange, resetNodeSelection}) {
     return (
         <Box position="absolute" top={1} right={1}>
             <Accordion allowToggle>
@@ -13,7 +13,7 @@ function GeoNetControls({settings, handleSettingsChange}) {
                         <AccordionIcon/>
                     </AccordionButton>
                     <AccordionPanel>
-                        <MapControls settings={settings} onChange={handleSettingsChange}/>
+                        <MapControls settings={settings} onChange={handleSettingsChange} onResetNodeSelection={resetNodeSelection}/>
                     </AccordionPanel>
                 </AccordionItem>
             </Accordion>

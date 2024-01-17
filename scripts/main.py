@@ -17,13 +17,36 @@ from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layo
 from scripts.layouts.layout_creators.stacked_layout_creator import create_stacked_layout
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
-CREATE_DEFAULT_LAYOUT = False
-CREATE_SUNFLOWER_LAYOUT = False
-CREATE_STACKED_LAYOUT = False
+CREATE_DEFAULT_LAYOUT = True
+CREATE_SUNFLOWER_LAYOUT = True
+CREATE_STACKED_LAYOUT = True
 CREATE_CIRCULAR_LAYOUT = True
-CREATE_GRID_LAYOUT = False
+CREATE_GRID_LAYOUT = True
 
+def create_layouts_for_network(dataset, network):
+    if CREATE_DEFAULT_LAYOUT:
+        create_default_layout(dataset, copy.deepcopy(network))
 
+    if CREATE_SUNFLOWER_LAYOUT:
+        sunflower_layout_config = SunflowerLayoutConfig(displacement_radius=0.15)
+        create_sunflower_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), sunflower_layout_config, is_aggregated=True)
+        create_sunflower_layout(dataset, copy.deepcopy(network), SamePositionClustering(), sunflower_layout_config, is_aggregated=False)
+
+    if CREATE_STACKED_LAYOUT:
+        stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.03, hull_buffer=0.03)
+        create_stacked_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), stacked_layout_confing, is_aggregated=True)
+        create_stacked_layout(dataset, copy.deepcopy(network), SamePositionClustering(), stacked_layout_confing, is_aggregated=False)
+
+    if CREATE_CIRCULAR_LAYOUT:
+        #TODO: Introduce configs based on dataset, e.g MarieBoucher needs scale 10 and China 25
+        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=8)
+        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True)
+        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False)
+
+    if CREATE_GRID_LAYOUT:
+        grid_layout_config = GridLayoutConfig(distance_between_points=0.4)
+        create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), grid_layout_config, is_aggregated=True)
+        create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=False)
 def main():
     # process_archeology_data()
     # prepare_jucs_data()
@@ -32,44 +55,25 @@ def main():
     # process_china_data()
     # process_smith_data()
 
-    current_dataset = 'marieboucher'
+    execute_all = True
+    current_dataset = 'china'
 
-    if current_dataset == 'china':
-        network = create_china_geo_network()
-    elif current_dataset == 'marieboucher':
-        network = create_marie_boucher_geo_network()
-    elif current_dataset == 'smith':
-        network = create_smith_geo_network()
-    elif current_dataset == 'jucs':
-        network = create_jucs_geo_network()
-    elif current_dataset == 'archeology':
-        network = create_archeology_geo_network()
+    if execute_all:
+        networks = {
+            'china': create_china_geo_network(),
+            'marieboucher': create_marie_boucher_geo_network(),
+            'smith': create_smith_geo_network(),
+            'jucs': create_jucs_geo_network(),
+            'archeology': create_archeology_geo_network()
+        }
+
+        for dataset, network in networks.items():
+            create_layouts_for_network(dataset, network)
     else:
-        raise Exception('Invalid dataset')
+        network = globals()[f"create_{current_dataset}_geo_network"]()
+        create_layouts_for_network(current_dataset, network)
 
-    if CREATE_DEFAULT_LAYOUT:
-        create_default_layout(current_dataset, copy.deepcopy(network))
 
-    if CREATE_SUNFLOWER_LAYOUT:
-        sunflower_layout_config = SunflowerLayoutConfig(displacement_radius=0.15)
-        create_sunflower_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), sunflower_layout_config, is_aggregated=True)
-        create_sunflower_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), sunflower_layout_config, is_aggregated=False)
-
-    if CREATE_STACKED_LAYOUT:
-        stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.03, hull_buffer=0.03)
-        create_stacked_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), stacked_layout_confing, is_aggregated=True)
-        create_stacked_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), stacked_layout_confing, is_aggregated=False)
-
-    if CREATE_CIRCULAR_LAYOUT:
-        #TODO: Introduce configs based on dataset, e.g MarieBoucher needs scale 10 and China 25
-        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.CIRCLE_PACKING, min_distance_between_nodes_km=8)
-        create_circular_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True)
-        create_circular_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False)
-
-    if CREATE_GRID_LAYOUT:
-        grid_layout_config = GridLayoutConfig(distance_between_points=0.4)
-        create_grid_layout(current_dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), grid_layout_config, is_aggregated=True)
-        create_grid_layout(current_dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=False)
 
 
 if __name__ == '__main__':

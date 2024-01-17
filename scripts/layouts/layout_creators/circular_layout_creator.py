@@ -12,7 +12,7 @@ def create_circular_layout(dataset, network, clustering_strategy, config, is_agg
     # circular_layout.optimize_layout(network, max_iterations_per_cluster=1, improvement_threshold=1)
     # network.create_text_labels()
     if is_aggregated:
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/circular-clustered.geojson', include_hulls=True, include_labels=True)
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/circular-clustered.geojson', include_hulls=False, include_labels=True)
     else:
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/circular.geojson', include_hulls=True, include_labels=True)
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/circular.geojson', include_hulls=False, include_labels=True)
     return

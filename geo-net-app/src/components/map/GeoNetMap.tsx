@@ -1,10 +1,10 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import DeckGL from 'deck.gl';
-import {NavigationControl, Map} from 'react-map-gl';
+import {Map} from 'react-map-gl';
 import {JsonFilePathsDictionary, Layouts} from "../../hooks/useJsonData.tsx";
-import {CreateGeoNetLayer} from "../../layers/GeoNetLayerCreator.ts";
+import GeoNetLayer from "../../layers/GeoNetLayer.ts";
 import GeoNetControls from "../controls/GeoNetControls.tsx";
-import {INITIAL_VIEW_STATE, MAP_STYLE, MAPBOX_ACCESS_TOKEN, NAV_CONTROL_STYLE} from "./MAP_STYLE.tsx";
+import {INITIAL_VIEW_STATE, MAP_STYLE, MAPBOX_ACCESS_TOKEN} from "./MAP_STYLE.tsx";
 
 interface GeoNetMapProps {
     layouts: JsonFilePathsDictionary;
@@ -22,25 +22,80 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         nodeBorderOpacity: 1,
         degreeBasedRadiusScale: false
     });
+    const [selectedNodes, _setSelectedNodes] = useState([]);
+    const selectedNodesRef = useRef(selectedNodes);
+
+    function setSelectedNodes(selectedNodes) {
+        selectedNodesRef.current = selectedNodes;
+        _setSelectedNodes(selectedNodes);
+    }
+
     useEffect(() => {
-        const selectedDataSet = layouts[selectedLayer];
-        const geonetLayer = CreateGeoNetLayer(selectedLayer, selectedDataSet, settings, updateLayer, layouts);
+        const geonetLayer = new GeoNetLayer({
+            id: `${selectedLayer}`,
+            data: layouts[selectedLayer],
+            pickable: true,
+            autoHighlight: true,
+            ...settings,
+            onClick: onClick,
+            onHover: onHover
+        });
         setCurrentGeoNetLayer(geonetLayer);
     }, [layouts, settings, selectedLayer]);
 
-    const handleSettingsChange = (newSettings, layerIndex) => {
-        console.log('handleSettingsChange', newSettings, layerIndex)
+    function onHover(info) {
+        if (info.object && info.object.geometry.type === 'Point') {
+            const {neighbors, connecting_edges} = info.object.properties;
+            const filteredData = layouts[selectedLayer].features.filter(feature =>
+                neighbors.includes(feature.properties.id) ||
+                connecting_edges.includes(feature.properties.id) ||
+                feature.properties.id === info.object.properties.id
+            );
+            updateLayer(selectedLayer, filteredData);
+        } else if (selectedNodesRef.current.length === 0) {
+            updateLayer(selectedLayer, layouts[selectedLayer]);
+        }
+    }
+
+    function onClick(info) {
+        if (info.object && info.object.geometry.type === 'Point') {
+            const {neighbors, connecting_edges} = info.object.properties;
+            const filteredData = layouts[selectedLayer].features.filter(feature =>
+                neighbors.includes(feature.properties.id) ||
+                connecting_edges.includes(feature.properties.id) ||
+                feature.properties.id === info.object.properties.id
+            );
+
+            const newSelectedNodes = Array.from(new Set([...selectedNodesRef.current, ...filteredData]));
+            setSelectedNodes(newSelectedNodes);
+            updateLayer(selectedLayer, selectedNodesRef.current);
+        }
+    }
+
+    function handleSettingsChange(newSettings, layerIndex) {
         if (layerIndex !== undefined) {
             setSelectedLayer(layerIndex);
         }
         setSettings(prevSettings => ({...prevSettings, ...newSettings}));
-    };
-
-    function updateLayer(selectedLayer, newFilteredData) {
-        const filteredLayer = CreateGeoNetLayer(selectedLayer, newFilteredData, settings, updateLayer, layouts);
-        setCurrentGeoNetLayer(filteredLayer);
     }
 
+    function resetNodeSelection() {
+        console.log('Resetting node selection to whole geoNetwork..')
+        updateLayer(selectedLayer, layouts[selectedLayer]);
+    }
+
+    function updateLayer(selectedLayer, newFilteredData) {
+        const filteredLayer = new GeoNetLayer({
+            id: `${selectedLayer}`,
+            data: newFilteredData,
+            pickable: true,
+            autoHighlight: true,
+            ...settings,
+            onClick: onClick,
+            onHover: onHover
+        });
+        setCurrentGeoNetLayer(filteredLayer);
+    }
 
     return (
         <>
@@ -53,9 +108,8 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
                     mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
                     mapStyle={MAP_STYLE}
                 />
-                {/*<NavigationControl style={NAV_CONTROL_STYLE}/>*/}
             </DeckGL>
-            <GeoNetControls settings={settings} handleSettingsChange={handleSettingsChange}></GeoNetControls>
+            <GeoNetControls settings={settings} handleSettingsChange={handleSettingsChange} resetNodeSelection={resetNodeSelection}/>
         </>
     );
 }
