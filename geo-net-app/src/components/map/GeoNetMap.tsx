@@ -101,13 +101,11 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     }
 
     function resetNodeSelection() {
-        console.log('Resetting node selection to whole geoNetwork..')
         updateLayer(selectedLayerRef.current, layouts[selectedLayerRef.current]);
         setSelectedNodes([])
     }
 
     function removeHullOverlap(removeOverlap: boolean) { //TODO: Move into own file..
-        console.log('Current layout:', selectedLayerRef.current);
 
         let newLayout;
         switch (selectedLayerRef.current) {

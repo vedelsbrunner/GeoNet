@@ -27,13 +27,10 @@ function MapControls({settings, onChange, onResetNodeSelection, removeHullOverla
     const handleLayerSelectionChange = (event) => {
         const layerIndex = event.target.value;
         onChange(settings, layerIndex);
-        console.log('Hull removal?')
-        console.log(hullOverlapRemovalRef.current)
         removeHullOverlap(hullOverlapRemovalRef.current);
     };
 
     const handleHullOverlapRemoval = (value) => {
-        console.log('Hull overlap remove..')
         const isChecked = value.target.checked;
         setHullOverlapRemoval(isChecked)
         removeHullOverlap(isChecked)

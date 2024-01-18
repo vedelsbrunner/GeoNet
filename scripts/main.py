@@ -17,12 +17,12 @@ from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layo
 from scripts.layouts.layout_creators.stacked_layout_creator import create_stacked_layout
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
-CREATE_DEFAULT_LAYOUT = False
+CREATE_DEFAULT_LAYOUT = True
 CREATE_SUNFLOWER_LAYOUT = True
-CREATE_STACKED_LAYOUT = False
-CREATE_CIRCULAR_LAYOUT = False
+CREATE_STACKED_LAYOUT = True
+CREATE_CIRCULAR_LAYOUT = True
 CREATE_DOUBLE_CIRCULAR_LAYOUT = True
-CREATE_GRID_LAYOUT = False
+CREATE_GRID_LAYOUT = True
 
 EXECUTE_ALL = True
 

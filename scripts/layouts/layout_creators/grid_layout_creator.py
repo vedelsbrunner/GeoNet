@@ -10,8 +10,9 @@ def create_grid_layout(dataset, network, clustering_strategy, grid_layout_config
     if resolve_overlaps:
         network.resolve_overlaps(15)
 
-    network.add_neighbors_and_edges()
     network.create_convex_hulls()
+
+    network.add_neighbors_and_edges()
 
     file_name = ''
     if resolve_overlaps:

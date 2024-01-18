@@ -118,12 +118,6 @@ class GeoNetwork:
         degrees = dict(self.graph.degree())
         points_df['degree'] = points_df['id'].apply(lambda x: degrees.get(x, 0))
 
-        closeness = nx.closeness_centrality(self.graph)
-        betweenness = nx.betweenness_centrality(self.graph)
-
-        points_df['closeness_centrality'] = points_df['id'].apply(lambda x: closeness.get(x, 0)).round(2)
-        points_df['betweenness_centrality'] = points_df['id'].apply(lambda x: betweenness.get(x, 0)).round(2)
-
         crs_object = CRS(crs)
         self.gdf_points = gpd.GeoDataFrame(points_df, geometry='geometry', crs=crs_object)
         self.gdf_edges = gpd.GeoDataFrame(lines_df, geometry='geometry', crs=crs_object)

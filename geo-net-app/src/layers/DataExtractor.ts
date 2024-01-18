@@ -10,7 +10,6 @@ export const ExtractDataLayers = (geoJson) => {
     }
 
     if (!Array.isArray(geoJson.features)) {
-        console.log('Converting geoJson to array of features in case of filtering'); // TODO
         geoJson.features = geoJson
     }
 
@@ -27,7 +26,6 @@ export const ExtractDataLayers = (geoJson) => {
                 }
                 else if (feature.properties.id.includes('circle_hull_radius'))
                 {
-                    console.log('Found a circular hull')
                     circluar_hulls.push(feature)
                 }
                 else {

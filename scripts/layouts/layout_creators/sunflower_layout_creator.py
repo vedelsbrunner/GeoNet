@@ -7,11 +7,12 @@ def create_sunflower_layout(dataset, network, clustering_strategy, sunflower_lay
     sunflower_layout = layout_factory.get_layout(LayoutType.SUNFLOWER)
     sunflower_layout.create_layout(network, sunflower_layout_config)
 
+    network.create_convex_hulls()
+
     if resolve_overlaps:
         network.resolve_overlaps()
 
     network.add_neighbors_and_edges()
-    network.create_convex_hulls()
     file_name = ''
     if resolve_overlaps:
         file_name = 'no-overlap-'

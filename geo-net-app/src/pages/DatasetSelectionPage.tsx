@@ -51,7 +51,6 @@ export function DataSetSelectionPage() {
 
     useEffect(() => {
         if (userSelected && !isLoading && layouts && !error) {
-            console.log('Navigating with layouts:', layouts);
             navigate('/map', {state: {layouts: layouts}});
         }
     }, [layouts]);

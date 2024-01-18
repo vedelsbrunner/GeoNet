@@ -2,7 +2,6 @@ import GeoNetLayer from "./GeoNetLayer.ts";
 
 //TODO: Remove data param is unnoetig
 export const CreateGeoNetLayer = (selectedLayer, data, settings, onClick, onHover) => {
-    console.log('Creating GeoNetLayer')
 // @ts-ignore
     return new GeoNetLayer({
         id: `${selectedLayer}`,
