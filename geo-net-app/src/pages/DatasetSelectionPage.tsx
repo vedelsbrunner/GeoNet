@@ -14,8 +14,10 @@ export function DataSetSelectionPage() {
     const layoutSetDict: JsonFilePathsDictionary = useMemo(() => {
         const baseLayouts = {
             [Layouts.Default]: 'default.geojson',
-            [Layouts.CircularClustered]: 'circular-clustered.geojson',
-            [Layouts.Circular]: 'circular.geojson',
+            [Layouts.SingleCircularClustered]: 'single_circle-circular-clustered.geojson',
+            [Layouts.SingleCircular]: 'single_circle-circular.geojson',
+            [Layouts.DoubleCircularClustered]: 'double_circle-circular.geojson',
+            [Layouts.DoubleCircular]: 'double_circle-circular.geojson',
             [Layouts.Stacked]: 'stacked.geojson',
             [Layouts.StackedClustered]: 'stacked-clustered.geojson',
             [Layouts.Sunflower]: 'sunflower.geojson',

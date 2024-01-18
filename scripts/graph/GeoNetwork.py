@@ -247,10 +247,9 @@ class GeoNetwork:
 
         return True
 
-    def resolve_overlaps(self):
+    def resolve_overlaps(self, max_iterations=10):
         logger.info("Resolving hull overlaps")
         iteration = 0
-        max_iterations = 20
         overlapping = True
 
         while overlapping and iteration < max_iterations:

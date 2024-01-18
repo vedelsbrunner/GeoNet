@@ -42,11 +42,12 @@ class CircularLayout(Layout):
             if num_points > 1:
                 if config.layout_type == CircularLayoutType.SINGLE_CIRCLE:
                     self.place_nodes_single_circle(network, cluster_points, config)
+                    network.add_point_gdf(f'{cluster}_circle_hull_radius', self.cluster_info[cluster]['center'][0], self.cluster_info[cluster]['center'][1], radius=self.cluster_info[cluster]['radius'], cluster=cluster)
                 elif config.layout_type == CircularLayoutType.DOUBLE_CIRCLE:
                     self.place_nodes_double_circle(network, cluster_points, config)
                     network.add_point_gdf(f'{cluster}_circle_hull_radius', self.cluster_info[cluster]['center'][0], self.cluster_info[cluster]['center'][1], radius=self.cluster_info[cluster]['outer_radius'], cluster=cluster)
-                elif config.layout_type == CircularLayoutType.CIRCLE_PACKING:
-                    self.place_nodes_in_packed_circular_pattern(network, cluster_points, config)
+                else:
+                    logger.error("Wrong CircularLayoutType selected")
 
                 logger.info(f"Placed nodes for cluster {cluster}.")
 
@@ -89,21 +90,3 @@ class CircularLayout(Layout):
             network.update_point(point.id, new_point.longitude, new_point.latitude)
 
         self.cluster_info[cluster_points['cluster'].iloc[0]] = {'radius': radius, 'center': (circle_center.x, circle_center.y)}
-
-    def place_nodes_in_spiral_pattern(self, network, cluster_points, config):
-        circle_center = cluster_points.geometry.unary_union.centroid
-        separation = config.min_distance_between_nodes_km
-
-        a = separation
-        b = separation / (2 * math.pi)
-
-        for i, point in enumerate(cluster_points.itertuples()):
-            theta = i * 0.1
-            r = a + b * theta
-
-            x = circle_center.x + r * math.cos(theta)
-            y = circle_center.y + r * math.sin(theta)
-            network.update_point(point.id, x, y)
-
-        max_radius = a + b * len(cluster_points) * 0.1
-        self.cluster_info[cluster_points['cluster'].iloc[0]] = {'max_radius': max_radius, 'center': (circle_center.x, circle_center.y)}

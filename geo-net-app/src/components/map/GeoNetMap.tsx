@@ -1,3 +1,4 @@
+import {Select, Box} from '@chakra-ui/react';
 import React, {useEffect, useRef, useState} from 'react';
 import DeckGL from 'deck.gl';
 import {Map} from 'react-map-gl';
@@ -24,11 +25,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     });
     const [selectedNodes, _setSelectedNodes] = useState([]);
     const selectedNodesRef = useRef(selectedNodes);
-
-    function setSelectedNodes(selectedNodes) {
-        selectedNodesRef.current = selectedNodes;
-        _setSelectedNodes(selectedNodes);
-    }
+    const [mapStyle, setMapStyle] = useState('mapbox://styles/multilingual-graz/clr8ultym002701pd38o83d83')
 
     useEffect(() => {
         const geonetLayer = new GeoNetLayer({
@@ -42,6 +39,11 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         });
         setCurrentGeoNetLayer(geonetLayer);
     }, [layouts, settings, selectedLayer]);
+
+    function setSelectedNodes(selectedNodes) {
+        selectedNodesRef.current = selectedNodes;
+        _setSelectedNodes(selectedNodes);
+    }
 
     function onHover(info) {
         if (info.object && info.object.geometry.type === 'Point') {
@@ -63,6 +65,10 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
             updateLayer(selectedLayer, layouts[selectedLayer]);
         }
     }
+
+    const handleMapStyleChange = (event) => {
+        setMapStyle(event.target.value);
+    };
 
     function onClick(info) {
         if (info.object && info.object.geometry.type === 'Point') {
@@ -107,6 +113,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
 
     return (
         <>
+
             <DeckGL
                 initialViewState={INITIAL_VIEW_STATE}
                 controller={true}
@@ -114,9 +121,22 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
             >
                 <Map
                     mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
-                    mapStyle={MAP_STYLE}
+                    mapStyle={mapStyle}
                 />
             </DeckGL>
+            <Box position="absolute" top={4} left={4} zIndex="1" color={'black'}>
+                <Select
+                    onChange={handleMapStyleChange}
+                    size="sm"
+                    variant="filled"
+                    width="auto"
+                    bgColor="rgb(45, 55, 72)"
+                >
+                    <option value="mapbox://styles/multilingual-graz/clr8ultym002701pd38o83d83">Default</option>
+                    <option value='mapbox://styles/multilingual-graz/clrht8uk600kw01pdhmjc8u0g'>Distorted 50%</option>
+                    <option value='mapbox://styles/multilingual-graz/clrirf57300m701pehf0t2aqd'>Distorted 100%</option>
+                </Select>
+            </Box>
             <GeoNetControls settings={settings} handleSettingsChange={handleSettingsChange} resetNodeSelection={resetNodeSelection}/>
         </>
     );

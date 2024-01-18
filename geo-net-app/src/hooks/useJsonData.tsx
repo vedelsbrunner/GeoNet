@@ -2,8 +2,10 @@ import {useState, useEffect} from 'react';
 
 export enum Layouts {
     Default = 'default',
-    CircularClustered = 'circularClustered',
-    Circular = 'circular',
+    SingleCircularClustered = 'singleCircularClustered',
+    SingleCircular = 'singleCircular',
+    DoubleCircularClustered = 'doubleCircularClustered',
+    DoubleCircular = 'doubleCircular',
     Stacked = 'stacked',
     StackedClustered = 'stackedClustered',
     Sunflower = 'sunflower',
@@ -14,8 +16,10 @@ export enum Layouts {
 
 export interface JsonFilePathsDictionary {
     [Layouts.Default]?: string;
-    [Layouts.CircularClustered]?: string;
-    [Layouts.Circular]?: string;
+    [Layouts.SingleCircularClustered]?: string;
+    [Layouts.SingleCircular]?: string;
+    [Layouts.DoubleCircularClustered]?: string;
+    [Layouts.DoubleCircular]?: string;
     [Layouts.Stacked]?: string;
     [Layouts.StackedClustered]?: string;
     [Layouts.Sunflower]?: string;
