@@ -3,29 +3,49 @@ import {useState, useEffect} from 'react';
 export enum Layouts {
     Default = 'default',
     SingleCircularClustered = 'singleCircularClustered',
+    NoOverlapSingleCircularClustered = 'noOverlapSingleCircularClustered',
     SingleCircular = 'singleCircular',
+    NoOverlapSingleCircular = 'noOverlapSingleCircular',
     DoubleCircularClustered = 'doubleCircularClustered',
+    NoOverlapDoubleCircularClustered = 'noOverlapDoubleCircularClustered',
     DoubleCircular = 'doubleCircular',
+    NoOverlapDoubleCircular = 'noOverlapDoubleCircular',
     Stacked = 'stacked',
+    NoOverlapStacked = 'noOverlapStacked',
     StackedClustered = 'stackedClustered',
+    NoOverlapStackedClustered = 'noOverlapStackedClustered',
     Sunflower = 'sunflower',
+    NoOverlapSunflower = 'noOverlapSunflower',
     SunflowerClustered = 'sunflowerClustered',
+    NoOverlapSunflowerClustered = 'noOverlapSunflowerClustered',
     Grid = 'grid',
-    GridClustered = 'gridClustered'
+    NoOverlapGrid = 'noOverlapGrid',
+    GridClustered = 'gridClustered',
+    NoOverlapGridClustered = 'noOverlapGridClustered'
 }
 
 export interface JsonFilePathsDictionary {
     [Layouts.Default]?: string;
     [Layouts.SingleCircularClustered]?: string;
+    [Layouts.NoOverlapSingleCircularClustered]?: string;
     [Layouts.SingleCircular]?: string;
+    [Layouts.NoOverlapSingleCircular]?: string;
     [Layouts.DoubleCircularClustered]?: string;
+    [Layouts.NoOverlapDoubleCircularClustered]?: string;
     [Layouts.DoubleCircular]?: string;
+    [Layouts.NoOverlapDoubleCircular]?: string;
     [Layouts.Stacked]?: string;
+    [Layouts.NoOverlapStacked]?: string;
     [Layouts.StackedClustered]?: string;
+    [Layouts.NoOverlapStackedClustered]?: string;
     [Layouts.Sunflower]?: string;
+    [Layouts.NoOverlapSunflower]?: string;
     [Layouts.SunflowerClustered]?: string;
+    [Layouts.NoOverlapSunflowerClustered]?: string;
     [Layouts.Grid]?: string;
+    [Layouts.NoOverlapGrid]?: string;
     [Layouts.GridClustered]?: string;
+    [Layouts.NoOverlapGridClustered]?: string;
 }
 
 interface DataSetsDictionary {

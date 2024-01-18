@@ -12,7 +12,9 @@ interface GeoNetMapProps {
 }
 
 function GeoNetMap({layouts}: GeoNetMapProps) {
-    const [selectedLayer, setSelectedLayer] = useState(Layouts.Default);
+    const [selectedLayer, _setSelectedLayer] = useState(Layouts.Default);
+    const selectedLayerRef = useRef(selectedLayer);
+
     const [currentGeoNetLayer, setCurrentGeoNetLayer] = useState('');
     const [settings, setSettings] = useState({
         lineWidthScale: 600,
@@ -21,13 +23,15 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         edgeOpacity: 0.4,
         nodeBorderWidth: 800,
         nodeBorderOpacity: 1,
-        degreeBasedRadiusScale: false
+        degreeBasedRadiusScale: false,
+        hullOverlapRemoval: false
     });
     const [selectedNodes, _setSelectedNodes] = useState([]);
     const selectedNodesRef = useRef(selectedNodes);
     const [mapStyle, setMapStyle] = useState('mapbox://styles/multilingual-graz/clr8ultym002701pd38o83d83')
 
     useEffect(() => {
+        // @ts-ignore
         const geonetLayer = new GeoNetLayer({
             id: `${selectedLayer}`,
             data: layouts[selectedLayer],
@@ -40,6 +44,10 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         setCurrentGeoNetLayer(geonetLayer);
     }, [layouts, settings, selectedLayer]);
 
+    function setSelectedLayer(selectedLayer) {
+        selectedLayerRef.current = selectedLayer;
+        _setSelectedLayer(selectedLayer);
+    }
     function setSelectedNodes(selectedNodes) {
         selectedNodesRef.current = selectedNodes;
         _setSelectedNodes(selectedNodes);
@@ -48,7 +56,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     function onHover(info) {
         if (info.object && info.object.geometry.type === 'Point') {
             const {neighbors, connecting_edges} = info.object.properties;
-            const filteredData = layouts[selectedLayer].features.filter(feature =>
+            const filteredData = layouts[selectedLayerRef.current].features.filter(feature =>
                 neighbors.includes(feature.properties.id) ||
                 connecting_edges.includes(feature.properties.id) ||
                 feature.properties.id === info.object.properties.id
@@ -56,13 +64,13 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
 
             if (selectedNodesRef.current.length > 0) {
                 const newSelectedNodes = Array.from(new Set([...selectedNodesRef.current, ...filteredData]));
-                updateLayer(selectedLayer, newSelectedNodes);
+                updateLayer(selectedLayerRef.current, newSelectedNodes);
             } else {
-                updateLayer(selectedLayer, filteredData)
+                updateLayer(selectedLayerRef.current, filteredData)
             }
 
         } else if (selectedNodesRef.current.length === 0) {
-            updateLayer(selectedLayer, layouts[selectedLayer]);
+            updateLayer(selectedLayerRef.current, layouts[selectedLayerRef.current]);
         }
     }
 
@@ -73,7 +81,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     function onClick(info) {
         if (info.object && info.object.geometry.type === 'Point') {
             const {neighbors, connecting_edges} = info.object.properties;
-            const filteredData = layouts[selectedLayer].features.filter(feature =>
+            const filteredData = layouts[selectedLayerRef.current].features.filter(feature =>
                 neighbors.includes(feature.properties.id) ||
                 connecting_edges.includes(feature.properties.id) ||
                 feature.properties.id === info.object.properties.id
@@ -81,7 +89,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
 
             const newSelectedNodes = Array.from(new Set([...selectedNodesRef.current, ...filteredData]));
             setSelectedNodes(newSelectedNodes);
-            updateLayer(selectedLayer, selectedNodesRef.current);
+            updateLayer(selectedLayerRef.current, selectedNodesRef.current);
         }
     }
 
@@ -94,13 +102,68 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
 
     function resetNodeSelection() {
         console.log('Resetting node selection to whole geoNetwork..')
-        updateLayer(selectedLayer, layouts[selectedLayer]);
+        updateLayer(selectedLayerRef.current, layouts[selectedLayerRef.current]);
         setSelectedNodes([])
     }
 
-    function updateLayer(selectedLayer, newFilteredData) {
+    function removeHullOverlap(removeOverlap: boolean) { //TODO: Move into own file..
+        console.log('Current layout:', selectedLayerRef.current);
+
+        let newLayout;
+        switch (selectedLayerRef.current) {
+            case Layouts.SingleCircularClustered:
+            case Layouts.NoOverlapSingleCircularClustered:
+                newLayout = removeOverlap ? Layouts.NoOverlapSingleCircularClustered : Layouts.SingleCircularClustered;
+                break;
+            case Layouts.SingleCircular:
+            case Layouts.NoOverlapSingleCircular:
+                newLayout = removeOverlap ? Layouts.NoOverlapSingleCircular : Layouts.SingleCircular;
+                break;
+            case Layouts.DoubleCircularClustered:
+            case Layouts.NoOverlapDoubleCircularClustered:
+                newLayout = removeOverlap ? Layouts.NoOverlapDoubleCircularClustered : Layouts.DoubleCircularClustered;
+                break;
+            case Layouts.DoubleCircular:
+            case Layouts.NoOverlapDoubleCircular:
+                newLayout = removeOverlap ? Layouts.NoOverlapDoubleCircular : Layouts.DoubleCircular;
+                break;
+            case Layouts.Stacked:
+            case Layouts.NoOverlapStacked:
+                newLayout = removeOverlap ? Layouts.NoOverlapStacked : Layouts.Stacked;
+                break;
+            case Layouts.StackedClustered:
+            case Layouts.NoOverlapStackedClustered:
+                newLayout = removeOverlap ? Layouts.NoOverlapStackedClustered : Layouts.StackedClustered;
+                break;
+            case Layouts.Sunflower:
+            case Layouts.NoOverlapSunflower:
+                newLayout = removeOverlap ? Layouts.NoOverlapSunflower : Layouts.Sunflower;
+                break;
+            case Layouts.Grid:
+            case Layouts.NoOverlapGrid:
+                newLayout = removeOverlap ? Layouts.NoOverlapGrid : Layouts.Grid;
+                break;
+            case Layouts.SunflowerClustered:
+            case Layouts.NoOverlapSunflowerClustered:
+                newLayout = removeOverlap ? Layouts.NoOverlapSunflowerClustered : Layouts.SunflowerClustered;
+                break;
+            case Layouts.GridClustered:
+            case Layouts.NoOverlapGridClustered:
+                newLayout = removeOverlap ? Layouts.NoOverlapGridClustered : Layouts.GridClustered;
+                break;
+            default:
+                newLayout = Layouts.Default;
+                break;
+        }
+
+        updateLayer(newLayout, layouts[newLayout])
+        setSelectedLayer(newLayout);
+    }
+
+    function updateLayer(layer, newFilteredData) {
+        // @ts-ignore
         const filteredLayer = new GeoNetLayer({
-            id: `${selectedLayer}`,
+            id: `${layer}`,
             data: newFilteredData,
             pickable: true,
             autoHighlight: true,
@@ -137,7 +200,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
                     <option value='mapbox://styles/multilingual-graz/clrirf57300m701pehf0t2aqd'>Distorted 100%</option>
                 </Select>
             </Box>
-            <GeoNetControls settings={settings} handleSettingsChange={handleSettingsChange} resetNodeSelection={resetNodeSelection}/>
+            <GeoNetControls settings={settings} handleSettingsChange={handleSettingsChange} resetNodeSelection={resetNodeSelection} removeHullOverlap={removeHullOverlap}/>
         </>
     );
 }

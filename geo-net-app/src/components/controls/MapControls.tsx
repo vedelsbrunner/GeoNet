@@ -1,8 +1,8 @@
 import {Box, Divider, FormLabel, HStack, Button, Select, Slider, SliderFilledTrack, SliderThumb, SliderTrack, Text, Checkbox} from '@chakra-ui/react';
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {Layouts} from "../../hooks/useJsonData.tsx";
 
-function MapControls({settings, onChange, onResetNodeSelection}) {
+function MapControls({settings, onChange, onResetNodeSelection, removeHullOverlap}) {
     const [lineWidthScale, setLineWidthScale] = useState(settings.lineWidthScale);
     const [pointOpacity, setPointOpacity] = useState(settings.pointOpacity);
     const [edgeOpacity, setEdgeOpacity] = useState(settings.edgeOpacity);
@@ -13,15 +13,31 @@ function MapControls({settings, onChange, onResetNodeSelection}) {
     const [degreeFilter, setDegreeFilter] = useState(settings.degreeFilter);
     const [degreeBasedRadiusScale, setDegreeBasedRadiusScale] = useState(settings.degreeBasedRadiusScale);
 
+    const [hullOverlapRemoval, _setHullOverlapRemoval] = useState(settings.hullOverlapRemoval)
+    const hullOverlapRemovalRef = useRef(hullOverlapRemoval);
+    const setHullOverlapRemoval= (removeOverlap: boolean) => {
+        hullOverlapRemovalRef.current = removeOverlap;
+        _setHullOverlapRemoval(removeOverlap);
+    }
+
     const handleLineWidthChange = (value) => {
         setLineWidthScale(value);
         onChange({...settings, lineWidthScale: value});
     };
     const handleLayerSelectionChange = (event) => {
         const layerIndex = event.target.value;
-        console.log('layerIndex', layerIndex);
         onChange(settings, layerIndex);
+        console.log('Hull removal?')
+        console.log(hullOverlapRemovalRef.current)
+        removeHullOverlap(hullOverlapRemovalRef.current);
     };
+
+    const handleHullOverlapRemoval = (value) => {
+        console.log('Hull overlap remove..')
+        const isChecked = value.target.checked;
+        setHullOverlapRemoval(isChecked)
+        removeHullOverlap(isChecked)
+    }
 
     const handlePointOpacityChange = (value) => {
         setPointOpacity(value);
@@ -50,7 +66,6 @@ function MapControls({settings, onChange, onResetNodeSelection}) {
 
     const handleDegreeBasedRadiusScale = (value) => {
         const isChecked = value.target.checked;
-        console.log(isChecked)
         setDegreeBasedRadiusScale(isChecked);
         onChange({...settings, degreeBasedRadiusScale: isChecked})
     }
@@ -59,9 +74,7 @@ function MapControls({settings, onChange, onResetNodeSelection}) {
         onResetNodeSelection();
     }
 
-    const handleHullOverlapRemoval = () => {
 
-    }
     return (
         <Box position="absolute" width={250} color="white" bg="gray.700" boxShadow="base" right={10} p={4} fontSize="sm">
             <Select onChange={handleLayerSelectionChange} bg={"gray"} color={"black"}>
@@ -187,6 +200,11 @@ function MapControls({settings, onChange, onResetNodeSelection}) {
                 </Checkbox>
             </HStack>
 
+            <Divider
+                mt={2}
+                mb={2}
+            />
+
             <HStack justifyContent="space-between" mt={1}>
                 <Button
                     id='reset-node-selection'
@@ -197,6 +215,8 @@ function MapControls({settings, onChange, onResetNodeSelection}) {
                     Reset Node Selection
                 </Button>
             </HStack>
+
+
         </Box>
     );
 }

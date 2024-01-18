@@ -15,15 +15,25 @@ export function DataSetSelectionPage() {
         const baseLayouts = {
             [Layouts.Default]: 'default.geojson',
             [Layouts.SingleCircularClustered]: 'single_circle-circular-clustered.geojson',
+            [Layouts.NoOverlapSingleCircularClustered]: 'no-overlap-single_circle-circular-clustered.geojson',
             [Layouts.SingleCircular]: 'single_circle-circular.geojson',
+            [Layouts.NoOverlapSingleCircular]: 'no-overlap-single_circle-circular.geojson',
             [Layouts.DoubleCircularClustered]: 'double_circle-circular.geojson',
+            [Layouts.NoOverlapDoubleCircularClustered]: 'no-overlap-double_circle-circular.geojson',
             [Layouts.DoubleCircular]: 'double_circle-circular.geojson',
+            [Layouts.NoOverlapDoubleCircular]: 'no-overlap-double_circle-circular.geojson',
             [Layouts.Stacked]: 'stacked.geojson',
+            [Layouts.NoOverlapStacked]: 'no-overlap-stacked.geojson',
             [Layouts.StackedClustered]: 'stacked-clustered.geojson',
+            [Layouts.NoOverlapStackedClustered]: 'no-overlap-stacked-clustered.geojson',
             [Layouts.Sunflower]: 'sunflower.geojson',
+            [Layouts.NoOverlapSunflower]: 'no-overlap-sunflower.geojson',
             [Layouts.Grid]: 'grid.geojson',
+            [Layouts.NoOverlapGrid]: 'no-overlap-grid.geojson',
             [Layouts.SunflowerClustered]: 'sunflower-clustered.geojson',
-            [Layouts.GridClustered]: 'grid-clustered.geojson'
+            [Layouts.NoOverlapSunflowerClustered]: 'no-overlap-sunflower-clustered.geojson',
+            [Layouts.GridClustered]: 'grid-clustered.geojson',
+            [Layouts.NoOverlapGridClustered]: 'no-overlap-grid-clustered.geojson'
 
         };
         const datasetLayouts = {};
