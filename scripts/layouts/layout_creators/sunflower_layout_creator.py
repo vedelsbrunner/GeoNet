@@ -18,8 +18,8 @@ def create_sunflower_layout(dataset, network, clustering_strategy, sunflower_lay
 
     if is_aggregated:
         file_name += 'sunflower-clustered.geojson'
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=False, include_labels=True)
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=True, include_labels=True)
     else:
         file_name += f'sunflower.geojson'
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=False, include_labels=True)
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=True, include_labels=True)
     return

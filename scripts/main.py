@@ -17,14 +17,14 @@ from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layo
 from scripts.layouts.layout_creators.stacked_layout_creator import create_stacked_layout
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
-CREATE_DEFAULT_LAYOUT = True
+CREATE_DEFAULT_LAYOUT = False
 CREATE_SUNFLOWER_LAYOUT = True
-CREATE_STACKED_LAYOUT = True
-CREATE_CIRCULAR_LAYOUT = True
+CREATE_STACKED_LAYOUT = False
+CREATE_CIRCULAR_LAYOUT = False
 CREATE_DOUBLE_CIRCULAR_LAYOUT = True
-CREATE_GRID_LAYOUT = True
+CREATE_GRID_LAYOUT = False
 
-EXECUTE_ALL = False
+EXECUTE_ALL = True
 
 
 def create_layouts_for_network(dataset, network):
@@ -32,7 +32,7 @@ def create_layouts_for_network(dataset, network):
         create_default_layout(dataset, copy.deepcopy(network))
 
     if CREATE_SUNFLOWER_LAYOUT:
-        sunflower_layout_config = SunflowerLayoutConfig(displacement_radius=0.15)
+        sunflower_layout_config = SunflowerLayoutConfig(displacement_radius=0.1)
         create_sunflower_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), sunflower_layout_config, is_aggregated=True, resolve_overlaps=False)
         create_sunflower_layout(dataset, copy.deepcopy(network), SamePositionClustering(), sunflower_layout_config, is_aggregated=False, resolve_overlaps=False)
 
@@ -49,7 +49,7 @@ def create_layouts_for_network(dataset, network):
 
     if CREATE_CIRCULAR_LAYOUT:
         #TODO: Introduce configs based on dataset, e.g MarieBoucher needs scale 10 and China 25
-        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=8)
+        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=10)
         create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=False)
         create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=False)
 
@@ -57,7 +57,7 @@ def create_layouts_for_network(dataset, network):
         create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_DOUBLE_CIRCULAR_LAYOUT:
-        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=8)
+        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=10)
         create_circular_layout(dataset, CircularLayoutType.DOUBLE_CIRCLE, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=False)
         create_circular_layout(dataset, CircularLayoutType.DOUBLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=False)
 
@@ -65,7 +65,7 @@ def create_layouts_for_network(dataset, network):
         create_circular_layout(dataset, CircularLayoutType.DOUBLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_GRID_LAYOUT:
-        grid_layout_config = GridLayoutConfig(distance_between_points=0.4)
+        grid_layout_config = GridLayoutConfig(distance_between_points=0.3)
         create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), grid_layout_config, is_aggregated=True, resolve_overlaps=False)
         create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=False, resolve_overlaps=False)
 
