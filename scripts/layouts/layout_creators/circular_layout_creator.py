@@ -18,8 +18,13 @@ def create_circular_layout(dataset, layout_type, network, clustering_strategy, c
     # circular_layout.optimize_layout(network, max_iterations_per_cluster=1, improvement_threshold=1)
     # network.create_text_labels()
 
+    file_name = ''
+    if resolve_overlaps:
+        file_name = 'no-overlap-'
     if is_aggregated:
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/{layout_type.name.lower()}-circular-clustered.geojson', include_hulls=False, include_labels=True)
+        file_name += f'{layout_type.name.lower()}-circular-clustered.geojson'
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=False, include_labels=True)
     else:
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/{layout_type.name.lower()}-circular.geojson', include_hulls=False, include_labels=True)
+        file_name += f'{layout_type.name.lower()}-circular.geojson'
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=False, include_labels=True)
     return

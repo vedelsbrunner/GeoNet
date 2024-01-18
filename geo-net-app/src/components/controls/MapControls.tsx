@@ -59,6 +59,9 @@ function MapControls({settings, onChange, onResetNodeSelection}) {
         onResetNodeSelection();
     }
 
+    const handleHullOverlapRemoval = () => {
+
+    }
     return (
         <Box position="absolute" width={250} color="white" bg="gray.700" boxShadow="base" right={10} p={4} fontSize="sm">
             <Select onChange={handleLayerSelectionChange} bg={"gray"} color={"black"}>
@@ -169,6 +172,20 @@ function MapControls({settings, onChange, onResetNodeSelection}) {
                 mb={2}
             />
 
+            <Text
+                fontWeight={300}
+                fontSize={18}
+            >
+                Layouts
+            </Text>
+
+            <HStack justifyContent="space-between" mt={1}>
+                <Checkbox
+                    id='enable-hull-overlap-removal'
+                    onChange={handleHullOverlapRemoval}>
+                    Overlapping clusters removal
+                </Checkbox>
+            </HStack>
 
             <HStack justifyContent="space-between" mt={1}>
                 <Button
