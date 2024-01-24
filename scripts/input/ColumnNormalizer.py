@@ -26,3 +26,7 @@ archeology_mapping = {
     'SOURCE_LOCATION': 'source_location',
     'TARGET_LOCATION': 'target_location'
 }
+
+russia_mapping = {
+
+}
