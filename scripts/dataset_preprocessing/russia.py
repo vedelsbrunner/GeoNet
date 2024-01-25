@@ -21,13 +21,25 @@ def create_russia_geo_network():
             logger.info('Skipping empty location')
             continue
 
-        source_node_id = f"src_{row['source']}"
-        target_node_id = f"tgt_{row['target']}"
+        source_node_id = f"{row['source']}"
+        target_node_id = f"{row['target']}"
         line_id = f"edge_{source_node_id}_{target_node_id}"
 
-        network.add_point(source_node_id, source_location.x, source_location.y)
-        network.add_point(target_node_id, target_location.x, target_location.y)
-        network.add_line(line_id, source_node_id, target_node_id)
+        source_node_props = {
+            'node_info': df.loc[index]['PP'],
+        }
+
+        target_node_props = {
+            'node_info': df.loc[index]['PP'],
+        }
+
+        edge_props = {
+            'edge_info': df.loc[index]['agt_description']
+        }
+
+        network.add_point(source_node_id, source_location.x, source_location.y, **source_node_props)
+        network.add_point(target_node_id, target_location.x, target_location.y, **target_node_props)
+        network.add_line(line_id, source_node_id, target_node_id, **edge_props)
 
     network.finalize()
     return network
@@ -37,26 +49,24 @@ def process_russia_data():
     dataset_path = '../datasets/russia_geocooded.csv'
     df = pd.read_csv(dataset_path)
 
-    # List to hold the edge data with additional properties
+    location_to_id = {}
+    unique_locations = df['location'].unique()
+    for idx, location in enumerate(unique_locations):
+        location_to_id[location] = f"location_{idx}"
+
     network_data = []
 
-    # Iterate over each unique AgtId
     for agt_id in df['AgtId'].unique():
-        # Get the subset of DataFrame for this AgtId
         subset_df = df[df['AgtId'] == agt_id]
-
-        # Get all unique locations for this AgtId
         locations = subset_df['location'].unique()
 
-        # Create all possible pairs (edges) for these locations
         for loc1, loc2 in combinations(locations, 2):
-            # Extract properties for source and target
             source_data = subset_df[subset_df['location'] == loc1].iloc[0]
             target_data = subset_df[subset_df['location'] == loc2].iloc[0]
 
             edge_data = {
-                'source': f"source_{source_data['PP']}_{source_data['location']}",
-                'target': f"target_{target_data['PP']}_{target_data['location']}",
+                'source': f"{source_data['PP']}_{location_to_id[loc1]}",
+                'target': f"{target_data['PP']}_{location_to_id[loc2]}",
                 'source_address': source_data['location_address'],
                 'target_address': target_data['location_address'],
                 'source_coordinates': source_data['location'],
@@ -72,11 +82,13 @@ def process_russia_data():
 
             network_data.append(edge_data)
 
-    # Create a DataFrame from the network data
     network_df = pd.DataFrame(network_data)
 
-    # Save the network DataFrame to a new CSV file
     network_df.to_csv('../datasets/russia_network_with_properties.csv', index=False)
+
+
+process_russia_data()
+
 
 def geocode_russia_dataset():
     dataset_path = '../datasets/russia.json'

@@ -14,6 +14,7 @@ interface GeoNetMapProps {
 function GeoNetMap({layouts}: GeoNetMapProps) {
     const [selectedLayer, _setSelectedLayer] = useState(Layouts.Default);
     const selectedLayerRef = useRef(selectedLayer);
+    const [hoverInfo, setHoverInfo] = useState(null);
 
     const [currentGeoNetLayer, setCurrentGeoNetLayer] = useState('');
     const [settings, setSettings] = useState({
@@ -48,12 +49,23 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         selectedLayerRef.current = selectedLayer;
         _setSelectedLayer(selectedLayer);
     }
+
     function setSelectedNodes(selectedNodes) {
         selectedNodesRef.current = selectedNodes;
         _setSelectedNodes(selectedNodes);
     }
 
     function onHover(info) {
+        if (info.object) {
+            console.log(info.object)
+            setHoverInfo({
+                x: info.x,
+                y: info.y,
+                properties: info.object.properties
+            });
+        } else {
+            setHoverInfo(null);
+        }
         if (info.object && info.object.geometry.type === 'Point') {
             const {neighbors, connecting_edges} = info.object.properties;
             const filteredData = layouts[selectedLayerRef.current].features.filter(feature =>
@@ -172,6 +184,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         setCurrentGeoNetLayer(filteredLayer);
     }
 
+
     return (
         <>
 
@@ -184,6 +197,57 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
                     mapboxAccessToken={MAPBOX_ACCESS_TOKEN}
                     mapStyle={mapStyle}
                 />
+                {/*{*/}
+                {/*    hoverInfo != null && hoverInfo.x != null && hoverInfo.y != null &&*/}
+
+                {/*    <div style={{*/}
+                {/*        position: 'absolute',*/}
+                {/*        zIndex: 1,*/}
+                {/*        pointerEvents: 'none',*/}
+                {/*        padding: '10px',*/}
+                {/*        background: 'rgba(255, 255, 255, 0.8)',*/}
+                {/*        color: 'black',*/}
+                {/*        maxWidth: '200px',*/}
+                {/*        fontSize: '14px',*/}
+                {/*        borderRadius: '4px',*/}
+                {/*        boxShadow: '0 2px 4px rgba(0,0,0,0.3)',*/}
+                {/*        left: hoverInfo.x, top: hoverInfo.y*/}
+                {/*    }}>*/}
+
+                {/*        {Object.entries(hoverInfo.properties).map(([key, value]) => (*/}
+                {/*            <div key={key}><strong>{key}</strong>: {value}</div>*/}
+                {/*        ))}*/}
+                {/*    </div>*/}
+                {/*}*/}
+
+                {
+                    hoverInfo != null && hoverInfo.x != null && hoverInfo.y != null &&
+                    (hoverInfo.properties.node_info || hoverInfo.properties.edge_info) &&
+                    <div style={{
+                        position: 'absolute',
+                        zIndex: 1,
+                        pointerEvents: 'none',
+                        padding: '10px',
+                        background: 'rgba(255, 255, 255, 0.8)',
+                        color: 'black',
+                        maxWidth: '200px',
+                        fontSize: '14px',
+                        borderRadius: '4px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                        left: hoverInfo.x, top: hoverInfo.y
+                    }}>
+
+                        {
+                            hoverInfo.properties && hoverInfo.properties.node_info &&
+                            <div key="node_info">{hoverInfo.properties.node_info}</div>
+                        }
+
+                        {
+                            hoverInfo.properties && hoverInfo.properties.edge_info &&
+                            <div key="edge_info">{hoverInfo.properties.edge_info}</div>
+                        }
+                    </div>
+                }
             </DeckGL>
             <Box position="absolute" top={4} left={4} zIndex="1" color={'black'}>
                 <Select

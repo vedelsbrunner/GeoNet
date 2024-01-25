@@ -10,6 +10,7 @@ export const CreateGeoNetLayer = (selectedLayer, data, settings, onClick, onHove
         autoHighlight: true,
         ...settings,
         onClick: onClick,
-        onHover: onHover
+        onHover: onHover,
+
     });
 }

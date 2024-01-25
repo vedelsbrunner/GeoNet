@@ -16,14 +16,16 @@ export class NodesLayer {
             radiusUnits: 'meters',
             radiusScale: 3,
             radiusMinPixels: 1.5,
-            getFillColor: d => [255,255,255,255 * settings.pointOpacity],
+            getFillColor: d => [255, 255, 255, 255 * settings.pointOpacity],
             getRadius: d => settings.degreeBasedRadiusScale ? settings.pointRadius * Math.sqrt(d.properties.degree) : settings.pointRadius,
 
             // Node Border settings
             stroked: true,
             lineWidthUnits: 'meters',
             getLineWidth: d => settings.nodeBorderWidth,
-            getLineColor: d => [0,0,0,255 * settings.nodeBorderOpacity]
+            getLineColor: d => [0, 0, 0, 255 * settings.nodeBorderOpacity],
+
+
         });
     }
 }

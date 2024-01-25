@@ -54,8 +54,8 @@ def create_layouts_for_network(dataset, network):
         create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=False)
         create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=False)
 
-        create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=True)
-        create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=True)
+        # create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=True)
+        # create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_DOUBLE_CIRCULAR_LAYOUT:
         circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=10)
