@@ -14,13 +14,15 @@ def create_grid_layout(dataset, network, clustering_strategy, grid_layout_config
 
     network.add_neighbors_and_edges()
 
+    network.create_text_labels()
+
     file_name = ''
     if resolve_overlaps:
         file_name = 'no-overlap-'
     if is_aggregated:
         file_name += f'grid-clustered.geojson'
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=True, include_labels=False)
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=True, include_labels=True)
     else:
         file_name += f'grid.geojson'
-        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=True, include_labels=False)
+        network.write_to_disk(f'../geo-net-app/public/{dataset}/{file_name}', include_hulls=True, include_labels=True)
     return

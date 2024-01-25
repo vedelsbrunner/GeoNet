@@ -1,4 +1,6 @@
 import logging
+import re
+from collections import Counter
 from itertools import combinations
 from multiprocessing import Pool
 import itertools
@@ -17,6 +19,21 @@ from scripts.utils.LoggerConfig import logger
 
 logging.basicConfig(level=logging.INFO)
 
+def normalize_segment(segment):
+    # Normalize by converting to lowercase
+    return segment.lower().strip()
+
+def get_most_common_segments(locations, max_segments=10):
+    segment_counter = Counter()
+    for location in locations:
+        # Splitting location into segments based on comma
+        segments = [normalize_segment(segment) for segment in location.split(',')]
+        # Update counter for each segment
+        segment_counter.update(segments)
+
+    # Getting the most common segments
+    most_common = segment_counter.most_common(max_segments)
+    return [segment for segment, _ in most_common]
 
 class GeoNetwork:
     def __init__(self):
@@ -91,7 +108,7 @@ class GeoNetwork:
             self.__point_to_edges[point_id_start].append((line_id, point_id_end))
             self.__point_to_edges[point_id_end].append((line_id, point_id_start))
 
-    def create_convex_hulls(self, buffer_distance=0.06):
+    def create_convex_hulls(self, buffer_distance=0.035):
         hulls_data = []
 
         for cluster_id, points in self.gdf_points.groupby('cluster'):
@@ -105,7 +122,6 @@ class GeoNetwork:
                 hulls_data.append({'cluster_id': cluster_id, 'geometry': hull})
 
         self.gdf_hulls = gpd.GeoDataFrame(hulls_data, crs=self.gdf_points.crs)
-
 
     # TODO: Ugly post-processing, refactor(!)
     def finalize(self, crs="EPSG:32633"):
@@ -138,9 +154,8 @@ class GeoNetwork:
         gdf_points_copy['neighbors'] = gdf_points_copy['neighbors'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
         gdf_points_copy['connecting_edges'] = gdf_points_copy['connecting_edges'].apply(lambda x: ','.join(map(str, x)) if isinstance(x, list) else x)
 
-
         if 'geometry' in gdf_points_copy.columns:
-            gdf_points_copy['longitude'] = gdf_points_copy.geometry.apply(lambda geom: geom.y) #No suer if geom.y is long or lat..
+            gdf_points_copy['longitude'] = gdf_points_copy.geometry.apply(lambda geom: geom.y)  # No suer if geom.y is long or lat..
 
         # Sort by 'cluster', 'degree', and then 'longitude' --> TODO: Only relevant for the stacked layout..
         if 'cluster' in gdf_points_copy.columns and 'degree' in gdf_points_copy.columns and 'longitude' in gdf_points_copy.columns:
@@ -290,11 +305,10 @@ class GeoNetwork:
         num_nodes = self.gdf_points.count()[0]
         num_edges = self.gdf_edges.count()[0]
         logger.info("This graph as {} nodes and {} edges.".format(num_nodes, num_edges))
+
     def create_text_labels(self):
         self.__gdf_labels = gpd.GeoDataFrame(columns=['id', 'geometry', 'text'])
-
-        cluster_locations = self.gdf_points.groupby('cluster')['location'].apply(set)
-
+        cluster_locations = self.gdf_points.groupby('cluster')['location'].apply(lambda x: set(x.dropna())).to_dict()  # TODO: Why are nans here?
 
         labels = []
         for cluster_id, locations in cluster_locations.items():
@@ -302,12 +316,8 @@ class GeoNetwork:
                 logger.info(f"Skipping cluster with ID {cluster_id} (noise)")
                 continue
 
-            if 'nan' in str(locations):
-                logger.error('TODO: Handle nan cluster / location, why are u here?')
-                continue
-
             # Enable if u want to use the centroid for text positon
-            #points_in_cluster = self.gdf_points[self.gdf_points['cluster'] == cluster_id]
+            # points_in_cluster = self.gdf_points[self.gdf_points['cluster'] == cluster_id]
             # centroid = points_in_cluster.unary_union.centroid
 
             cluster_hull = self.gdf_hulls.loc[self.gdf_hulls['cluster_id'] == cluster_id, 'geometry'].values[0]
@@ -317,7 +327,10 @@ class GeoNetwork:
             label_y = southernmost_point[1]
             label_geom = Point(label_x, label_y)
 
-            location_string = "\n".join(map(str, locations))
+            common_locations = get_most_common_segments(locations)
+            logger.info(f"Common locations: {common_locations}")
+            location_string = "\n".join(map(str, common_locations))
+
             labels.append({
                 'id': f"location_label'{cluster_id}",
                 'geometry': label_geom,
@@ -325,4 +338,5 @@ class GeoNetwork:
             })
 
         self.__gdf_labels = gpd.GeoDataFrame(labels, crs=self.gdf_points.crs)
+
 

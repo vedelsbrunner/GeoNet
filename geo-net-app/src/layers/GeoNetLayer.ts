@@ -10,7 +10,7 @@ export default class GeoNetLayer extends CompositeLayer {
 
     renderLayers() {
         const {nodes, edges, hulls, location_labels, circluar_hulls} = ExtractDataLayers(this.props.data)
-
+        console.log(location_labels)
         const {lineWidthScale, pointRadius, pointOpacity, edgeOpacity, nodeBorderWidth, nodeBorderOpacity, degreeBasedRadiusScale, hullOverlapRemoval} = this.props;
         const layerSettings = {lineWidthScale, pointRadius, pointOpacity, edgeOpacity, nodeBorderWidth, nodeBorderOpacity, degreeBasedRadiusScale, hullOverlapRemoval};
         return [

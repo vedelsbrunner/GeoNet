@@ -13,9 +13,9 @@ export class LabelsLayer {
             pickable: false,
             getSize: 1500,
             background: true,
+            getColor: [255,255,255,255],
             getBackgroundColor: [255, 255, 255, 80],
-            extensions: [new CollisionFilterExtension()]
-
+            // extensions: [new CollisionFilterExtension()]
         });
     }
 }

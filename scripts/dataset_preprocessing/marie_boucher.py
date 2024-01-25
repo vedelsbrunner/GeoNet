@@ -24,11 +24,13 @@ def create_marie_boucher_geo_network():
         line_id = f"edge_{source_node_id}_{target_node_id}"
 
         source_node_props = {
-            'node_info': df.loc[index]['source']
+            'node_info': df.loc[index]['source'],
+            'location': df.loc[index]['source_location']
         }
 
         target_node_props = {
-            'node_info': df.loc[index]['target']
+            'node_info': df.loc[index]['target'],
+            'location': df.loc[index]['target_location']
         }
 
         edge_props = {
@@ -43,14 +45,23 @@ def create_marie_boucher_geo_network():
     logger.info(network.print_network_summary())
     return network
 
+def drop_null_entries(df):
+    null_count = df[df['source_location'].isnull() | df['target_location'].isnull()].shape[0]
+    if null_count > 0:
+        logger.info(f"Dropping {null_count} entries where 'source_location' or 'target_location' is null.")
+        df = df.dropna(subset=['source_location', 'target_location'])
+    else:
+        logger.info("No entries found with null 'source_location' or 'target_location'.")
+    return df
 
 def process_marieboucher_data():
-    mariebouche = "../datasets/marieboucher.csv"
-    df = pd.read_csv(mariebouche)
+    marieboucher = "../datasets/marieboucher.csv"
+    df = pd.read_csv(marieboucher)
     df.replace("Bouffay, Nantes", "Bouffay 44000 Nantes Frankreich", inplace=True)
     df.replace("Ile Saint Christophe", "Saint-Christophe-et-Niévès", inplace=True)
     df.replace(to_replace=r'\bSt\b', value='Saint', regex=True, inplace=True)
 
     df = normalize_column_names(df, marieboucher_mapping)
+    df = drop_null_entries(df)
     df = geocode_places(df)
-    df.to_csv("./datasets/marieboucher_geocoded.csv", index=False)
+    df.to_csv("../datasets/marieboucher_geocoded.csv", index=False)

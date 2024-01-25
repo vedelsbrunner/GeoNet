@@ -16,7 +16,8 @@ def create_circular_layout(dataset, layout_type, network, clustering_strategy, c
     network.add_neighbors_and_edges()
 
     # circular_layout.optimize_layout(network, max_iterations_per_cluster=1, improvement_threshold=1)
-    # network.create_text_labels()
+
+    network.create_text_labels()
 
     file_name = ''
     if resolve_overlaps:

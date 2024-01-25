@@ -5,7 +5,7 @@ from scripts.cluster.SamePositionClustering import SamePositionClustering
 from scripts.dataset_preprocessing.archeology import process_archeology_data, create_archeology_geo_network
 from scripts.dataset_preprocessing.china import create_china_geo_network, process_china_data
 from scripts.dataset_preprocessing.jucs import create_jucs_geo_network, process_jucs_data, prepare_jucs_data, geocode_jucs_data
-from scripts.dataset_preprocessing.marie_boucher import create_marie_boucher_geo_network
+from scripts.dataset_preprocessing.marie_boucher import create_marie_boucher_geo_network, process_marieboucher_data
 from scripts.dataset_preprocessing.russia import geocode_russia_dataset, process_russia_data, create_russia_geo_network
 from scripts.dataset_preprocessing.smith import create_smith_geo_network
 from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig, CircularLayoutType
@@ -19,11 +19,11 @@ from scripts.layouts.layout_creators.stacked_layout_creator import create_stacke
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
 CREATE_DEFAULT_LAYOUT = True
-CREATE_SUNFLOWER_LAYOUT = False
-CREATE_STACKED_LAYOUT = False
+CREATE_SUNFLOWER_LAYOUT = True
+CREATE_STACKED_LAYOUT = True
 CREATE_CIRCULAR_LAYOUT = True
-CREATE_DOUBLE_CIRCULAR_LAYOUT = False
-CREATE_GRID_LAYOUT = False
+CREATE_DOUBLE_CIRCULAR_LAYOUT = True
+CREATE_GRID_LAYOUT = True
 
 EXECUTE_ALL = False
 
@@ -81,6 +81,7 @@ def main():
     # process_jucs_data()
     # process_china_data()
     # process_smith_data()
+    # process_marieboucher_data()
 
     network_creators = {
         'russia': create_russia_geo_network,
@@ -91,7 +92,7 @@ def main():
         'archeology': create_archeology_geo_network
     }
 
-    current_dataset = 'jucs'
+    current_dataset = 'marieboucher'
 
     if EXECUTE_ALL:
         for dataset, creator in network_creators.items():
