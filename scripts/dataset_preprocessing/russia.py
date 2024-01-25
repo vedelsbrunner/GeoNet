@@ -34,7 +34,7 @@ def create_russia_geo_network():
         }
 
         edge_props = {
-            'edge_info': df.loc[index]['agt_description']
+            'edge_info': f"AgtId:{df.loc[index]['AgtId']} \n {df.loc[index]['agt_description']}"
         }
 
         network.add_point(source_node_id, source_location.x, source_location.y, **source_node_props)

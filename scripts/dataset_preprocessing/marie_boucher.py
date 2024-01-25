@@ -19,36 +19,27 @@ def create_marie_boucher_geo_network():
             logger.info('Skipping empty location')
             continue
 
-        source_node_id = f"src_{row['source']}"
-        target_node_id = f"tgt_{row['target']}"
+        source_node_id = f"{row['source']}"
+        target_node_id = f"{row['target']}"
         line_id = f"edge_{source_node_id}_{target_node_id}"
 
-        network.add_point(source_node_id, source_location.x, source_location.y)
-        network.add_point(target_node_id, target_location.x, target_location.y)
-        network.add_line(line_id, source_node_id, target_node_id)
+        source_node_props = {
+            'node_info': df.loc[index]['source']
+        }
+
+        target_node_props = {
+            'node_info': df.loc[index]['target']
+        }
+
+        edge_props = {
+            'edge_info': df.loc[index]['Content']
+        }
+
+        network.add_point(source_node_id, source_location.x, source_location.y, **source_node_props)
+        network.add_point(target_node_id, target_location.x, target_location.y, **target_node_props)
+        network.add_line(line_id, source_node_id, target_node_id, **edge_props)
 
     network.finalize()
-
-    for index, row in df.iterrows():
-        source_node_id = f"src_{row['source']}"  # TODO: Duplicate code / Remove the finalize !!
-        target_node_id = f"tgt_{row['target']}"
-
-        props = {
-            'content': df.loc[index]['Content'],
-            'source': df.loc[index]['source'],
-            'target': df.loc[index]['target'],
-            'location': df.loc[index]['source_location'],
-        }
-
-        network.add_point_props(source_node_id, **props)
-
-        props = {
-            'content': df.loc[index]['Content'],
-            'source': df.loc[index]['source'],
-            'target': df.loc[index]['target'],
-            'location': df.loc[index]['target_location'],
-        }
-        network.add_point_props(target_node_id, **props)
     return network
 
 

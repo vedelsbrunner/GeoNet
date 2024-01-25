@@ -74,7 +74,7 @@ def create_layouts_for_network(dataset, network):
         create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=False, resolve_overlaps=True)
 
 def main():
-    process_russia_data()
+    # process_russia_data()
     # process_archeology_data()
     # prepare_jucs_data()
     # geocode_jucs_data()
@@ -91,7 +91,7 @@ def main():
         'archeology': create_archeology_geo_network
     }
 
-    current_dataset = 'russia'
+    current_dataset = 'marieboucher'
 
     if EXECUTE_ALL:
         for dataset, creator in network_creators.items():
