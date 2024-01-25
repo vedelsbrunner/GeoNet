@@ -40,6 +40,7 @@ def create_marie_boucher_geo_network():
         network.add_line(line_id, source_node_id, target_node_id, **edge_props)
 
     network.finalize()
+    logger.info(network.print_network_summary())
     return network
 
 

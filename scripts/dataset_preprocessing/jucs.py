@@ -19,8 +19,8 @@ def prepare_jucs_data():
 
     df['Authors'] = df['Authors'].apply(ast.literal_eval)
     df['Author cities'] = df['Author cities'].apply(ast.literal_eval)
-
     df['Keywords'] = df['Keywords'].apply(ast.literal_eval)
+    df['Author institutions'] = df['Author institutions'].apply(ast.literal_eval)  # Adding this line
 
     expanded_data = []
 
@@ -28,9 +28,10 @@ def prepare_jucs_data():
         authors = row['Authors']
         cities = row['Author cities']
         keywords = row['Keywords']
+        institutions = row['Author institutions']
 
-        for author, city in zip(authors, cities):
-            expanded_data.append({'Author': author, 'City': city, 'Keywords': keywords})
+        for author, city, institution in zip(authors, cities, institutions):
+            expanded_data.append({'Author': author, 'City': city, 'Institution': institution, 'Keywords': keywords})
 
     combined_df = pd.DataFrame(expanded_data)
     combined_df.to_csv("../datasets/jucs_prepared.csv", index=False)
@@ -54,6 +55,7 @@ def process_jucs_data():
 
     author_keywords = {}
     author_locations = {}
+    author_institutions = {}
     keyword_frequency = Counter()
 
     for _, row in df.iterrows():
@@ -81,6 +83,7 @@ def process_jucs_data():
             author_keywords[author] = keywords
 
         author_locations[author] = location_str
+        author_institutions[author] = row['Institution']
 
     logger.debug("Keyword Frequency (Ascending Order):")
     for keyword, freq in sorted(keyword_frequency.items(), key=lambda item: item[1]):
@@ -95,7 +98,10 @@ def process_jucs_data():
                 'source': author1,
                 'target': author2,
                 'source_coordinates': author_locations[author1],
-                'target_coordinates': author_locations[author2]
+                'target_coordinates': author_locations[author2],
+                'shared_keywords': ','.join(shared_keywords),
+                'source_institution': author_institutions[author1],
+                'target_institution': author_institutions[author2]
             })
 
     network_df = pd.DataFrame(network_data)
@@ -119,11 +125,22 @@ def create_jucs_geo_network():
         target_node_id = f"{row['target']}"
         line_id = f"edge_{source_node_id}_{target_node_id}"
 
-        network.add_point(source_node_id, source_location.x, source_location.y)
-        network.add_point(target_node_id, target_location.x, target_location.y)
-        network.add_line(line_id, source_node_id, target_node_id)
+        source_node_props = {
+            'node_info': f"{df.loc[index]['source']} ({df.loc[index]['source_institution']})"
+        }
+
+        target_node_props = {
+            'node_info': f"{df.loc[index]['target']} ({df.loc[index]['target_institution']})"
+        }
+
+        edge_props = {
+            'edge_info': f"{df.loc[index]['shared_keywords']}"
+        }
+
+        network.add_point(source_node_id, source_location.x, source_location.y, **source_node_props)
+        network.add_point(target_node_id, target_location.x, target_location.y, **target_node_props)
+        network.add_line(line_id, source_node_id, target_node_id, **edge_props)
 
     network.finalize()
     logger.info(network.print_network_summary())
-    # TODO: Add props 2.0
     return network

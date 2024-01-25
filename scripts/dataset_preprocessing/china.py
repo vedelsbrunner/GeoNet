@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 
 from collections import Counter
@@ -37,15 +39,25 @@ def create_china_geo_network():
         target_node_id = f"{row['target']}"
         line_id = f"edge_{source_node_id}_{target_node_id}"
 
-        network.add_point(source_node_id, source_location.x, source_location.y)
-        network.add_point(target_node_id, target_location.x, target_location.y)
-        network.add_line(line_id, source_node_id, target_node_id)
+        source_node_props = {
+            'node_info': f"{df.loc[index]['source']} ({df.loc[index]['source_university']})"
+        }
+
+        target_node_props = {
+            'node_info': f"{df.loc[index]['target']} ({df.loc[index]['target_university']})"
+        }
+
+        edge_props = {
+            'edge_info': f"{df.loc[index]['keywords']}"
+        }
+
+        network.add_point(source_node_id, source_location.x, source_location.y, **source_node_props)
+        network.add_point(target_node_id, target_location.x, target_location.y, **target_node_props)
+        network.add_line(line_id, source_node_id, target_node_id, **edge_props)
 
     network.finalize()
     logger.info(network.print_network_summary())
-    # TODO: Add props 2.0
     return network
-
 
 def process_china_data():
     accepted_keywords = []
@@ -59,6 +71,7 @@ def process_china_data():
     normalized_accepted_keywords = {kw.lower().strip() for kw in accepted_keywords}
     normalized_ignored_keywords = {kw.lower().strip() for kw in ignored_keywords}
 
+    author_universities = {}
     author_keywords = {}
     author_locations = {}
     keyword_frequency = Counter()
@@ -85,6 +98,7 @@ def process_china_data():
             author_keywords[author] = keywords
 
         author_locations[author] = location_str
+        author_universities[author] = row.get('School_Name', None)
 
     logger.debug("Keyword Frequency (Ascending Order):")
     for keyword, freq in sorted(keyword_frequency.items(), key=lambda item: item[1]):
@@ -99,7 +113,10 @@ def process_china_data():
                 'source': author1,
                 'target': author2,
                 'source_coordinates': author_locations[author1],
-                'target_coordinates': author_locations[author2]
+                'target_coordinates': author_locations[author2],
+                'keywords': ','.join(shared_keywords),
+                'source_university': author_universities[author1],
+                'target_university': author_universities[author2]
             })
 
     network_df = pd.DataFrame(network_data)

@@ -42,6 +42,7 @@ def create_russia_geo_network():
         network.add_line(line_id, source_node_id, target_node_id, **edge_props)
 
     network.finalize()
+    logger.info(network.print_network_summary())
     return network
 
 
@@ -87,7 +88,6 @@ def process_russia_data():
     network_df.to_csv('../datasets/russia_network_with_properties.csv', index=False)
 
 
-process_russia_data()
 
 
 def geocode_russia_dataset():
