@@ -91,7 +91,7 @@ def main():
         'archeology': create_archeology_geo_network
     }
 
-    current_dataset = 'marieboucher'
+    current_dataset = 'jucs'
 
     if EXECUTE_ALL:
         for dataset, creator in network_creators.items():

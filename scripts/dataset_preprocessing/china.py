@@ -33,8 +33,8 @@ def create_china_geo_network():
             logger.info('Skipping empty location')
             continue
 
-        source_node_id = f"src_{row['source']}"
-        target_node_id = f"tgt_{row['target']}"
+        source_node_id = f"{row['source']}"
+        target_node_id = f"{row['target']}"
         line_id = f"edge_{source_node_id}_{target_node_id}"
 
         network.add_point(source_node_id, source_location.x, source_location.y)
