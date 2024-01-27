@@ -58,21 +58,26 @@ class CircularLayout(Layout):
         circle_center = cluster_points.geometry.unary_union.centroid
 
         inner_circumference = len(inner_points) * config.min_distance_between_nodes_km
-        outer_circumference = len(outer_points) * config.min_distance_between_nodes_km
-
         inner_radius = inner_circumference / (2 * pi)
-        outer_radius = outer_circumference / (2 * pi)
 
-        # Check for edge case where inner circle has more points than the outer
-        if len(inner_points) > len(outer_points):
-            outer_radius = inner_radius + config.min_distance_between_nodes_km * 2
+        if outer_points:
+            outer_circumference = len(outer_points) * config.min_distance_between_nodes_km
+            outer_radius = outer_circumference / (2 * pi)
+
+            # Check for edge case where inner circle has more points than the outer
+            if len(inner_points) > len(outer_points):
+                outer_radius = inner_radius + config.min_distance_between_nodes_km * 2
+
+            place_nodes_on_circle(network, outer_points, circle_center, outer_radius)
+        else:
+            # If there are no outer points, outer_radius is not defined
+            outer_radius = None
 
         place_nodes_on_circle(network, inner_points, circle_center, inner_radius)
-        place_nodes_on_circle(network, outer_points, circle_center, outer_radius)
 
         self.cluster_info[cluster_points['cluster'].iloc[0]] = {
             'inner_radius': inner_radius,
-            'outer_radius': outer_radius,
+            'outer_radius': outer_radius if outer_radius is not None else 'N/A',
             'center': (circle_center.x, circle_center.y)
         }
 
