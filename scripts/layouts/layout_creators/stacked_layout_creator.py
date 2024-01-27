@@ -12,7 +12,7 @@ def create_stacked_layout(dataset, network, clustering_strategy, config, is_aggr
     if resolve_overlaps:
         network.resolve_overlaps(15)
 
-    network.create_text_labels()
+    # network.create_text_labels()
 
     file_name = ''
     if resolve_overlaps:

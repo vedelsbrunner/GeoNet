@@ -6,7 +6,7 @@ from scripts.dataset_preprocessing.archeology import process_archeology_data, cr
 from scripts.dataset_preprocessing.china import create_china_geo_network, process_china_data
 from scripts.dataset_preprocessing.jucs import create_jucs_geo_network, process_jucs_data, prepare_jucs_data, geocode_jucs_data
 from scripts.dataset_preprocessing.marie_boucher import create_marie_boucher_geo_network, process_marieboucher_data
-from scripts.dataset_preprocessing.russia import geocode_russia_dataset, process_russia_data, create_russia_geo_network
+from scripts.dataset_preprocessing.russia import geocode_russia_dataset, process_russia_data, create_russia_geo_network, filter_european_countries, create_russia_europe_geo_network
 from scripts.dataset_preprocessing.smith import create_smith_geo_network
 from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig, CircularLayoutType
 from scripts.layouts.GridLayoutConfig import GridLayoutConfig
@@ -54,8 +54,8 @@ def create_layouts_for_network(dataset, network):
         create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=False)
         create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=False)
 
-        # create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=True)
-        # create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=True)
+        create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=True)
+        create_circular_layout(dataset, CircularLayoutType.SINGLE_CIRCLE, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_DOUBLE_CIRCULAR_LAYOUT:
         circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=10)
@@ -74,7 +74,11 @@ def create_layouts_for_network(dataset, network):
         create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=False, resolve_overlaps=True)
 
 def main():
-    # process_russia_data()
+    # filter_european_countries()
+
+    # process_russia_data(dataset_path="../datasets/russia/russia_geocooded_europe.csv", output_path="../datasets/russia/russia_network_europe.csv")
+    # process_russia_data(dataset_path="../datasets/russia/russia_geocooded.csv", output_path="../datasets/russia/russia_network.csv")
+
     # process_archeology_data()
     # prepare_jucs_data()
     # geocode_jucs_data()
@@ -85,6 +89,7 @@ def main():
 
     network_creators = {
         'russia': create_russia_geo_network,
+        'russia_europe': create_russia_europe_geo_network(),
         'china': create_china_geo_network,
         'marieboucher': create_marie_boucher_geo_network,
         'smith': create_smith_geo_network,
@@ -92,7 +97,7 @@ def main():
         'archeology': create_archeology_geo_network
     }
 
-    current_dataset = 'marieboucher'
+    current_dataset = 'russia_europe'
 
     if EXECUTE_ALL:
         for dataset, creator in network_creators.items():
@@ -100,7 +105,7 @@ def main():
             create_layouts_for_network(dataset, network)
     else:
         if current_dataset in network_creators:
-            network = network_creators[current_dataset]()
+            network = network_creators[current_dataset]
             create_layouts_for_network(current_dataset, network)
         else:
             print(f"No network creator function found for dataset: {current_dataset}")
