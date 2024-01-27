@@ -9,12 +9,15 @@ export class LabelsLayer {
             sizeUnits: 'meters',
             getPosition: d => d.geometry.coordinates,
             getText: d => d.properties.text,
-            getAlignmentBaseline : 'top',
+            getAlignmentBaseline: 'top',
             pickable: false,
             getSize: 1500,
             background: true,
-            getColor: [255,255,255,255],
+            getColor: [255, 255, 255, 255],
             getBackgroundColor: [255, 255, 255, 80],
+            characterSet: 'auto',
+            fontFamily: '"Your Font Family", Arial, sans-serif', // Specify the font family here
+
             // extensions: [new CollisionFilterExtension()]
         });
     }
