@@ -26,11 +26,11 @@ def create_russia_geo_network():
         line_id = f"edge_{source_node_id}_{target_node_id}"
 
         source_node_props = {
-            'node_info': df.loc[index]['PP'],
+            'node_info': f"{df.loc[index]['PP']} ({df.loc[index]['source_address']})",
         }
 
         target_node_props = {
-            'node_info': df.loc[index]['PP'],
+            'node_info': f"{df.loc[index]['PP']} ({df.loc[index]['target_address']})",
         }
 
         edge_props = {
@@ -47,7 +47,7 @@ def create_russia_geo_network():
 
 
 def process_russia_data():
-    dataset_path = '../datasets/russia_geocooded.csv'
+    dataset_path = '../datasets/russia/russia_geocooded.csv'
     df = pd.read_csv(dataset_path)
 
     location_to_id = {}
@@ -85,7 +85,7 @@ def process_russia_data():
 
     network_df = pd.DataFrame(network_data)
 
-    network_df.to_csv('../datasets/russia_network_with_properties.csv', index=False)
+    network_df.to_csv('../datasets/russia/russia_network_with_properties.csv', index=False)
 
 
 
