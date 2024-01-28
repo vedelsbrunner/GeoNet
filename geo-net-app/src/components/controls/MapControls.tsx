@@ -15,7 +15,7 @@ function MapControls({settings, onChange, onResetNodeSelection, removeHullOverla
 
     const [hullOverlapRemoval, _setHullOverlapRemoval] = useState(settings.hullOverlapRemoval)
     const hullOverlapRemovalRef = useRef(hullOverlapRemoval);
-    const setHullOverlapRemoval= (removeOverlap: boolean) => {
+    const setHullOverlapRemoval = (removeOverlap: boolean) => {
         hullOverlapRemovalRef.current = removeOverlap;
         _setHullOverlapRemoval(removeOverlap);
     }
@@ -34,6 +34,10 @@ function MapControls({settings, onChange, onResetNodeSelection, removeHullOverla
         const isChecked = value.target.checked;
         setHullOverlapRemoval(isChecked)
         removeHullOverlap(isChecked)
+    }
+
+    const handleShowLabels = (value) => {
+        onChange({...settings, showLabels: value.target.checked});
     }
 
     const handlePointOpacityChange = (value) => {
@@ -194,6 +198,14 @@ function MapControls({settings, onChange, onResetNodeSelection, removeHullOverla
                     id='enable-hull-overlap-removal'
                     onChange={handleHullOverlapRemoval}>
                     Overlapping clusters removal
+                </Checkbox>
+            </HStack>
+
+            <HStack justifyContent="space-between" mt={1}>
+                <Checkbox
+                    id='show-labels'
+                    onChange={handleShowLabels}>
+                    Show Labels
                 </Checkbox>
             </HStack>
 

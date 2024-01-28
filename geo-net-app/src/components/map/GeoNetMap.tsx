@@ -26,6 +26,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         nodeBorderOpacity: 1,
         degreeBasedRadiusScale: false,
         hullOverlapRemoval: false,
+        showLabels: false
     });
     const [selectedNodes, _setSelectedNodes] = useState([]);
     const selectedNodesRef = useRef(selectedNodes);

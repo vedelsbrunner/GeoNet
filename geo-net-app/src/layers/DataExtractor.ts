@@ -44,5 +44,5 @@ export const ExtractDataLayers = (geoJson) => {
         }
     });
 
-    return {nodes, edges, hulls, location_labels, circluar_hulls};
+    return {nodes, edges, hulls, location_labels, circular_hulls: circluar_hulls};
 }
