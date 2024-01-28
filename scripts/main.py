@@ -11,10 +11,6 @@ from scripts.dataset_preprocessing.russia import geocode_russia_dataset, process
     create_russia_middle_east_geo_network
 from scripts.dataset_preprocessing.region_filter import filter_european_countries, filter_middle_eastern_countries
 from scripts.dataset_preprocessing.smith import create_smith_geo_network
-from scripts.layouts.CircularLayoutConfig import CircularLayoutConfig, CircularLayoutType
-from scripts.layouts.GridLayoutConfig import GridLayoutConfig
-from scripts.layouts.StackedLayout import StackedLayoutConfig
-from scripts.layouts.SunflowerLayoutConfig import SunflowerLayoutConfig
 from scripts.layouts.layout_creators.circular_layout_creator import create_circular_layout
 from scripts.layouts.layout_creators.default_layout_creator import create_default_layout
 from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layout
@@ -22,11 +18,11 @@ from scripts.layouts.layout_creators.stacked_layout_creator import create_stacke
 from scripts.layouts.layout_creators.sunflower_layout_creator import create_sunflower_layout
 
 CREATE_DEFAULT_LAYOUT = False
-CREATE_SUNFLOWER_LAYOUT = True
+CREATE_SUNFLOWER_LAYOUT = False
 CREATE_STACKED_LAYOUT = False
 CREATE_CIRCULAR_LAYOUT = False
 CREATE_DOUBLE_CIRCULAR_LAYOUT = False
-CREATE_GRID_LAYOUT = False
+CREATE_GRID_LAYOUT = True
 
 EXECUTE_ALL = False
 
@@ -43,7 +39,6 @@ def create_layouts_for_network(dataset, network):
         create_sunflower_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['sunflower'], is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_STACKED_LAYOUT:
-        stacked_layout_confing = StackedLayoutConfig(stack_points_offset=0.03, hull_buffer=0.03)
         create_stacked_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['stacked'], is_aggregated=True, resolve_overlaps=False)
         create_stacked_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['stacked'], is_aggregated=False, resolve_overlaps=False)
 
@@ -51,29 +46,25 @@ def create_layouts_for_network(dataset, network):
         create_stacked_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['stacked'], is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_CIRCULAR_LAYOUT:
-        # TODO: Introduce configs based on dataset, e.g MarieBoucher needs scale 10 and China 25
-        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=10)
-        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=False)
-        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=False)
+        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['single-circle'], is_aggregated=True, resolve_overlaps=False)
+        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['single-circle'], is_aggregated=False, resolve_overlaps=False)
 
-        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=True)
-        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=True)
+        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['single-circle'], is_aggregated=True, resolve_overlaps=True)
+        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['single-circle'], is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_DOUBLE_CIRCULAR_LAYOUT:
-        circular_layout_config = CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=10)
-        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=False)
-        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=False)
+        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['double-circle'], is_aggregated=True, resolve_overlaps=False)
+        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['double-circle'], is_aggregated=False, resolve_overlaps=False)
 
-        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), circular_layout_config, is_aggregated=True, resolve_overlaps=True)
-        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), circular_layout_config, is_aggregated=False, resolve_overlaps=True)
+        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['double-circle'], is_aggregated=True, resolve_overlaps=True)
+        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['double-circle'], is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_GRID_LAYOUT:
-        grid_layout_config = GridLayoutConfig(distance_between_points=0.3)
-        create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), grid_layout_config, is_aggregated=True, resolve_overlaps=False)
-        create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=False, resolve_overlaps=False)
+        create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['grid'], is_aggregated=True, resolve_overlaps=False)
+        create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['grid'], is_aggregated=False, resolve_overlaps=False)
 
-        create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), grid_layout_config, is_aggregated=True, resolve_overlaps=True)
-        create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), grid_layout_config, is_aggregated=False, resolve_overlaps=True)
+        create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['grid'], is_aggregated=True, resolve_overlaps=True)
+        create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['grid'], is_aggregated=False, resolve_overlaps=True)
 
 
 def main():

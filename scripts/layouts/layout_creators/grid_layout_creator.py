@@ -2,15 +2,15 @@ from scripts.layouts.LayoutFactory import LayoutFactory
 from scripts.layouts.LayoutType import LayoutType
 
 
-def create_grid_layout(dataset, network, clustering_strategy, grid_layout_config, is_aggregated, resolve_overlaps):
+def create_grid_layout(dataset, network, clustering_strategy, config, is_aggregated, resolve_overlaps):
     layout_factory = LayoutFactory(clustering_strategy)
     grid_layout = layout_factory.get_layout(LayoutType.GRID)
-    grid_layout.create_layout(network, grid_layout_config)
+    grid_layout.create_layout(network, config)
 
     if resolve_overlaps:
         network.resolve_overlaps(15)
 
-    network.create_convex_hulls()
+    network.create_convex_hulls(config.hull_buffer)
 
     network.add_neighbors_and_edges()
 

@@ -8,7 +8,8 @@ def create_circular_layout(dataset, network, clustering_strategy, config, is_agg
     layout_factory = LayoutFactory(clustering_strategy)
     circular_layout = layout_factory.get_layout(LayoutType.CIRCULAR)
     circular_layout.create_layout(network, config)
-    network.create_convex_hulls()  # Assuming that the network is already clustered #TODO
+
+    network.create_convex_hulls(config.hull_buffer)  # Assuming that the network is already clustered #TODO
 
     if resolve_overlaps:
         network.resolve_overlaps(15)

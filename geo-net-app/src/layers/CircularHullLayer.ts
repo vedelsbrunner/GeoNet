@@ -12,7 +12,7 @@ export class CircularHullLayer {
             radiusUnits: 'meters',
             filled: true,
             getFillColor: d => [255,255,255,25],
-            getRadius: d => d.properties.radius * 1000 + 3000,
+            getRadius: d => d.properties.radius * 1000 + 6000,
 
             // Node Border settings
             stroked: true,

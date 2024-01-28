@@ -10,7 +10,8 @@ class CircularLayoutType(Enum):
 
 
 class CircularLayoutConfig(LayoutConfig):
-    def __init__(self, layout_type: CircularLayoutType, min_distance_between_nodes_km: int):
+    def __init__(self, layout_type: CircularLayoutType, min_distance_between_nodes_km: int, hull_buffer: float):
         super().__init__()
         self.layout_type = layout_type
         self.min_distance_between_nodes_km = min_distance_between_nodes_km
+        self.hull_buffer = hull_buffer
