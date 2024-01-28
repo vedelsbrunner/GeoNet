@@ -32,10 +32,12 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     const [mapStyle, setMapStyle] = useState('mapbox://styles/multilingual-graz/clr8ultym002701pd38o83d83')
 
     useEffect(() => {
+        const dataSource = selectedNodesRef.current.length > 0 ? selectedNodesRef.current : layouts[selectedLayer];
+
         // @ts-ignore
         const geonetLayer = new GeoNetLayer({
             id: `${selectedLayer}`,
-            data: layouts[selectedLayer],
+            data: dataSource,
             pickable: true,
             autoHighlight: true,
             ...settings,
@@ -106,9 +108,9 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     }
 
     function handleSettingsChange(newSettings, layerIndex) {
-        if (layerIndex !== undefined) {
-            setSelectedLayer(layerIndex);
-        }
+        // if (layerIndex !== undefined) {
+        //     setSelectedLayer(layerIndex);
+        // }
         setSettings(prevSettings => ({...prevSettings, ...newSettings}));
     }
 
