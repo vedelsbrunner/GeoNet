@@ -20,8 +20,9 @@ from scripts.utils.LoggerConfig import logger
 logging.basicConfig(level=logging.INFO)
 
 def normalize_segment(segment):
-    # Normalize by converting to lowercase
-    return segment.lower().strip()
+    # Normalize by converting to lowercase, stripping whitespace, removing digits, and capitalizing the first letter.
+    cleaned_segment = re.sub(r'\d+', '', segment).lower().strip()
+    return cleaned_segment.capitalize()
 
 def get_most_common_segments(locations, max_segments=10):
     segment_counter = Counter()
@@ -308,17 +309,13 @@ class GeoNetwork:
 
     def create_text_labels(self):
         self.__gdf_labels = gpd.GeoDataFrame(columns=['id', 'geometry', 'text'])
-        cluster_locations = self.gdf_points.groupby('cluster')['location'].apply(lambda x: set(x.dropna())).to_dict()  # TODO: Why are nans here?
+        cluster_locations = self.gdf_points.groupby('cluster')['location'].apply(lambda x: set(x.dropna())).to_dict()
 
         labels = []
         for cluster_id, locations in cluster_locations.items():
             if cluster_id == -1:
                 logger.info(f"Skipping cluster with ID {cluster_id} (noise)")
                 continue
-
-            # Enable if u want to use the centroid for text positon
-            # points_in_cluster = self.gdf_points[self.gdf_points['cluster'] == cluster_id]
-            # centroid = points_in_cluster.unary_union.centroid
 
             cluster_hull = self.gdf_hulls.loc[self.gdf_hulls['cluster_id'] == cluster_id, 'geometry'].values[0]
             southernmost_point = min(cluster_hull.exterior.coords, key=lambda p: p[1])
@@ -332,11 +329,10 @@ class GeoNetwork:
             location_string = "\n".join(map(str, common_locations))
 
             labels.append({
-                'id': f"location_label'{cluster_id}",
+                'id': f"location_label_{cluster_id}",
                 'geometry': label_geom,
                 'text': location_string
             })
 
         self.__gdf_labels = gpd.GeoDataFrame(labels, crs=self.gdf_points.crs)
-
 
