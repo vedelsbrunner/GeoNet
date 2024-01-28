@@ -1,4 +1,6 @@
 import math
+
+from geopy.distance import geodesic
 from shapely.geometry import Point
 
 from scripts.layouts import GridLayoutConfig
@@ -30,6 +32,6 @@ class GridLayout(Layout):
 
             for i, point in enumerate(cluster_points.itertuples()):
                 dx, dy = i % grid_size, i // grid_size
-                new_x = grid_center.x + dx * config.distance_between_points
-                new_y = grid_center.y + dy * config.distance_between_points
-                network.update_point(point.id, new_x, new_y)
+                new_point = geodesic(kilometers=dx * config.distance_between_points).destination((grid_center.y, grid_center.x), bearing=90)
+                new_point = geodesic(kilometers=dy * config.distance_between_points).destination((new_point.latitude, new_point.longitude), bearing=0)
+                network.update_point(point.id, new_point.longitude, new_point.latitude)
