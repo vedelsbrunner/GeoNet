@@ -17,6 +17,12 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     const [hoverInfo, setHoverInfo] = useState(null);
 
     const [currentGeoNetLayer, setCurrentGeoNetLayer] = useState('');
+
+
+    const [selectedNodes, _setSelectedNodes] = useState([]);
+    const selectedNodesRef = useRef(selectedNodes);
+
+
     const [settings, setSettings] = useState({
         lineWidthScale: 500,
         pointRadius: 1500,
@@ -26,10 +32,9 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         nodeBorderOpacity: 1,
         degreeBasedRadiusScale: false,
         hullOverlapRemoval: false,
-        showLabels: false
+        showLabels: false,
+        nodeSelectionActive: nodeSelectionActive
     });
-    const [selectedNodes, _setSelectedNodes] = useState([]);
-    const selectedNodesRef = useRef(selectedNodes);
     const [mapStyle, setMapStyle] = useState('mapbox://styles/multilingual-graz/clr8ultym002701pd38o83d83')
 
     useEffect(() => {
@@ -88,6 +93,11 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         } else if (selectedNodesRef.current.length === 0) {
             updateLayer(selectedLayerRef.current, layouts[selectedLayerRef.current]);
         }
+    }
+
+    function nodeSelectionActive()
+    {
+        return selectedNodesRef.current.length > 0
     }
 
     const handleMapStyleChange = (event) => {
