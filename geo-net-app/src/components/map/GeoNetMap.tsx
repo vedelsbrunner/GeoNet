@@ -25,7 +25,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         nodeBorderWidth: 800,
         nodeBorderOpacity: 1,
         degreeBasedRadiusScale: false,
-        hullOverlapRemoval: false
+        hullOverlapRemoval: false,
     });
     const [selectedNodes, _setSelectedNodes] = useState([]);
     const selectedNodesRef = useRef(selectedNodes);
@@ -33,7 +33,8 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
 
     useEffect(() => {
         const dataSource = selectedNodesRef.current.length > 0 ? selectedNodesRef.current : layouts[selectedLayer];
-
+        console.log('Current datasource:')
+        console.log(dataSource)
         // @ts-ignore
         const geonetLayer = new GeoNetLayer({
             id: `${selectedLayer}`,
@@ -108,9 +109,11 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
     }
 
     function handleSettingsChange(newSettings, layerIndex) {
-        // if (layerIndex !== undefined) {
-        //     setSelectedLayer(layerIndex);
-        // }
+        console.log(layerIndex)
+        if (layerIndex !== undefined) {
+            resetNodeSelection()
+            setSelectedLayer(layerIndex);
+        }
         setSettings(prevSettings => ({...prevSettings, ...newSettings}));
     }
 
