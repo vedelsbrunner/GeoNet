@@ -7,10 +7,10 @@ def create_grid_layout(dataset, network, clustering_strategy, config, is_aggrega
     grid_layout = layout_factory.get_layout(LayoutType.GRID)
     grid_layout.create_layout(network, config)
 
+    network.create_convex_hulls(config.hull_buffer)
+
     if resolve_overlaps:
         network.resolve_overlaps(15)
-
-    network.create_convex_hulls(config.hull_buffer)
 
     network.add_neighbors_and_edges()
 
