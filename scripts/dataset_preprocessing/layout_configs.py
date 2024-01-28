@@ -19,10 +19,19 @@ common_jucs_config = {
     'grid': GridLayoutConfig(distance_between_points_km=15, hull_buffer=0.1)
 }
 
+common_marieboucher_config = {
+    'sunflower': SunflowerLayoutConfig(displacement_radius=0.1, hull_buffer=0.1),
+    'stacked': StackedLayoutConfig(stack_points_offset=0.03, hull_buffer=0.03),
+    'single-circle': CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=25, hull_buffer=0.3),
+    'double-circle': CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=25, hull_buffer=0.3),
+    'grid': GridLayoutConfig(distance_between_points_km=15, hull_buffer=0.1)
+}
+
 dataset_configs = {
     'russia': common_russia_config,
     'russia_europe': common_russia_config,
     'russia_middle_east': common_russia_config,
     'jucs': common_jucs_config,
-    'jucs_europe': common_jucs_config
+    'jucs_europe': common_jucs_config,
+    'marieboucher': common_marieboucher_config
 }

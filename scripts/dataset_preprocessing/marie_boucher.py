@@ -9,7 +9,7 @@ from scripts.utils.LoggerConfig import logger
 
 def create_marie_boucher_geo_network():
     network = GeoNetwork()
-    df = pd.read_csv("../datasets/marieboucher_geocoded.csv")
+    df = pd.read_csv("../datasets/marieboucher/marieboucher_geocoded.csv")
 
     for index, row in df.iterrows():
         target_location = wkt.loads(row['target_coordinates'])
