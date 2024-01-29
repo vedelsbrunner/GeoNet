@@ -100,7 +100,7 @@ def main():
         'archeology': create_archeology_geo_network
     }
 
-    current_dataset = 'jucs'
+    current_dataset = 'russia'
 
     if EXECUTE_ALL:
         for dataset, creator in network_creators.items():

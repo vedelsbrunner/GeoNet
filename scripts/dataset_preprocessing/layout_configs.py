@@ -5,9 +5,9 @@ from scripts.layouts.SunflowerLayoutConfig import SunflowerLayoutConfig
 
 common_russia_config = {
     'sunflower': SunflowerLayoutConfig(displacement_radius=0.1, hull_buffer=0.1),
-    'stacked': StackedLayoutConfig(stack_points_offset=0.03, hull_buffer=0.03),
-    'single-circle': CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=25, hull_buffer=0.3),
-    'double-circle': CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=25, hull_buffer=0.3),
+    'stacked': StackedLayoutConfig(stack_points_offset=0.03, hull_buffer=0.1),
+    'single-circle': CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=25, hull_buffer=0.1),
+    'double-circle': CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=25, hull_buffer=0.1),
     'grid': GridLayoutConfig(distance_between_points_km=15, hull_buffer=0.1)
 }
 
