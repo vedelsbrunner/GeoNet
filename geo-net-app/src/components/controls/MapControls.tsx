@@ -80,18 +80,18 @@ function MapControls({settings, onChange, onResetNodeSelection, removeHullOverla
         <Box position="absolute" width={250} color="white" bg="gray.700" boxShadow="base" right={10} p={4} fontSize="sm">
             <Select onChange={handleLayerSelectionChange} bg={"gray"} color={"black"}>
                 <optgroup label="Standard Layouts">
-                    <option value={Layouts.Default}>Default</option>
+                    <option value={Layouts.Default}>Overlap</option>
                     <option value={Layouts.Stacked}>Stacked</option>
-                    <option value={Layouts.SingleCircular}>Single Circular</option>
-                    <option value={Layouts.DoubleCircular}>Double Circular</option>
-                    <option value={Layouts.Sunflower}>Sunflower</option>
+                    <option value={Layouts.SingleCircular}>Circular</option>
+                    <option value={Layouts.DoubleCircular}>Double Circle</option>
+                    <option value={Layouts.Sunflower}>Sunflower Packing</option>
                     <option value={Layouts.Grid}>Grid</option>
                 </optgroup>
                 <optgroup label="Clustered Layouts">
                     <option value={Layouts.StackedClustered}>Stacked Clustered</option>
-                    <option value={Layouts.SingleCircularClustered}>Single Circular Clustered</option>
-                    <option value={Layouts.DoubleCircularClustered}>Double Circular Clustered</option>
-                    <option value={Layouts.SunflowerClustered}>Sunflower Clustered</option>
+                    <option value={Layouts.SingleCircularClustered}>Circular Clustered</option>
+                    <option value={Layouts.DoubleCircularClustered}>Double Circle Clustered</option>
+                    <option value={Layouts.SunflowerClustered}>Sunflower Packing Clustered</option>
                     <option value={Layouts.GridClustered}>Grid Clustered</option>
                 </optgroup>
             </Select>
