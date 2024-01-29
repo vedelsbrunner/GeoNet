@@ -71,7 +71,7 @@ class CircularLayout(Layout):
             place_nodes_on_circle(network, outer_points, circle_center, outer_radius)
         else:
             # If there are no outer points, outer_radius is not defined
-            outer_radius = None
+            outer_radius = inner_radius
 
         place_nodes_on_circle(network, inner_points, circle_center, inner_radius)
 
