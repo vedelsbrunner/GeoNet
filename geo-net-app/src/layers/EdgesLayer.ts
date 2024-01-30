@@ -5,7 +5,7 @@ export class EdgesLayer {
         return new LineLayer({
             id: 'lines-layer',
             data: edges,
-            autoHighlight: true,
+            autoHighlight: false,
             pickable: true,
             getSourcePosition: d => d.geometry.coordinates[0],
             getTargetPosition: d => d.geometry.coordinates[1],
