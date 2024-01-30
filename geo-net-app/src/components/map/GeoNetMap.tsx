@@ -25,7 +25,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
 
     const [settings, setSettings] = useState({
         lineWidthScale: 500,
-        pointRadius: 1500,
+        pointRadius: 1000,
         pointOpacity: 1,
         edgeOpacity: 0.1,
         nodeBorderWidth: 800,

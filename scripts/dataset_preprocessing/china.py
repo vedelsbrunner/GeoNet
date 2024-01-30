@@ -25,7 +25,7 @@ topics_keywords = {
 
 def create_china_geo_network():
     network = GeoNetwork()
-    df = pd.read_csv("../datasets/china_geocoded.csv")  # TODO: Relative always from main dir...
+    df = pd.read_csv("../datasets/china/china_geocoded.csv")  # TODO: Relative always from main dir...
 
     for index, row in df.iterrows():
         target_location = wkt.loads(row['target_coordinates'])
@@ -40,11 +40,13 @@ def create_china_geo_network():
         line_id = f"edge_{source_node_id}_{target_node_id}"
 
         source_node_props = {
-            'node_info': f"{df.loc[index]['source']} ({df.loc[index]['source_university']})"
+            'node_info': f"{df.loc[index]['source']} ({df.loc[index]['source_university']})",
+            'location': df.loc[index]['source_location']
         }
 
         target_node_props = {
-            'node_info': f"{df.loc[index]['target']} ({df.loc[index]['target_university']})"
+            'node_info': f"{df.loc[index]['target']} ({df.loc[index]['target_university']})",
+            'location': df.loc[index]['target_location']
         }
 
         edge_props = {
@@ -64,7 +66,7 @@ def process_china_data():
     for key in topics_keywords:
         accepted_keywords.extend(topics_keywords[key])
 
-    china = "../datasets/china.csv"
+    china = "../datasets/china/china.csv"
     df = pd.read_csv(china, keep_default_na=False)
     ignored_keywords = {"China", "History", ""}  # Add ignored keywords here
 
@@ -74,6 +76,7 @@ def process_china_data():
     author_universities = {}
     author_keywords = {}
     author_locations = {}
+    author_address = {}
     keyword_frequency = Counter()
 
     for _, row in df.iterrows():
@@ -99,6 +102,7 @@ def process_china_data():
 
         author_locations[author] = location_str
         author_universities[author] = row.get('School_Name', None)
+        author_address[author] = row.get('City', None)
 
     logger.debug("Keyword Frequency (Ascending Order):")
     for keyword, freq in sorted(keyword_frequency.items(), key=lambda item: item[1]):
@@ -116,9 +120,11 @@ def process_china_data():
                 'target_coordinates': author_locations[author2],
                 'keywords': ','.join(shared_keywords),
                 'source_university': author_universities[author1],
-                'target_university': author_universities[author2]
+                'target_university': author_universities[author2],
+                'source_location': author_locations[author1],
+                'target_location': author_locations[author2]
             })
 
     network_df = pd.DataFrame(network_data)
-    network_df.to_csv("../datasets/china_geocoded.csv", index=False)
+    network_df.to_csv("../datasets/china/china_geocoded.csv", index=False)
     return
