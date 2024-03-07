@@ -35,7 +35,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
         showLabels: false,
         nodeSelectionActive: nodeSelectionActive
     });
-    const [mapStyle, setMapStyle] = useState('mapbox://styles/multilingual-graz/clr8ultym002701pd38o83d83')
+    const [mapStyle, setMapStyle] = useState('mapbox://styles/multilingual-graz/clso7vnmn006r01pk4uow1utl')
 
     useEffect(() => {
         const dataSource = selectedNodesRef.current.length > 0 ? selectedNodesRef.current : layouts[selectedLayer];
@@ -276,6 +276,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
                     <option value="mapbox://styles/multilingual-graz/clr8ultym002701pd38o83d83">Default</option>
                     <option value='mapbox://styles/multilingual-graz/clrht8uk600kw01pdhmjc8u0g'>Distorted 50%</option>
                     <option value='mapbox://styles/multilingual-graz/clrirf57300m701pehf0t2aqd'>Distorted 100%</option>
+                    <option value='mapbox://styles/multilingual-graz/clso7vnmn006r01pk4uow1utl'>User study</option>
                 </Select>
             </Box>
             <GeoNetControls settings={settings} handleSettingsChange={handleSettingsChange} resetNodeSelection={resetNodeSelection} removeHullOverlap={removeHullOverlap}/>

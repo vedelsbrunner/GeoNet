@@ -11,6 +11,8 @@ from scripts.dataset_preprocessing.russia import geocode_russia_dataset, process
     create_russia_middle_east_geo_network
 from scripts.dataset_preprocessing.region_filter import filter_european_countries, filter_middle_eastern_countries
 from scripts.dataset_preprocessing.smith import create_smith_geo_network
+from scripts.dataset_preprocessing.user_study_tasks1_most_connected_nodes import create_user_study_task3_most_connected_nodes, create_user_study_task4_most_connected_nodes, create_user_study_task1_1_most_connected_nodes, create_user_study_task1_2_most_connected_nodes, \
+    create_user_study_task1_3_most_connected_nodes, create_user_study_task1_4_most_connected_nodes, create_user_study_task1_5_most_connected_nodes, create_user_study_task1_6_most_connected_nodes
 from scripts.layouts.layout_creators.circular_layout_creator import create_circular_layout
 from scripts.layouts.layout_creators.default_layout_creator import create_default_layout
 from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layout
@@ -24,7 +26,7 @@ CREATE_CIRCULAR_LAYOUT = True
 CREATE_DOUBLE_CIRCULAR_LAYOUT = True
 CREATE_GRID_LAYOUT = True
 
-EXECUTE_ALL = False
+EXECUTE_ALL = True
 
 
 def create_layouts_for_network(dataset, network):
@@ -32,39 +34,39 @@ def create_layouts_for_network(dataset, network):
         create_default_layout(dataset, copy.deepcopy(network))
 
     if CREATE_SUNFLOWER_LAYOUT:
-        create_sunflower_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['sunflower'], is_aggregated=True, resolve_overlaps=False)
+        # create_sunflower_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['sunflower'], is_aggregated=True, resolve_overlaps=False)
         create_sunflower_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['sunflower'], is_aggregated=False, resolve_overlaps=False)
 
-        create_sunflower_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['sunflower'], is_aggregated=True, resolve_overlaps=True)
-        create_sunflower_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['sunflower'], is_aggregated=False, resolve_overlaps=True)
+        # create_sunflower_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['sunflower'], is_aggregated=True, resolve_overlaps=True)
+        # create_sunflower_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['sunflower'], is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_STACKED_LAYOUT:
-        create_stacked_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['stacked'], is_aggregated=True, resolve_overlaps=False)
+        # create_stacked_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['stacked'], is_aggregated=True, resolve_overlaps=False)
         create_stacked_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['stacked'], is_aggregated=False, resolve_overlaps=False)
 
-        create_stacked_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['stacked'], is_aggregated=True, resolve_overlaps=True)
-        create_stacked_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['stacked'], is_aggregated=False, resolve_overlaps=True)
+        # create_stacked_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['stacked'], is_aggregated=True, resolve_overlaps=True)
+        # create_stacked_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['stacked'], is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_CIRCULAR_LAYOUT:
-        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['single-circle'], is_aggregated=True, resolve_overlaps=False)
+        # create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['single-circle'], is_aggregated=True, resolve_overlaps=False)
         create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['single-circle'], is_aggregated=False, resolve_overlaps=False)
 
-        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['single-circle'], is_aggregated=True, resolve_overlaps=True)
-        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['single-circle'], is_aggregated=False, resolve_overlaps=True)
+        # create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['single-circle'], is_aggregated=True, resolve_overlaps=True)
+        # create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['single-circle'], is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_DOUBLE_CIRCULAR_LAYOUT:
-        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['double-circle'], is_aggregated=True, resolve_overlaps=False)
+        # create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['double-circle'], is_aggregated=True, resolve_overlaps=False)
         create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['double-circle'], is_aggregated=False, resolve_overlaps=False)
 
-        create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['double-circle'], is_aggregated=True, resolve_overlaps=True)
-        create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['double-circle'], is_aggregated=False, resolve_overlaps=True)
+        # create_circular_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['double-circle'], is_aggregated=True, resolve_overlaps=True)
+        # create_circular_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['double-circle'], is_aggregated=False, resolve_overlaps=True)
 
     if CREATE_GRID_LAYOUT:
-        create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['grid'], is_aggregated=True, resolve_overlaps=False)
+        # create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['grid'], is_aggregated=True, resolve_overlaps=False)
         create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['grid'], is_aggregated=False, resolve_overlaps=False)
 
-        create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['grid'], is_aggregated=True, resolve_overlaps=True)
-        create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['grid'], is_aggregated=False, resolve_overlaps=True)
+        # create_grid_layout(dataset, copy.deepcopy(network), DbscanClustering(eps=0.3), dataset_configs[dataset]['grid'], is_aggregated=True, resolve_overlaps=True)
+        # create_grid_layout(dataset, copy.deepcopy(network), SamePositionClustering(), dataset_configs[dataset]['grid'], is_aggregated=False, resolve_overlaps=True)
 
 
 def main():
@@ -89,18 +91,24 @@ def main():
     # process_marieboucher_data()
 
     network_creators = {
-        'russia': create_russia_geo_network,
-        'russia_europe': create_russia_europe_geo_network,
-        'russia_middle_east': create_russia_middle_east_geo_network,
-        'china': create_china_geo_network,
-        'marieboucher': create_marie_boucher_geo_network,
-        'smith': create_smith_geo_network,
-        'jucs': create_jucs_geo_network,
-        'jucs_europe': create_jucs_europe_geo_network,
-        'archeology': create_archeology_geo_network
+        # 'russia': create_russia_geo_network,
+        # 'russia_europe': create_russia_europe_geo_network,
+        # 'russia_middle_east': create_russia_middle_east_geo_network,
+        # 'china': create_china_geo_network,
+        # 'marieboucher': create_marie_boucher_geo_network,
+        # 'smith': create_smith_geo_network,
+        # 'jucs': create_jucs_geo_network,
+        # 'jucs_europe': create_jucs_europe_geo_network,
+        # 'archeology': create_archeology_geo_network,
+        'user_study_task1_1': create_user_study_task1_1_most_connected_nodes,
+        'user_study_task1_2': create_user_study_task1_2_most_connected_nodes,
+        'user_study_task1_3': create_user_study_task1_3_most_connected_nodes,
+        'user_study_task1_4': create_user_study_task1_4_most_connected_nodes,
+        'user_study_task1_5': create_user_study_task1_5_most_connected_nodes,
+        'user_study_task1_6': create_user_study_task1_6_most_connected_nodes,
     }
 
-    current_dataset = 'china'
+    current_dataset = 'user_study_task1_4'
 
     if EXECUTE_ALL:
         for dataset, creator in network_creators.items():

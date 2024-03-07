@@ -27,6 +27,14 @@ common_marieboucher_config = {
     'grid': GridLayoutConfig(distance_between_points_km=8, hull_buffer=0.08)
 }
 
+common_user_study_task1_config = {
+    'sunflower': SunflowerLayoutConfig(displacement_radius=0.11, hull_buffer=0.1),
+    'stacked': StackedLayoutConfig(stack_points_offset=0.04, hull_buffer=0.07),
+    'single-circle': CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=16, hull_buffer=0.05),
+    'double-circle': CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=16, hull_buffer=0.05),
+    'grid': GridLayoutConfig(distance_between_points_km=17, hull_buffer=0.11)
+}
+
 dataset_configs = {
     'russia': common_russia_config,
     'russia_europe': common_russia_config,
@@ -40,6 +48,27 @@ dataset_configs = {
         'single-circle': CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=15, hull_buffer=0.07),
         'double-circle': CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=15, hull_buffer=0.07),
         'grid': GridLayoutConfig(distance_between_points_km=15, hull_buffer=0.1)
-    }
+    },
+    'user_study_task1_1': common_user_study_task1_config,
+    'user_study_task1_2': common_user_study_task1_config,
+    'user_study_task1_3': common_user_study_task1_config,
+    'user_study_task1_4': common_user_study_task1_config,
+    'user_study_task1_5': common_user_study_task1_config,
+    'user_study_task1_6': common_user_study_task1_config,
+    'user_study_task2': common_marieboucher_config,
+    'user_study_task3': {
+        'sunflower': SunflowerLayoutConfig(displacement_radius=0.18, hull_buffer=0.15),
+        'stacked': StackedLayoutConfig(stack_points_offset=0.1, hull_buffer=0.05),
+        'single-circle': CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=40, hull_buffer=0.07),
+        'double-circle': CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=40, hull_buffer=0.07),
+        'grid': GridLayoutConfig(distance_between_points_km=40, hull_buffer=0.1)
+    },
+    'user_study_task4': {
+        'sunflower': SunflowerLayoutConfig(displacement_radius=0.18, hull_buffer=0.15),
+        'stacked': StackedLayoutConfig(stack_points_offset=0.1, hull_buffer=0.05),
+        'single-circle': CircularLayoutConfig(layout_type=CircularLayoutType.SINGLE_CIRCLE, min_distance_between_nodes_km=40, hull_buffer=0.07),
+        'double-circle': CircularLayoutConfig(layout_type=CircularLayoutType.DOUBLE_CIRCLE, min_distance_between_nodes_km=40, hull_buffer=0.07),
+        'grid': GridLayoutConfig(distance_between_points_km=40, hull_buffer=0.1)
+    },
 
 }

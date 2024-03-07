@@ -7,7 +7,8 @@ import {RadioCard} from "../components/RadioCard.tsx";
 export function DataSetSelectionPage() {
     const navigate = useNavigate();
     const [selectedDataSet, setSelectedDataSet] = useState('');
-    const dataSetDirectories = useMemo(() => ['china', 'jucs','jucs_europe', 'marieboucher', 'smith', 'russia', 'russia_europe', 'russia_middle_east'], []);
+    const dataSetDirectories = useMemo(() => ['china', 'jucs', 'jucs_europe', 'marieboucher', 'smith', 'russia', 'russia_europe', 'russia_middle_east',
+        'user_study_task1_1', 'user_study_task1_2', 'user_study_task1_3', 'user_study_task1_4', 'user_study_task1_5', 'user_study_task1_6'], []);
     const [userSelected, setUserSelected] = useState(false);
     const [layouts, setLayouts] = useState(null);
 
