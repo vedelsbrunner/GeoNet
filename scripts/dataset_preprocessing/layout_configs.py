@@ -63,6 +63,20 @@ dataset_configs = {
     'user_study_task2_5': common_user_study_task1_config,
     'user_study_task2_6': common_user_study_task1_config,
 
+    'user_study_task3_1': common_user_study_task1_config,
+    'user_study_task3_2': common_user_study_task1_config,
+    'user_study_task3_3': common_user_study_task1_config,
+    'user_study_task3_4': common_user_study_task1_config,
+    'user_study_task3_5': common_user_study_task1_config,
+    'user_study_task3_6': common_user_study_task1_config,
+
+    'user_study_task4_1': common_user_study_task1_config,
+    'user_study_task4_2': common_user_study_task1_config,
+    'user_study_task4_3': common_user_study_task1_config,
+    'user_study_task4_4': common_user_study_task1_config,
+    'user_study_task4_5': common_user_study_task1_config,
+    'user_study_task4_6': common_user_study_task1_config,
+
     'user_study_task2': common_marieboucher_config,
     'user_study_task3': {
         'sunflower': SunflowerLayoutConfig(displacement_radius=0.18, hull_buffer=0.15),
