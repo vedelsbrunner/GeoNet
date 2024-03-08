@@ -277,6 +277,7 @@ function GeoNetMap({layouts}: GeoNetMapProps) {
                     <option value='mapbox://styles/multilingual-graz/clrht8uk600kw01pdhmjc8u0g'>Distorted 50%</option>
                     <option value='mapbox://styles/multilingual-graz/clrirf57300m701pehf0t2aqd'>Distorted 100%</option>
                     <option value='mapbox://styles/multilingual-graz/clso7vnmn006r01pk4uow1utl'>User study</option>
+                    <option value='mapbox://styles/multilingual-graz/clso7suoo00sr01pfewi355kk'>User study - Task2</option>
                 </Select>
             </Box>
             <GeoNetControls settings={settings} handleSettingsChange={handleSettingsChange} resetNodeSelection={resetNodeSelection} removeHullOverlap={removeHullOverlap}/>

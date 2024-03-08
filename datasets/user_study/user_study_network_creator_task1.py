@@ -13,10 +13,8 @@ german_cities = [
     "Cologne", "Stuttgart", "Dresden", "Leipzig", "Bremen", "Hanover"
 ]
 
-
 def create_scale_free_network(num_nodes, min_degree, max_degree):
     return nx.generators.random_graphs.barabasi_albert_graph(num_nodes, np.random.randint(min_degree, max_degree))
-
 
 def geocode_cities(cities):
     geolocator = Nominatim(user_agent=str(uuid.uuid4()))
@@ -32,7 +30,6 @@ def geocode_cities(cities):
             print(f"Geocoding timed out for {city}")
     return coordinates_dict
 
-
 def add_geographical_coordinates(G, coordinates_dict, node_distribution):
     for node in G.nodes():
         city = random.choices(list(node_distribution.keys()), weights=node_distribution.values(), k=1)[0]
@@ -42,7 +39,6 @@ def add_geographical_coordinates(G, coordinates_dict, node_distribution):
             G.nodes[node]['city'] = city
         else:
             print(f"Coordinates not found for {city}")
-
 
 def network_to_dataframe(G):
     data = {
@@ -63,7 +59,6 @@ def network_to_dataframe(G):
         data['target_coordinates'].append(G.nodes[target]['coordinates'])
     return pd.DataFrame(data)
 
-
 def write_city_node_counts(G, filename):
     city_counts = {}
     for node in G.nodes():
@@ -79,7 +74,6 @@ def write_city_node_counts(G, filename):
         for city, count in sorted_cities:
             f.write(f"{city}: {count}\n")
 
-
 def generate_and_save_networks(num_networks, num_nodes, coordinates_dict, node_distribution):
     for i in range(1, num_networks + 1):
         min_degree = max(int(num_nodes * 0.01), 1)
@@ -89,7 +83,7 @@ def generate_and_save_networks(num_networks, num_nodes, coordinates_dict, node_d
         add_geographical_coordinates(G, coordinates_dict, node_distribution)
         df = network_to_dataframe(G)
 
-        current_network_dir = f'task1/network{i}'
+        current_network_dir = f'task2/network{i}'
         os.makedirs(current_network_dir, exist_ok=True)
 
         network_csv_path = os.path.join(current_network_dir, f'geo_network_germany.csv')
@@ -99,7 +93,6 @@ def generate_and_save_networks(num_networks, num_nodes, coordinates_dict, node_d
         city_counts_txt_path = os.path.join(current_network_dir, 'city_node_counts.txt')
         write_city_node_counts(G, city_counts_txt_path)
         print(f"City node counts for network {i} saved to '{city_counts_txt_path}'")
-
 
 # Prepare for network generation
 coordinates_dict = geocode_cities(german_cities)
@@ -112,4 +105,4 @@ city_with_increase = random.choice(list(node_distribution.keys()))
 node_distribution[city_with_increase] = increased_max_nodes
 
 # Generate the networks
-generate_and_save_networks(6, 100, coordinates_dict, node_distribution)
+generate_and_save_networks(6, 150, coordinates_dict, node_distribution)

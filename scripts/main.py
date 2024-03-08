@@ -11,8 +11,10 @@ from scripts.dataset_preprocessing.russia import geocode_russia_dataset, process
     create_russia_middle_east_geo_network
 from scripts.dataset_preprocessing.region_filter import filter_european_countries, filter_middle_eastern_countries
 from scripts.dataset_preprocessing.smith import create_smith_geo_network
-from scripts.dataset_preprocessing.user_study_tasks1_most_connected_nodes import create_user_study_task3_most_connected_nodes, create_user_study_task4_most_connected_nodes, create_user_study_task1_1_most_connected_nodes, create_user_study_task1_2_most_connected_nodes, \
-    create_user_study_task1_3_most_connected_nodes, create_user_study_task1_4_most_connected_nodes, create_user_study_task1_5_most_connected_nodes, create_user_study_task1_6_most_connected_nodes
+from scripts.dataset_preprocessing.user_study_tasks1_most_connected_nodes import create_user_study_task4_most_connected_nodes, \
+    create_user_study_task1_1_most_connected_nodes, create_user_study_task1_2_most_connected_nodes, \
+    create_user_study_task1_3_most_connected_nodes, create_user_study_task1_4_most_connected_nodes, create_user_study_task1_5_most_connected_nodes, create_user_study_task1_6_most_connected_nodes, \
+    create_user_study_task2_1, create_user_study_task2_2, create_user_study_task2_3, create_user_study_task2_4, create_user_study_task2_5, create_user_study_task2_6
 from scripts.layouts.layout_creators.circular_layout_creator import create_circular_layout
 from scripts.layouts.layout_creators.default_layout_creator import create_default_layout
 from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layout
@@ -100,12 +102,20 @@ def main():
         # 'jucs': create_jucs_geo_network,
         # 'jucs_europe': create_jucs_europe_geo_network,
         # 'archeology': create_archeology_geo_network,
-        'user_study_task1_1': create_user_study_task1_1_most_connected_nodes,
-        'user_study_task1_2': create_user_study_task1_2_most_connected_nodes,
-        'user_study_task1_3': create_user_study_task1_3_most_connected_nodes,
-        'user_study_task1_4': create_user_study_task1_4_most_connected_nodes,
-        'user_study_task1_5': create_user_study_task1_5_most_connected_nodes,
-        'user_study_task1_6': create_user_study_task1_6_most_connected_nodes,
+
+        # 'user_study_task1_1': create_user_study_task1_1_most_connected_nodes,
+        # 'user_study_task1_2': create_user_study_task1_2_most_connected_nodes,
+        # 'user_study_task1_3': create_user_study_task1_3_most_connected_nodes,
+        # 'user_study_task1_4': create_user_study_task1_4_most_connected_nodes,
+        # 'user_study_task1_5': create_user_study_task1_5_most_connected_nodes,
+        # 'user_study_task1_6': create_user_study_task1_6_most_connected_nodes,
+
+        'user_study_task2_1': create_user_study_task2_1,
+        'user_study_task2_2': create_user_study_task2_2,
+        'user_study_task2_3': create_user_study_task2_3,
+        'user_study_task2_4': create_user_study_task2_4,
+        'user_study_task2_5': create_user_study_task2_5,
+        'user_study_task2_6': create_user_study_task2_6,
     }
 
     current_dataset = 'user_study_task1_4'
