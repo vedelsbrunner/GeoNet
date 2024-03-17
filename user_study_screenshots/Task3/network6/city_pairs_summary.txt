@@ -1,0 +1,10 @@
+Berlin-Hamburg Pair:
+  Nodes in Berlin: 8
+  Nodes in Hamburg: 8
+  Edges between Berlin and Hamburg: 25
+
+Hannover-Leipzig Pair:
+  Nodes in Hannover: 8
+  Nodes in Leipzig: 8
+  Edges between Hannover and Leipzig: 30
+

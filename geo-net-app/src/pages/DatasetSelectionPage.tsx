@@ -10,7 +10,8 @@ export function DataSetSelectionPage() {
     const dataSetDirectories = useMemo(() => ['china', 'jucs', 'jucs_europe', 'marieboucher', 'smith', 'russia', 'russia_europe', 'russia_middle_east',
         // 'user_study_task1_1', 'user_study_task1_2', 'user_study_task1_3', 'user_study_task1_4', 'user_study_task1_5', 'user_study_task1_6',
         // 'user_study_task2_1', 'user_study_task2_2', 'user_study_task2_3', 'user_study_task2_4', 'user_study_task2_5', 'user_study_task2_6',
-        'user_study_task3_1', 'user_study_task3_2', 'user_study_task3_3', 'user_study_task3_4', 'user_study_task3_5', 'user_study_task3_6'
+        // 'user_study_task3_1', 'user_study_task3_2', 'user_study_task3_3', 'user_study_task3_4', 'user_study_task3_5', 'user_study_task3_6'
+        'user_study_task4_1', 'user_study_task4_2', 'user_study_task4_3', 'user_study_task4_4', 'user_study_task4_5', 'user_study_task4_6'
     ], []);
     const [userSelected, setUserSelected] = useState(false);
     const [layouts, setLayouts] = useState(null);

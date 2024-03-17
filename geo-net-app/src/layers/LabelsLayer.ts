@@ -11,12 +11,11 @@ export class LabelsLayer {
             getText: d => d.properties.text,
             getAlignmentBaseline: 'top',
             pickable: false,
-            getSize: 15000,
+            getSize: 29000,
             background: true,
             getColor: [255, 255, 255, 255],
             getBackgroundColor: [255, 255, 255, 0],
             characterSet: 'auto',
-            fontFamily: '"Your Font Family", Arial, sans-serif', // Specify the font family here
 
             // extensions: [new CollisionFilterExtension()]
         });

@@ -1,0 +1,10 @@
+France-Spain Pair:
+  Nodes in France: 36
+  Nodes in Spain: 36
+  Edges between France and Spain: 0
+
+Germany-Poland Pair:
+  Nodes in Germany: 36
+  Nodes in Poland: 36
+  Edges between Germany and Poland: 15
+

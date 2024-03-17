@@ -1,0 +1,3 @@
+Irland: 18
+Scotland: 8
+England 16

@@ -83,7 +83,7 @@ def generate_and_save_networks(num_networks, num_nodes, coordinates_dict, node_d
         add_geographical_coordinates(G, coordinates_dict, node_distribution)
         df = network_to_dataframe(G)
 
-        current_network_dir = f'task2/network{i}'
+        current_network_dir = f'task1/network{i}'
         os.makedirs(current_network_dir, exist_ok=True)
 
         network_csv_path = os.path.join(current_network_dir, f'geo_network_germany.csv')
@@ -105,4 +105,4 @@ city_with_increase = random.choice(list(node_distribution.keys()))
 node_distribution[city_with_increase] = increased_max_nodes
 
 # Generate the networks
-generate_and_save_networks(6, 150, coordinates_dict, node_distribution)
+generate_and_save_networks(6, 100, coordinates_dict, node_distribution)

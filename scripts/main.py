@@ -118,19 +118,19 @@ def main():
         # 'user_study_task2_5': create_user_study_task2_5,
         # 'user_study_task2_6': create_user_study_task2_6,
 
-        'user_study_task3_1': create_user_study_task3_1,
-        'user_study_task3_2': create_user_study_task3_2,
-        'user_study_task3_3': create_user_study_task3_3,
-        'user_study_task3_4': create_user_study_task3_4,
-        'user_study_task3_5': create_user_study_task3_5,
-        'user_study_task3_6': create_user_study_task3_6,
+        # 'user_study_task3_1': create_user_study_task3_1,
+        # 'user_study_task3_2': create_user_study_task3_2,
+        # 'user_study_task3_3': create_user_study_task3_3,
+        # 'user_study_task3_4': create_user_study_task3_4,
+        # 'user_study_task3_5': create_user_study_task3_5,
+        # 'user_study_task3_6': create_user_study_task3_6,
 
-        # 'user_study_task4_1': create_user_study_task4_1,
-        # 'user_study_task4_2': create_user_study_task4_2,
-        # 'user_study_task4_3': create_user_study_task4_3,
-        # 'user_study_task4_4': create_user_study_task4_4,
-        # 'user_study_task4_5': create_user_study_task4_5,
-        # 'user_study_task4_6': create_user_study_task4_6,
+        'user_study_task4_1': create_user_study_task4_1,
+        'user_study_task4_2': create_user_study_task4_2,
+        'user_study_task4_3': create_user_study_task4_3,
+        'user_study_task4_4': create_user_study_task4_4,
+        'user_study_task4_5': create_user_study_task4_5,
+        'user_study_task4_6': create_user_study_task4_6,
     }
 
     current_dataset = 'user_study_task1_4'
