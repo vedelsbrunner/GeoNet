@@ -12,12 +12,14 @@ city_pairs = [("Berlin", "Hamburg"), ("Hannover", "Leipzig")]
 
 # Define the hardcoded number of edges for each network and city pair
 network_edges = [
-    (5, 15),  # Network 1
-    (8, 14),  # Network 2
+    (5, 15),   # Network 1
+    (8, 14),   # Network 2
     (10, 18),  # Network 3
     (12, 15),  # Network 4
     (20, 35),  # Network 5
-    (25, 30)   # Network 6
+    (25, 30),  # Network 6
+    (30, 25),  # Network 7
+    (60, 49)   # Network 8
 ]
 
 def geocode_cities(cities):
@@ -110,4 +112,4 @@ def generate_and_save_networks(num_networks, coordinates_dict):
 coordinates_dict = geocode_cities(cities_of_interest)
 
 # Generate and save networks
-generate_and_save_networks(6, coordinates_dict)
+generate_and_save_networks(8, coordinates_dict)

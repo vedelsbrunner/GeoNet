@@ -5,16 +5,16 @@ export const MAP_STYLE = 'mapbox://styles/multilingual-graz/clrht8uk600kw01pdhmj
 
 export const INITIAL_VIEW_STATE = {
     // Task 1
-    // latitude: 53.8,
-    // longitude: -4.5,
+    latitude: 50.8,
+    longitude: 11.5,
     // Task2
-    // latitude: 51,
-    // longitude: 10.1,\
+    // latitude: 54,
+    // longitude: -2,
     // Task3
     // latitude: 52.6,
     // longitude: 11.6,
     // Task4
-    latitude: 48,
-    longitude: 8.6,
-    zoom: 4.6
+    // latitude: 48,
+    // longitude: 8.6,
+    zoom: 5.9
 };

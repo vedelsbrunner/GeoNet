@@ -63,6 +63,8 @@ dataset_configs = {
     'user_study_task1_4': common_user_study_task1_config,
     'user_study_task1_5': common_user_study_task1_config,
     'user_study_task1_6': common_user_study_task1_config,
+    'user_study_task1_7': common_user_study_task1_config,
+    'user_study_task1_8': common_user_study_task1_config,
 
     'user_study_task2_1': common_user_study_task1_config,
     'user_study_task2_2': common_user_study_task1_config,
@@ -70,6 +72,8 @@ dataset_configs = {
     'user_study_task2_4': common_user_study_task1_config,
     'user_study_task2_5': common_user_study_task1_config,
     'user_study_task2_6': common_user_study_task1_config,
+    'user_study_task2_7': common_user_study_task1_config,
+    'user_study_task2_8': common_user_study_task1_config,
 
     'user_study_task3_1': common_user_study_task1_config,
     'user_study_task3_2': common_user_study_task1_config,
@@ -77,6 +81,8 @@ dataset_configs = {
     'user_study_task3_4': common_user_study_task1_config,
     'user_study_task3_5': common_user_study_task1_config,
     'user_study_task3_6': common_user_study_task1_config,
+    'user_study_task3_7': common_user_study_task1_config,
+    'user_study_task3_8': common_user_study_task1_config,
 
     'user_study_task4_1': common_user_study_task4_config,
     'user_study_task4_2': common_user_study_task4_config,
@@ -84,6 +90,8 @@ dataset_configs = {
     'user_study_task4_4': common_user_study_task4_config,
     'user_study_task4_5': common_user_study_task4_config,
     'user_study_task4_6': common_user_study_task4_config,
+    'user_study_task4_7': common_user_study_task4_config,
+    'user_study_task4_8': common_user_study_task4_config,
 
     'user_study_task2': common_marieboucher_config,
     'user_study_task3': {

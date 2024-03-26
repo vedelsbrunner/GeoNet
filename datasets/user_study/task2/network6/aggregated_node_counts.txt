@@ -1,18 +1,18 @@
 Scotland:
-  Aberdeen: 9
-  Edinburgh: 4
-  Glasgow: 4
-Total Scotland nodes: 17
+  Aberdeen: 5
+  Edinburgh: 10
+  Glasgow: 8
+Total Scotland nodes: 23
 
 England:
-  London: 5
-  Plymouth: 8
-  Manchester: 7
-Total England nodes: 20
+  London: 6
+  Plymouth: 6
+  Manchester: 4
+Total England nodes: 16
 
 Ireland:
-  Dublin: 7
+  Dublin: 11
   Cork: 5
-  Galway: 6
-Total Ireland nodes: 18
+  Galway: 4
+Total Ireland nodes: 20
 

@@ -11,7 +11,7 @@ export class LabelsLayer {
             getText: d => d.properties.text,
             getAlignmentBaseline: 'top',
             pickable: false,
-            getSize: 29000,
+            getSize: 18000,
             background: true,
             getColor: [255, 255, 255, 255],
             getBackgroundColor: [255, 255, 255, 0],

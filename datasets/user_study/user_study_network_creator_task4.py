@@ -24,9 +24,9 @@ network_edges = [
     (30, 20), # Network 3
     (40, 35), # Network 4
     (27, 35), # Network 5
-    (24, 42)  # Network 6
-    (55, 60)  # Network 7
-    (60, 70)  # Network 8
+    (24, 42),  # Network 6
+    (55, 60),  # Network 7
+    (78, 60)  # Network 8
 ]
 
 def geocode_cities(cities):

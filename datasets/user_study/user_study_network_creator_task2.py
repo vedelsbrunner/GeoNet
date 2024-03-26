@@ -109,4 +109,4 @@ def generate_and_save_networks(num_networks, num_nodes, coordinates_dict):
 
 
 coordinates_dict = geocode_cities(cities)
-generate_and_save_networks(6, 100, coordinates_dict)
+generate_and_save_networks(8, 100, coordinates_dict)

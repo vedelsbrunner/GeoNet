@@ -15,7 +15,8 @@ from scripts.dataset_preprocessing.user_study_tasks1_most_connected_nodes import
     create_user_study_task1_3_most_connected_nodes, create_user_study_task1_4_most_connected_nodes, create_user_study_task1_5_most_connected_nodes, create_user_study_task1_6_most_connected_nodes, \
     create_user_study_task2_1, create_user_study_task2_2, create_user_study_task2_3, create_user_study_task2_4, create_user_study_task2_5, create_user_study_task2_6, create_user_study_task3_1, \
     create_user_study_task3_2, create_user_study_task3_3, create_user_study_task3_4, create_user_study_task3_5, create_user_study_task3_6, create_user_study_task4_1, create_user_study_task4_2, \
-    create_user_study_task4_3, create_user_study_task4_4, create_user_study_task4_5, create_user_study_task4_6
+    create_user_study_task4_3, create_user_study_task4_4, create_user_study_task4_5, create_user_study_task4_6, create_user_study_task4_7, create_user_study_task4_8, create_user_study_task3_7, \
+    create_user_study_task3_8, create_user_study_task2_7, create_user_study_task2_8, create_user_study_task1_7_most_connected_nodes
 from scripts.layouts.layout_creators.circular_layout_creator import create_circular_layout
 from scripts.layouts.layout_creators.default_layout_creator import create_default_layout
 from scripts.layouts.layout_creators.grid_layout_creator import create_grid_layout
@@ -104,12 +105,14 @@ def main():
         # 'jucs_europe': create_jucs_europe_geo_network,
         # 'archeology': create_archeology_geo_network,
 
-        # 'user_study_task1_1': create_user_study_task1_1_most_connected_nodes,
-        # 'user_study_task1_2': create_user_study_task1_2_most_connected_nodes,
-        # 'user_study_task1_3': create_user_study_task1_3_most_connected_nodes,
-        # 'user_study_task1_4': create_user_study_task1_4_most_connected_nodes,
-        # 'user_study_task1_5': create_user_study_task1_5_most_connected_nodes,
-        # 'user_study_task1_6': create_user_study_task1_6_most_connected_nodes,
+        'user_study_task1_1': create_user_study_task1_1_most_connected_nodes,
+        'user_study_task1_2': create_user_study_task1_2_most_connected_nodes,
+        'user_study_task1_3': create_user_study_task1_3_most_connected_nodes,
+        'user_study_task1_4': create_user_study_task1_4_most_connected_nodes,
+        'user_study_task1_5': create_user_study_task1_5_most_connected_nodes,
+        'user_study_task1_6': create_user_study_task1_6_most_connected_nodes,
+        'user_study_task1_7': create_user_study_task1_7_most_connected_nodes,
+        'user_study_task1_8': create_user_study_task1_7_most_connected_nodes,
 
         # 'user_study_task2_1': create_user_study_task2_1,
         # 'user_study_task2_2': create_user_study_task2_2,
@@ -117,6 +120,8 @@ def main():
         # 'user_study_task2_4': create_user_study_task2_4,
         # 'user_study_task2_5': create_user_study_task2_5,
         # 'user_study_task2_6': create_user_study_task2_6,
+        # 'user_study_task2_7': create_user_study_task2_7,
+        # 'user_study_task2_8': create_user_study_task2_8,
 
         # 'user_study_task3_1': create_user_study_task3_1,
         # 'user_study_task3_2': create_user_study_task3_2,
@@ -124,13 +129,17 @@ def main():
         # 'user_study_task3_4': create_user_study_task3_4,
         # 'user_study_task3_5': create_user_study_task3_5,
         # 'user_study_task3_6': create_user_study_task3_6,
+        # 'user_study_task3_7': create_user_study_task3_7,
+        # 'user_study_task3_8': create_user_study_task3_8,
 
-        'user_study_task4_1': create_user_study_task4_1,
-        'user_study_task4_2': create_user_study_task4_2,
-        'user_study_task4_3': create_user_study_task4_3,
-        'user_study_task4_4': create_user_study_task4_4,
-        'user_study_task4_5': create_user_study_task4_5,
-        'user_study_task4_6': create_user_study_task4_6,
+        # 'user_study_task4_1': create_user_study_task4_1,
+        # 'user_study_task4_2': create_user_study_task4_2,
+        # 'user_study_task4_3': create_user_study_task4_3,
+        # 'user_study_task4_4': create_user_study_task4_4,
+        # 'user_study_task4_5': create_user_study_task4_5,
+        # 'user_study_task4_6': create_user_study_task4_6,
+        # 'user_study_task4_7': create_user_study_task4_7,
+        # 'user_study_task4_8': create_user_study_task4_8,
     }
 
     current_dataset = 'user_study_task1_4'

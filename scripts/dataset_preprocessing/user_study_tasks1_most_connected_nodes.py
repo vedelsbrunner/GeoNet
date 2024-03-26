@@ -34,6 +34,14 @@ def create_user_study_task1_6_most_connected_nodes():
     df = pd.read_csv("../datasets/user_study/task1/network6/geo_network_germany.csv")
     return create_user_study_network(df)
 
+def create_user_study_task1_7_most_connected_nodes():
+    df = pd.read_csv("../datasets/user_study/task1/network7/geo_network_germany.csv")
+    return create_user_study_network(df)
+
+def create_user_study_task1_8_most_connected_nodes():
+    df = pd.read_csv("../datasets/user_study/task1/network8/geo_network_germany.csv")
+    return create_user_study_network(df)
+
 
 def create_user_study_task2_1():
     df = pd.read_csv("../datasets/user_study/task2/network1/geo_network_1.csv")
@@ -62,6 +70,14 @@ def create_user_study_task2_5():
 
 def create_user_study_task2_6():
     df = pd.read_csv("../datasets/user_study/task2/network6/geo_network_6.csv")
+    return create_user_study_network(df)
+
+def create_user_study_task2_7():
+    df = pd.read_csv("../datasets/user_study/task2/network7/geo_network_7.csv")
+    return create_user_study_network(df)
+
+def create_user_study_task2_8():
+    df = pd.read_csv("../datasets/user_study/task2/network8/geo_network_8.csv")
     return create_user_study_network(df)
 
 
@@ -94,6 +110,13 @@ def create_user_study_task3_6():
     df = pd.read_csv("../datasets/user_study/task3/network6/geo_network.csv")
     return create_user_study_network(df)
 
+def create_user_study_task3_7():
+    df = pd.read_csv("../datasets/user_study/task3/network7/geo_network.csv")
+    return create_user_study_network(df)
+
+def create_user_study_task3_8():
+    df = pd.read_csv("../datasets/user_study/task3/network8/geo_network.csv")
+    return create_user_study_network(df)
 
 def create_user_study_task4_1():
     df = pd.read_csv("../datasets/user_study/task4/network1/geo_network.csv")
@@ -122,6 +145,16 @@ def create_user_study_task4_5():
 
 def create_user_study_task4_6():
     df = pd.read_csv("../datasets/user_study/task4/network6/geo_network.csv")
+    return create_user_study_network(df)
+
+
+def create_user_study_task4_7():
+    df = pd.read_csv("../datasets/user_study/task4/network7/geo_network.csv")
+    return create_user_study_network(df)
+
+
+def create_user_study_task4_8():
+    df = pd.read_csv("../datasets/user_study/task4/network8/geo_network.csv")
     return create_user_study_network(df)
 
 

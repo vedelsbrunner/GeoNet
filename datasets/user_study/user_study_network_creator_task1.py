@@ -105,4 +105,4 @@ city_with_increase = random.choice(list(node_distribution.keys()))
 node_distribution[city_with_increase] = increased_max_nodes
 
 # Generate the networks
-generate_and_save_networks(6, 100, coordinates_dict, node_distribution)
+generate_and_save_networks(8, 100, coordinates_dict, node_distribution)

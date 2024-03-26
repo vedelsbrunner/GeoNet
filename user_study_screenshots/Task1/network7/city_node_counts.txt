@@ -1,0 +1,10 @@
+Munich: 17
+Hanover: 16
+Berlin: 13
+Stuttgart: 11
+Dresden: 11
+Frankfurt: 10
+Leipzig: 9
+Cologne: 6
+Bremen: 6
+Hamburg: 1

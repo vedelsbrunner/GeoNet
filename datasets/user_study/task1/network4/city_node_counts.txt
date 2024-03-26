@@ -1,9 +1,10 @@
-Cologne: 20
-Dresden: 15
-Leipzig: 15
-Stuttgart: 15
+Hanover: 22
+Leipzig: 19
+Munich: 17
 Berlin: 12
-Hanover: 8
+Stuttgart: 9
 Bremen: 7
-Frankfurt: 6
-Hamburg: 2
+Dresden: 7
+Hamburg: 3
+Frankfurt: 2
+Cologne: 2
