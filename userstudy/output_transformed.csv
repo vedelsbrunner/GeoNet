@@ -1,0 +1,129 @@
+ParticipantID,GroupID,Group,Technique,Question,Task,Training,Answer,Time
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q1,1,True,Munich,47.314
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q1,2,True,Leipzig,8.981
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q1,3,False,Munich,4.441
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q1,4,False,Hanover,7.897
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q1,5,False,Stuttgart,6.876
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q1,6,False,Stuttgart,7.159
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q1,7,False,Hanover,7.226
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q1,8,False,Hanover,9.295
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q2,1,True,Ireland,17.589
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q2,2,True,England,10.698
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q2,3,False,Ireland,6.057
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q2,4,False,England,12.76
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q2,5,False,Ireland,7.341
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q2,6,False,England,7.748
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q2,7,False,Ireland,11.003
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q2,8,False,England,6.992
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q3,1,True,Hannover - Leipzig,2.56
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q3,2,True,Hannover - Leipzig,4.041
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q3,3,False,Hannover - Leipzig,3.65
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q3,4,False,Hannover - Leipzig,4.917
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q3,5,False,Hannover - Leipzig,5.082
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q3,6,False,Hamburg - Berlin,9.021
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q3,7,False,Hamburg - Berlin,6.919
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q3,8,False,Hamburg - Berlin,4.338
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q4,1,True,Germany - Poland,4.416
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q4,2,True,Spain - France,2.835
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q4,3,False,Spain - France,1.831
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q4,4,False,Germany - Poland,12.056
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q4,5,False,Germany - Poland,5.188
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q4,6,False,Germany - Poland,2.277
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q4,7,False,Germany - Poland,5.503
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Stacked,Q4,8,False,Spain - France,3.395
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q1,1,True,Munich,3.725
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q1,2,True,Leipzig,2.613
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q1,3,False,Munich,6.204
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q1,4,False,Hanover,9.489
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q1,5,False,Stuttgart,16.823
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q1,6,False,Stuttgart,3.743
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q1,7,False,Hanover,14.519
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q1,8,False,Hanover,7.96
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q2,1,True,Ireland,4.155
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q2,2,True,England,8.349
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q2,3,False,Ireland,5.707
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q2,4,False,Ireland,6.45
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q2,5,False,Ireland,7.328
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q2,6,False,England,4.596
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q2,7,False,Ireland,5.31
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q2,8,False,England,9.479
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q3,1,True,Hannover - Leipzig,2.286
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q3,2,True,Hannover - Leipzig,2.309
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q3,3,False,Hannover - Leipzig,2.557
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q3,4,False,Hannover - Leipzig,2.028
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q3,5,False,Hannover - Leipzig,3.014
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q3,6,False,Hannover - Leipzig,11.802
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q3,7,False,Hamburg - Berlin,2.672
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q3,8,False,Hamburg - Berlin,2.192
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q4,1,True,Germany - Poland,2.048
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q4,2,True,Spain - France,2.074
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q4,3,False,Spain - France,3.415
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q4,4,False,Germany - Poland,1.802
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q4,5,False,Germany - Poland,3.201
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q4,6,False,Germany - Poland,2.984
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q4,7,False,Spain - France,3.72
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Grid,Q4,8,False,Spain - France,3.151
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q1,1,True,Munich,3.438
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q1,2,True,Leipzig,2.081
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q1,3,False,Munich,3.684
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q1,4,False,Hanover,2.812
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q1,5,False,Stuttgart,2.415
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q1,6,False,Stuttgart,2.277
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q1,7,False,Hanover,3.668
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q1,8,False,Hanover,2.367
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q2,1,True,Ireland,9.189
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q2,2,True,England,3.564
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q2,3,False,Ireland,5.097
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q2,4,False,Ireland,4.364
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q2,5,False,Ireland,3.495
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q2,6,False,Ireland,2.603
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q2,7,False,Ireland,3.801
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q2,8,False,England,2.941
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q3,1,True,Hannover - Leipzig,1.605
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q3,2,True,Hannover - Leipzig,2.077
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q3,3,False,Hannover - Leipzig,2.313
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q3,4,False,Hannover - Leipzig,2.195
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q3,5,False,Hannover - Leipzig,2.251
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q3,6,False,Hannover - Leipzig,1.942
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q3,7,False,Hamburg - Berlin,2.357
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q3,8,False,Hamburg - Berlin,1.997
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q4,1,True,Germany - Poland,3.861
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q4,2,True,Spain - France,2.091
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q4,3,False,Spain - France,3.1
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q4,4,False,Germany - Poland,1.813
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q4,5,False,Germany - Poland,1.81
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q4,6,False,Germany - Poland,1.712
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q4,7,False,Germany - Poland,2.108
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Circular,Q4,8,False,Spain - France,1.605
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q1,1,True,Munich,2.328
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q1,2,True,Leipzig,5.481
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q1,3,False,Munich,2.467
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q1,4,False,Hanover,1.7
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q1,5,False,Stuttgart,2.328
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q1,6,False,Cologne,2.109
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q1,7,False,Hanover,3.067
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q1,8,False,Hanover,2.866
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q2,1,True,Ireland,2.51
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q2,2,True,England,2.297
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q2,3,False,Ireland,2.306
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q2,4,False,Ireland,5.345
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q2,5,False,Ireland,2.221
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q2,6,False,England,2.194
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q2,7,False,Ireland,1.881
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q2,8,False,England,3.302
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q3,1,True,Hannover - Leipzig,2.099
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q3,2,True,Hannover - Leipzig,2.125
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q3,3,False,Hannover - Leipzig,1.65
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q3,4,False,Hannover - Leipzig,1.662
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q3,5,False,Hannover - Leipzig,1.48
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q3,6,False,Hannover - Leipzig,1.859
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q3,7,False,Hamburg - Berlin,2.989
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q3,8,False,Hamburg - Berlin,1.643
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q4,1,True,Germany - Poland,2.093
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q4,2,True,Spain - France,1.543
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q4,3,False,Spain - France,4.705
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q4,4,False,Spain - France,1.896
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q4,5,False,Germany - Poland,1.877
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q4,6,False,Germany - Poland,1.578
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q4,7,False,Germany - Poland,1.487
+R_2PLPBmGUUIlOqfT,1,"Stacked,Grid,Circular,Sunflower",Sunflower,Q4,8,False,Spain - France,2.002
